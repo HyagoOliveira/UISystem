@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 35fceb4154c3b484f907036ff847c37c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - document: {instanceID: 0}
+  - focusablePlayer: {instanceID: 0}
+  - sceneSettings: {fileID: 11400000, guid: 421e3ace73273f949aaca7ba5cbefd52, type: 2}
+  - serializationSettings: {fileID: 11400000, guid: 0c15610faa9866b4daefe2a99d92183b,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
