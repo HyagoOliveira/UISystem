@@ -1,8 +1,8 @@
 # UI System
 
 * This package is an extension for Unity UI Toolkit System.
-* Unity minimum version: **2022.2**
-* Current version: **0.0.1**
+* Unity minimum version: **2022.3**
+* Current version: **0.1.0**
 * License: **MIT**
 * Dependencies:
 	- Unity.Input System : [1.2.0](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.2/changelog/CHANGELOG.html)
