@@ -6,6 +6,7 @@
 * License: **MIT**
 * Dependencies:
 	- Unity.Input System : [1.2.0](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.2/changelog/CHANGELOG.html)
+	- com.unity.ugui: [2.0.0](https://docs.unity3d.com/Packages/com.unity.ugui@2.0/changelog/CHANGELOG.html)
 
 ## Other Features
 
