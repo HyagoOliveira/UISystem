@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Added
+- InputEventSystem prefab
 - NotoSans Normal, JP and TMP/UITK Fonts
 - Unity UI (uGUI) 2.0.0 dependency
 
