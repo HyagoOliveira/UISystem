@@ -9,7 +9,7 @@
     "Menus"
   ],
   "dependencies": {
-    "com.unity.ugui": "2.0.0"
+    "com.unity.ugui": "1.0.0"
   },
   "license": "MIT",
   "homepage": "https://github.com/HyagoOliveira/UISystem#readme",
