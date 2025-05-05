@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [0.2.0] - 2025-05-04
 ### Added
+- OpacityAnimator
 - InputEventSystem prefab
 - NotoSans Normal, JP and TMP/UITK Fonts
 - Unity UI (uGUI) 2.0.0 dependency
