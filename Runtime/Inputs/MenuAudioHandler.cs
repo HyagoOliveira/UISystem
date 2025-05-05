@@ -5,6 +5,10 @@ using System.Collections;
 
 namespace ActionCode.UISystem
 {
+    /// <summary>
+    /// Handler for Menu Audio.
+    /// Plays the cancel Audio Effect when the UI Cancel input is performed.
+    /// </summary>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(AudioSource))]
     public sealed class MenuAudioHandler : MonoBehaviour
@@ -15,6 +19,8 @@ namespace ActionCode.UISystem
         private AudioSource source;
         [SerializeField, Tooltip("The Global Menu Data.")]
         private MenuData menuData;
+
+        [Header("Input")]
         [SerializeField] private InputActionAsset input;
         [SerializeField] private InputActionPopup cancel = new(nameof(input), "UI");
 

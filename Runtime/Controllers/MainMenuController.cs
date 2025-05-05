@@ -37,7 +37,6 @@ namespace ActionCode.UISystem
 
         public bool IsContinueEnabled { get; set; }
 
-
         protected override void Reset()
         {
             base.Reset();
