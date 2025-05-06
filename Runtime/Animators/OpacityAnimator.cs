@@ -11,9 +11,9 @@ namespace ActionCode.UISystem
     public sealed class OpacityAnimator : AbstractAnimator
     {
         [SerializeField] private string elementName;
-#pragma warning disable UNT0013 // Remove invalid SerializeField attribute
-        [SerializeField] public AnimationCurve animation;
-#pragma warning restore UNT0013 // Remove invalid SerializeField attribute
+#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
+        [SerializeField] private AnimationCurve animation;
+#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
 
         /// <summary>
         /// The Visual Element been animated.

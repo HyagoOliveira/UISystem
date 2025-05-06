@@ -15,7 +15,9 @@ namespace ActionCode.UISystem
     public abstract class AbstractMenu : MonoBehaviour
     {
         [SerializeField, Tooltip("The Audio Handler for this menu.")]
+#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
         private MenuAudioHandler audio;
+#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
 
         [Header("Transition")]
         [Tooltip("Whether to activate the first controller when start.")]
