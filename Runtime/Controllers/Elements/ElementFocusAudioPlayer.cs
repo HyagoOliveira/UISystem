@@ -43,14 +43,8 @@ namespace ActionCode.UISystem
         public void UpdateClassName(string className)
         {
             enabled = false;
-            //UnsubscribeEvents();
-
             ClassName = className;
-
             enabled = true;
-
-            //FindReferences();
-            //SubscribeEvents();
         }
 
         /// <summary>
