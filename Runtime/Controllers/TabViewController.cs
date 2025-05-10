@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
+using ActionCode.InputSystem;
+using UnityEngine.InputSystem;
 using System.Collections.Generic;
 
 namespace ActionCode.UISystem
@@ -20,6 +22,20 @@ namespace ActionCode.UISystem
         public AudioSource source;
         [Tooltip("The audio played when tab is moved.")]
         public AudioClip moveSound;
+
+        [Header("Input")]
+        [SerializeField, Tooltip("The Input Action asset whet your move tabs input is")]
+        private InputActionAsset input;
+        [SerializeField, Tooltip("The 1D Axis input where negative moves to left and positive moves to the right.")]
+        private InputActionPopup inputAction = new(nameof(input), "UI");
+
+        /// <summary>
+        /// The input action used to move between tabs.
+        /// <para>
+        /// It's a 1D Axis input where negative moves to the left and positive moves to the right.
+        /// </para>
+        /// </summary>
+        public InputAction InputAction { get; private set; }
 
         /// <summary>
         /// The TabView element.
@@ -51,6 +67,8 @@ namespace ActionCode.UISystem
             base.Reset();
             source = GetComponent<AudioSource>();
         }
+
+        private void Awake() => FindInputAction();
 
         /// <summary>
         /// Moves to the given direction.
@@ -87,15 +105,26 @@ namespace ActionCode.UISystem
         {
             base.SubscribeEvents();
             TabView.activeTabChanged += HandleActiveTabChanged;
+            InputAction.performed += HandleInputActionPerformed;
         }
 
         protected override void UnsubscribeEvents()
         {
             base.UnsubscribeEvents();
             TabView.activeTabChanged -= HandleActiveTabChanged;
+            InputAction.performed -= HandleInputActionPerformed;
         }
 
         private int GetWarpedIndex(int index) => index < 0 ? Tabs.Count - 1 : 0;
+
+        private void FindInputAction() => InputAction = input.FindAction(inputAction.GetPath());
+
+        private void HandleInputActionPerformed(InputAction.CallbackContext ctx)
+        {
+            // Cannot read int
+            var direction = ctx.ReadValue<float>();
+            Move((int)direction);
+        }
 
         private void HandleActiveTabChanged(Tab _, Tab __) => PlayMoveSound();
     }
