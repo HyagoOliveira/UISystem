@@ -35,7 +35,12 @@ namespace ActionCode.UISystem
 
         private readonly Stack<AbstractController> undoHistory = new();
 
-        protected virtual void Reset() => FindFirstController();
+        protected virtual void Reset()
+        {
+            audio = GetComponent<MenuAudioHandler>();
+            FindFirstController();
+        }
+
         protected virtual void Start() => TryActivateFirstController();
 
         protected abstract AbstractController[] GetScreens();

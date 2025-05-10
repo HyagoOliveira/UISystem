@@ -3,6 +3,7 @@ using UnityEngine.UIElements;
 using ActionCode.InputSystem;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using System;
 
 namespace ActionCode.UISystem
 {
@@ -28,6 +29,11 @@ namespace ActionCode.UISystem
         private InputActionAsset input;
         [SerializeField, Tooltip("The 1D Axis input where negative moves to left and positive moves to the right.")]
         private InputActionPopup inputAction = new(nameof(input), "UI");
+
+        /// <summary>
+        /// Action fired when tab changed.
+        /// </summary>
+        public event Action<Tab> OnTabChanged;
 
         /// <summary>
         /// The input action used to move between tabs.
@@ -126,6 +132,10 @@ namespace ActionCode.UISystem
             Move((int)direction);
         }
 
-        private void HandleActiveTabChanged(Tab _, Tab __) => PlayMoveSound();
+        private void HandleActiveTabChanged(Tab _, Tab current)
+        {
+            PlayMoveSound();
+            OnTabChanged?.Invoke(current);
+        }
     }
 }

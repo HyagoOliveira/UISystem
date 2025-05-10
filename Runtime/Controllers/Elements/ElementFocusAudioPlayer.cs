@@ -60,7 +60,7 @@ namespace ActionCode.UISystem
         {
             enabled = false;
 
-            await Awaitable.WaitForSecondsAsync(0.01f);
+            await Awaitable.NextFrameAsync();
             element.Focus();
 
             enabled = true;
