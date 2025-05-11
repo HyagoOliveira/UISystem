@@ -1,22 +1,28 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
-using ActionCode.InputSystem;
 using UnityEngine.InputSystem;
-using System.Collections.Generic;
-using System;
+using ActionCode.InputSystem;
+using ActionCode.SerializedDictionaries;
 
 namespace ActionCode.UISystem
 {
     /// <summary>
-    /// Controller for a TabView element with sound.
+    /// Controller for a Tab menu like Game Options.
     /// </summary>
     [RequireComponent(typeof(AudioSource))]
-    public sealed class TabViewController : AbstractController
+    [RequireComponent(typeof(ElementHighlighter))]
+    [RequireComponent(typeof(ButtonClickAudioPlayer))]
+    [RequireComponent(typeof(ElementFocusAudioPlayer))]
+    public sealed class TabMenuController : AbstractController
     {
         [Tooltip("The name used to find the TabView element.")]
         public string tabViewName;
         [Tooltip("If enabled, moving tab will warp from the other side when reaching the end.")]
         public bool isWarpAllowed = true;
+        [Tooltip("The local ElementFocusAudioPlayer component.")]
+        public ElementFocusAudioPlayer focuser;
 
         [Header("Audio")]
         [Tooltip("The local AudioSource component.")]
@@ -25,10 +31,13 @@ namespace ActionCode.UISystem
         public AudioClip moveSound;
 
         [Header("Input")]
-        [SerializeField, Tooltip("The Input Action asset whet your move tabs input is")]
-        private InputActionAsset input;
-        [SerializeField, Tooltip("The 1D Axis input where negative moves to left and positive moves to the right.")]
-        private InputActionPopup inputAction = new(nameof(input), "UI");
+        [Tooltip("The Input Action asset whet your move tabs input is")]
+        public InputActionAsset input;
+        [Tooltip("The 1D Axis input where negative moves to left and positive moves to the right.")]
+        public InputActionPopup inputAction = new(nameof(input), "UI");
+
+        [Space]
+        [SerializeField] private SerializedDictionary<string, AbstractTab> tabs;
 
         /// <summary>
         /// Action fired when tab changed.
@@ -72,9 +81,20 @@ namespace ActionCode.UISystem
         {
             base.Reset();
             source = GetComponent<AudioSource>();
+            focuser = GetComponent<ElementFocusAudioPlayer>();
         }
 
-        private void Awake() => FindInputAction();
+        private void Awake()
+        {
+            InitializeTabs();
+            FindInputAction();
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            SelectTabButton();
+        }
 
         /// <summary>
         /// Moves to the given direction.
@@ -123,6 +143,30 @@ namespace ActionCode.UISystem
 
         private int GetWarpedIndex(int index) => index < 0 ? Tabs.Count - 1 : 0;
 
+        private void InitializeTabs()
+        {
+            foreach (var tabPair in tabs)
+            {
+                var tab = Root.Find<Tab>(tabPair.Key);
+                tabPair.Value.Initialize(tab);
+            }
+        }
+
+        private void SelectTabButton()
+        {
+            var firstTabIndex = TabView.tabIndex;
+            var hasTab = tabs.TryGetValueUsingIndex(firstTabIndex, out var tab);
+            if (hasTab) SelectFirstTabButton(tab);
+        }
+
+        private void SelectTabButton(string name)
+        {
+            var hasTab = tabs.TryGetValue(name, out var value);
+            if (hasTab) SelectFirstTabButton(value);
+        }
+
+        private void SelectFirstTabButton(AbstractTab tab) => focuser.FocusWithoutSound(tab.GetFirstButton());
+
         private void FindInputAction() => InputAction = input.FindAction(inputAction.GetPath());
 
         private void HandleInputActionPerformed(InputAction.CallbackContext ctx)
@@ -135,6 +179,7 @@ namespace ActionCode.UISystem
         private void HandleActiveTabChanged(Tab _, Tab current)
         {
             PlayMoveSound();
+            SelectTabButton(current.name);
             OnTabChanged?.Invoke(current);
         }
     }
