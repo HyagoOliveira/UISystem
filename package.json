@@ -10,7 +10,8 @@
   ],
   "dependencies": {
     "com.unity.ugui": "1.0.0",
-    "com.actioncode.input-system": "1.1.0"
+    "com.actioncode.input-system": "1.1.0",
+    "com.actioncode.serialized-dictionary": "1.2.0"
   },
   "license": "MIT",
   "homepage": "https://github.com/HyagoOliveira/UISystem#readme",

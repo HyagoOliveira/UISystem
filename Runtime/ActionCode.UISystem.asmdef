@@ -3,7 +3,8 @@
     "rootNamespace": "ActionCode.UISystem",
     "references": [
         "GUID:75469ad4d38634e559750d17036d5f7c",
-        "GUID:9c28ae16f2bf6054f89167354241a994"
+        "GUID:9c28ae16f2bf6054f89167354241a994",
+        "GUID:b6d604d366204e3498891d6d6ba5936e"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
