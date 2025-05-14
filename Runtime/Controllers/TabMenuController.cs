@@ -19,10 +19,10 @@ namespace ActionCode.UISystem
     {
         [Tooltip("The name used to find the TabView element.")]
         public string tabViewName;
-        [Tooltip("If enabled, moving tab will warp from the other side when reaching the end.")]
-        public bool isWarpAllowed = true;
         [Tooltip("The local ElementFocusAudioPlayer component.")]
         public ElementFocusAudioPlayer focuser;
+        [Tooltip("If enabled, moving tab will warp from the other side when reaching the end.")]
+        public bool isWarpAllowed = true;
 
         [Header("Audio")]
         [Tooltip("The local AudioSource component.")]
@@ -84,15 +84,13 @@ namespace ActionCode.UISystem
             focuser = GetComponent<ElementFocusAudioPlayer>();
         }
 
-        private void Awake()
-        {
-            InitializeTabs();
-            FindInputAction();
-        }
+        private void Awake() => FindInputAction();
 
         protected override void OnEnable()
         {
             base.OnEnable();
+
+            InitializeTabs();
             SelectTabButton();
         }
 
@@ -161,8 +159,8 @@ namespace ActionCode.UISystem
 
         private void SelectTabButton(string name)
         {
-            var hasTab = tabs.TryGetValue(name, out var value);
-            if (hasTab) SelectFirstTabButton(value);
+            var hasTab = tabs.TryGetValue(name, out var tab);
+            if (hasTab) SelectFirstTabButton(tab);
         }
 
         private void SelectFirstTabButton(AbstractTab tab) => focuser.FocusWithoutSound(tab.GetFirstButton());

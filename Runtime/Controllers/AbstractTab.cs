@@ -15,6 +15,8 @@ namespace ActionCode.UISystem
 
         public bool IsEnabled => gameObject.activeInHierarchy;
 
+        protected virtual void OnDisable() => UnsubscribeEvents();
+
         public void Initialize(Tab tab)
         {
             Tab = tab;
@@ -22,13 +24,22 @@ namespace ActionCode.UISystem
             SubscribeEvents();
         }
 
-        protected virtual void OnDisable() => UnsubscribeEvents();
-
         public T Find<T>(string name) where T : VisualElement => Tab.Find<T>(name);
+        public virtual Button GetFirstButton() => Tab.Q<Button>();
 
         protected virtual void FindReferences() { }
         protected virtual void SubscribeEvents() { }
         protected virtual void UnsubscribeEvents() { }
-        public virtual Button GetFirstButton() => Tab.Q<Button>();
+
+        protected void EnableButtons() => SetButtonsEnabled(true);
+        protected void DisableButtons() => SetButtonsEnabled(false);
+
+        private void SetButtonsEnabled(bool enabled)
+        {
+            foreach (var button in Tab.Query<Button>().ToList())
+            {
+                button.SetEnabled(enabled);
+            }
+        }
     }
 }
