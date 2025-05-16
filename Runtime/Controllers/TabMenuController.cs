@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -17,12 +18,16 @@ namespace ActionCode.UISystem
     [RequireComponent(typeof(ElementFocusAudioPlayer))]
     public sealed class TabMenuController : AbstractController
     {
-        [Tooltip("The name used to find the TabView element.")]
-        public string tabViewName;
         [Tooltip("The local ElementFocusAudioPlayer component.")]
         public ElementFocusAudioPlayer focuser;
+
+        [Space]
         [Tooltip("If enabled, moving tab will warp from the other side when reaching the end.")]
         public bool isWarpAllowed = true;
+        [Tooltip("The name used to find the TabView element.")]
+        public string tabViewName;
+        [Tooltip("The name used to find the first tab. Empty uses the default one.")]
+        public string firstTabName;
 
         [Header("Audio")]
         [Tooltip("The local AudioSource component.")]
@@ -91,7 +96,7 @@ namespace ActionCode.UISystem
             base.OnEnable();
 
             InitializeTabs();
-            SelectTabButton();
+            SelectTabFirstButton();
         }
 
         /// <summary>
@@ -121,8 +126,11 @@ namespace ActionCode.UISystem
         protected override void FindReferences()
         {
             base.FindReferences();
+
             TabView = Find<TabView>(tabViewName);
             Tabs = TabView.Query<Tab>().ToList();
+
+            SelectFirstTab();
         }
 
         protected override void SubscribeEvents()
@@ -150,14 +158,22 @@ namespace ActionCode.UISystem
             }
         }
 
-        private void SelectTabButton()
+        private void SelectFirstTab()
         {
-            var firstTabIndex = TabView.tabIndex;
-            var hasTab = tabs.TryGetValueUsingIndex(firstTabIndex, out var tab);
+            var hasNoFirstTab = string.IsNullOrEmpty(firstTabName);
+            if (hasNoFirstTab) return;
+
+            if (TryGetTabIndex(firstTabName, out var index))
+                CurrentTabIndex = index;
+        }
+
+        private void SelectTabFirstButton()
+        {
+            var hasTab = tabs.TryGetValueUsingIndex(CurrentTabIndex, out var tab);
             if (hasTab) SelectFirstTabButton(tab);
         }
 
-        private void SelectTabButton(string name)
+        private void SelectTabFirstButton(string name)
         {
             var hasTab = tabs.TryGetValue(name, out var tab);
             if (hasTab) SelectFirstTabButton(tab);
@@ -166,6 +182,12 @@ namespace ActionCode.UISystem
         private void SelectFirstTabButton(AbstractTab tab) => focuser.FocusWithoutSound(tab.GetFirstButton());
 
         private void FindInputAction() => InputAction = input.FindAction(inputAction.GetPath());
+
+        private bool TryGetTabIndex(string tabName, out int index)
+        {
+            index = tabs.Keys.ToList().IndexOf(tabName);
+            return index > 0;
+        }
 
         private void HandleInputActionPerformed(InputAction.CallbackContext ctx)
         {
@@ -177,7 +199,7 @@ namespace ActionCode.UISystem
         private void HandleActiveTabChanged(Tab _, Tab current)
         {
             PlayMoveSound();
-            SelectTabButton(current.name);
+            SelectTabFirstButton(current.name);
             OnTabChanged?.Invoke(current);
         }
     }
