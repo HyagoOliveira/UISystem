@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using ActionCode.InputSystem;
-using System.Collections;
 
 namespace ActionCode.UISystem
 {
@@ -34,10 +33,10 @@ namespace ActionCode.UISystem
         public void PlaySubmitSound() => source.PlayOneShot(menuData.submit);
         public void PlayCancelSound() => source.PlayOneShot(menuData.cancel);
 
-        public IEnumerator PlayAndWaitSubmitSound()
+        public async Awaitable PlayAndWaitSubmitSound()
         {
             PlaySubmitSound();
-            return new WaitForSecondsRealtime(menuData.submit.length);
+            await Awaitable.WaitForSecondsAsync(menuData.submit.length);
         }
 
         private void FindDependencies()

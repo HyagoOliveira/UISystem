@@ -1,13 +1,14 @@
 using UnityEngine;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace ActionCode.UISystem
 {
     /// <summary>
-    /// Abstract controller for generic Menus.
-    /// A Menu consists of several Controllers that can be activated one by time.
+    /// Abstract controller for generic Menu.
+    /// <para>
+    /// A Menu consists of several Screens that can be activated one by time.
+    /// </para>
     /// </summary>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(-1)]
@@ -19,15 +20,18 @@ namespace ActionCode.UISystem
         private MenuAudioHandler audio;
 #pragma warning restore CS0108 // Member hides inherited member; missing new keyword
 
-        [Header("Transition")]
-        [Tooltip("Whether to activate the first controller when start.")]
-        public bool activateFirstController = true;
-        [Tooltip("The first controller to enable when start.")]
-        public AbstractController firstController;
-        [Min(0f), Tooltip("The time (in seconds) between transitions.")]
+        [Header("Screen Transition")]
+        [Tooltip("Whether to activate the first screen when start.")]
+        public bool activateFirstScreen = true;
+        [Tooltip("The first screen to activated when start.")]
+        public AbstractController firstScreen;
+        [Min(0f), Tooltip("The time (in seconds) between screen transitions.")]
         public float transitionTime = 0.2f;
 
-        public event Action<AbstractController> OnScreenActivated;
+        /// <summary>
+        /// Event fired when the given screen is opened.
+        /// </summary>
+        public event Action<AbstractController> OnScreenOpened;
 
         public MenuAudioHandler Audio => audio;
         public AbstractController LastScreen { get; private set; }
@@ -38,15 +42,15 @@ namespace ActionCode.UISystem
         protected virtual void Reset()
         {
             audio = GetComponent<MenuAudioHandler>();
-            FindFirstController();
+            FindFirstScreen();
         }
 
-        protected virtual void Start() => TryActivateFirstController();
+        protected virtual void Start() => TryActivateFirstScreen();
 
         protected abstract AbstractController[] GetScreens();
 
         /// <summary>
-        /// Quits the Game even in Editor mode.
+        /// Quits the Game, even while in Editor mode.
         /// </summary>
         public static void QuitGame()
         {
@@ -58,20 +62,22 @@ namespace ActionCode.UISystem
         }
 
         public void OpenScreen(AbstractController controller, bool undoable = true) =>
-            StartCoroutine(OpenScreenRoutine(controller, undoable));
+            _ = OpenScreenAsync(controller, undoable);
 
-        public IEnumerator OpenScreenRoutine(AbstractController controller, bool undoable)
+        public async Awaitable OpenScreenAsync(AbstractController controller, bool undoable = true)
         {
+            Time.timeScale = 1f;
+
             LastScreen = CurrentScreen;
             var applyTransition = CurrentScreen && CurrentScreen.IsEnabled;
 
             if (applyTransition)
             {
-                if (undoable) yield return Audio.PlayAndWaitSubmitSound();
+                if (undoable) await Audio.PlayAndWaitSubmitSound();
 
                 DeactivateAllScreens();
 
-                yield return new WaitForSecondsRealtime(transitionTime);
+                await Awaitable.WaitForSecondsAsync(transitionTime);
             }
 
             if (undoable)
@@ -84,10 +90,10 @@ namespace ActionCode.UISystem
             CurrentScreen.Activate();
             CurrentScreen.SetVisibility(true);
 
-            OnScreenActivated?.Invoke(CurrentScreen);
+            OnScreenOpened?.Invoke(CurrentScreen);
         }
 
-        public void OpenFirstScreen() => OpenScreen(firstController, undoable: false);
+        public void OpenFirstScreen() => OpenScreen(firstScreen, undoable: false);
 
         public bool TryOpenLastScreen()
         {
@@ -96,8 +102,8 @@ namespace ActionCode.UISystem
             return hasUndoableController;
         }
 
-        protected virtual void FindFirstController() =>
-            firstController = GetComponentInChildren<AbstractController>(includeInactive: true);
+        protected virtual void FindFirstScreen() => firstScreen =
+            GetComponentInChildren<AbstractController>(includeInactive: true);
 
         protected void DeactivateAllScreens()
         {
@@ -107,9 +113,9 @@ namespace ActionCode.UISystem
             }
         }
 
-        private void TryActivateFirstController()
+        private void TryActivateFirstScreen()
         {
-            if (activateFirstController) OpenFirstScreen();
+            if (activateFirstScreen) OpenFirstScreen();
         }
     }
 }
