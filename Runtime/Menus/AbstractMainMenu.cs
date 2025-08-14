@@ -65,9 +65,9 @@ namespace ActionCode.UISystem
             StartGame();
         }
 
-        private void HandleAnyButtonClicked()
+        private async void HandleAnyButtonClicked()
         {
-            Audio.PlaySubmitSound();
+            await PlaySubmitSoundAndWaitAsync();
             OpenScreen(mainMenu, undoable: false);
         }
 

@@ -1,24 +1,27 @@
-using UnityEngine;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using ActionCode.InputSystem;
 
 namespace ActionCode.UISystem
 {
     /// <summary>
     /// Abstract controller for generic Menu.
     /// <para>
-    /// A Menu consists of several Screens that can be activated one by time.
+    /// A Menu consists of several Screens that can be activated (one by time),
+    /// navigating between then.
     /// </para>
     /// </summary>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(-1)]
-    [RequireComponent(typeof(MenuAudioHandler))]
+    [RequireComponent(typeof(AudioSource))]
     public abstract class AbstractMenu : MonoBehaviour
     {
-        [SerializeField, Tooltip("The Audio Handler for this menu.")]
-#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
-        private MenuAudioHandler audio;
-#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
+        [SerializeField, Tooltip("The local AudioSource for this menu.")]
+        private AudioSource audioSource;
+        [SerializeField, Tooltip("The Global Menu Data.")]
+        private MenuData menuData;
 
         [Header("Screen Transition")]
         [Tooltip("Whether to activate the first screen when start.")]
@@ -28,26 +31,47 @@ namespace ActionCode.UISystem
         [Min(0f), Tooltip("The time (in seconds) between screen transitions.")]
         public float transitionTime = 0.2f;
 
+        [Header("Input")]
+        [SerializeField] private InputActionAsset input;
+        [SerializeField] private InputActionPopup cancel = new(nameof(input), "UI", "Cancel");
+
         /// <summary>
         /// Event fired when the given screen is opened.
         /// </summary>
         public event Action<AbstractController> OnScreenOpened;
 
-        public MenuAudioHandler Audio => audio;
+        /// <summary>
+        /// Event fired when the given screen is canceled: the back button is pressed.
+        /// </summary>
+        public event Action<AbstractController> OnScreenCanceled;
+
+        public MenuData Data => menuData;
+        public AudioSource Audio => audioSource;
         public AbstractController LastScreen { get; private set; }
         public AbstractController CurrentScreen { get; private set; }
 
+        private InputAction cancelAction;
         private readonly Stack<AbstractController> undoHistory = new();
 
         protected virtual void Reset()
         {
-            audio = GetComponent<MenuAudioHandler>();
+            audioSource = GetComponent<AudioSource>();
             FindFirstScreen();
         }
 
+        protected virtual void Awake() => cancelAction = input.FindAction(cancel.GetPath());
         protected virtual void Start() => TryActivateFirstScreen();
+        protected virtual void OnEnable() => SubscribeEvents();
+        protected virtual void OnDisable() => UnsubscribeEvents();
 
-        protected abstract AbstractController[] GetScreens();
+        public void PlaySubmitSound() => Audio.PlayOneShot(Data.submit);
+        public void PlayCancelSound() => Audio.PlayOneShot(Data.cancel);
+
+        public async Awaitable PlaySubmitSoundAndWaitAsync()
+        {
+            PlaySubmitSound();
+            await Awaitable.WaitForSecondsAsync(menuData.submit.length);
+        }
 
         /// <summary>
         /// Quits the Game, even while in Editor mode.
@@ -61,10 +85,12 @@ namespace ActionCode.UISystem
 #endif
         }
 
-        public void OpenScreen(AbstractController controller, bool undoable = true) =>
-            _ = OpenScreenAsync(controller, undoable);
+        public void OpenFirstScreen() => OpenScreen(firstScreen, undoable: false);
 
-        public async Awaitable OpenScreenAsync(AbstractController controller, bool undoable = true)
+        public void OpenScreen(AbstractController screen, bool undoable = true) =>
+            _ = OpenScreenAsync(screen, undoable);
+
+        public async Awaitable OpenScreenAsync(AbstractController screen, bool undoable = true)
         {
             Time.timeScale = 1f;
 
@@ -73,10 +99,9 @@ namespace ActionCode.UISystem
 
             if (applyTransition)
             {
-                if (undoable) await Audio.PlayAndWaitSubmitSound();
+                if (undoable) await PlaySubmitSoundAndWaitAsync();
 
                 DeactivateAllScreens();
-
                 await Awaitable.WaitForSecondsAsync(transitionTime);
             }
 
@@ -86,21 +111,24 @@ namespace ActionCode.UISystem
                 if (hasLastController) undoHistory.Push(LastScreen);
             }
 
-            CurrentScreen = controller;
+            CurrentScreen = screen;
             CurrentScreen.Activate();
             CurrentScreen.SetVisibility(true);
 
             OnScreenOpened?.Invoke(CurrentScreen);
         }
 
-        public void OpenFirstScreen() => OpenScreen(firstScreen, undoable: false);
-
-        public bool TryOpenLastScreen()
+        public bool TryOpenLastScreen(out AbstractController screen)
         {
-            var hasUndoableController = undoHistory.TryPop(out var controller);
-            if (hasUndoableController) OpenScreen(controller, undoable: false);
-            return hasUndoableController;
+            var hasUndoableScreen = undoHistory.TryPop(out screen);
+            if (hasUndoableScreen) OpenScreen(screen, undoable: false);
+            return hasUndoableScreen;
         }
+
+        protected abstract AbstractController[] GetScreens();
+
+        protected virtual void SubscribeEvents() => cancelAction.performed += HandleCancelPerformed;
+        protected virtual void UnsubscribeEvents() => cancelAction.performed -= HandleCancelPerformed;
 
         protected virtual void FindFirstScreen() => firstScreen =
             GetComponentInChildren<AbstractController>(includeInactive: true);
@@ -116,6 +144,14 @@ namespace ActionCode.UISystem
         private void TryActivateFirstScreen()
         {
             if (activateFirstScreen) OpenFirstScreen();
+        }
+
+        private void HandleCancelPerformed(InputAction.CallbackContext _)
+        {
+            if (!TryOpenLastScreen(out AbstractController screen)) return;
+
+            PlayCancelSound();
+            OnScreenCanceled?.Invoke(screen);
         }
     }
 }
