@@ -22,17 +22,16 @@ namespace ActionCode.UISystem
             mainMenu = GetComponentInChildren<MainMenuScreen>(includeInactive: true);
         }
 
-        private void OnEnable() => SubscribeEvents();
-        private void OnDisable() => UnsubscribeEvents();
-
         protected abstract void StartGame();
         protected abstract void ContinueGame();
 
         protected override AbstractController[] GetScreens() =>
             new AbstractController[] { anyButton, mainMenu, loadGame };
 
-        protected virtual void SubscribeEvents()
+        protected override void SubscribeEvents()
         {
+            base.SubscribeEvents();
+
             anyButton.OnAnyClicked += HandleAnyButtonClicked;
 
             mainMenu.OnContinueClicked += HandleContinueClicked;
@@ -42,8 +41,10 @@ namespace ActionCode.UISystem
             mainMenu.OnQuitClicked += HandleQuitClicked;
         }
 
-        protected virtual void UnsubscribeEvents()
+        protected override void UnsubscribeEvents()
         {
+            base.UnsubscribeEvents();
+
             anyButton.OnAnyClicked -= HandleAnyButtonClicked;
 
             mainMenu.OnContinueClicked -= HandleContinueClicked;
