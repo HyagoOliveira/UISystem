@@ -6,10 +6,10 @@ using UnityInputSystem = UnityEngine.InputSystem.InputSystem;
 namespace ActionCode.UISystem
 {
     /// <summary>
-    /// Controller for a UI Toolkit "Press Any Button".
+    /// Controller for a UI Toolkit "Press Any Button" Screen.
     /// Use the <see cref="OnAnyClicked"/> event when any key is pressed.
     /// </summary>
-    public sealed class AnyButtonController : AbstractController
+    public sealed class AnyButtonScreen : AbstractController
     {
         /// <summary>
         /// Event fired when any button is pressed.

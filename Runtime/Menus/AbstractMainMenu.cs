@@ -10,16 +10,16 @@ namespace ActionCode.UISystem
     public abstract class AbstractMainMenu : AbstractMenu
     {
         [Header("Screens")]
-        [SerializeField] protected AnyButtonController anyButton;
-        [SerializeField] protected MainMenuController mainMenu;
+        [SerializeField] protected AnyButtonScreen anyButton;
+        [SerializeField] protected MainMenuScreen mainMenu;
         [SerializeField] protected AbstractController loadGame;
 
         protected override void Reset()
         {
             base.Reset();
 
-            anyButton = GetComponentInChildren<AnyButtonController>(includeInactive: true);
-            mainMenu = GetComponentInChildren<MainMenuController>(includeInactive: true);
+            anyButton = GetComponentInChildren<AnyButtonScreen>(includeInactive: true);
+            mainMenu = GetComponentInChildren<MainMenuScreen>(includeInactive: true);
         }
 
         private void OnEnable() => SubscribeEvents();

@@ -5,13 +5,17 @@ using UnityEngine.UIElements;
 namespace ActionCode.UISystem
 {
     /// <summary>
-    /// Controller for a UI Toolkit Main Menu.
+    /// Controller for a UI Toolkit Main Menu Screen, with the main 
+    /// options like Continue, Start Game, Load Game, Options and Quit.
+    /// <para>
+    /// Use the events when to navigate between the main options.
+    /// </para>
     /// </summary>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(ElementHighlighter))]
     [RequireComponent(typeof(ButtonClickAudioPlayer))]
     [RequireComponent(typeof(ElementFocusAudioPlayer))]
-    public sealed class MainMenuController : AbstractController
+    public sealed class MainMenuScreen : AbstractController
     {
         [SerializeField, Tooltip("The local Focus Audio Player component.")]
         private ElementFocusAudioPlayer focusPlayer;
