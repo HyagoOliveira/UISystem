@@ -1,8 +1,8 @@
-using UnityEngine;
-using UnityEngine.UIElements;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace ActionCode.UISystem
 {
@@ -67,6 +67,11 @@ namespace ActionCode.UISystem
             List.itemsSource = source;
             List.Select(index);
         }
+
+        /// <summary>
+        /// Deletes the List.
+        /// </summary>
+        public void Delete() => List.RemoveFromHierarchy();
 
         protected override void FindReferences()
         {
