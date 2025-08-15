@@ -30,5 +30,13 @@ namespace ActionCode.UISystem
         /// <param name="enabled">Whether the element should be displayed in the layout.</param>
         public static void SetDisplayEnabled(this VisualElement element, bool enabled) =>
             element.style.display = enabled ? DisplayStyle.Flex : DisplayStyle.None;
+
+        /// <summary>
+        /// Sets whether the element can be selected.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="enabled">Whether the element can be selected.</param>
+        public static void SetSelectableEnabled(this VisualElement element, bool enabled) =>
+            element.pickingMode = enabled ? PickingMode.Position : PickingMode.Ignore;
     }
 }
