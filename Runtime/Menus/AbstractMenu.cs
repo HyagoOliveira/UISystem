@@ -9,8 +9,10 @@ namespace ActionCode.UISystem
     /// <summary>
     /// Abstract controller for generic Menu.
     /// <para>
-    /// A Menu consists of several Screens that can be activated (one by time),
-    /// navigating between then.
+    /// A Menu is a Finite State Machine containing several Screens, 
+    /// keeping the data about the Current and Last.<br/>
+    /// Only one Screen can be activated at time, navigating between then.<br/>
+    /// From an activated Screen, you can go back to the last one using the <see cref="cancel"/> input.
     /// </para>
     /// </summary>
     [DisallowMultipleComponent]
@@ -27,31 +29,34 @@ namespace ActionCode.UISystem
         [Tooltip("Whether to activate the first screen when start.")]
         public bool activateFirstScreen = true;
         [Tooltip("The first screen to activated when start.")]
-        public AbstractController firstScreen;
+        public AbstractMenuScreen firstScreen;
         [Min(0f), Tooltip("The time (in seconds) between screen transitions.")]
         public float transitionTime = 0.2f;
 
         [Header("Input")]
-        [SerializeField] private InputActionAsset input;
-        [SerializeField] private InputActionPopup cancel = new(nameof(input), "UI", "Cancel");
+        [SerializeField, Tooltip("The Input Asset where the Cancel action is.")]
+        private InputActionAsset input;
+        [SerializeField, Tooltip("The cancel action used to go back to the last Screen if available.")]
+        private InputActionPopup cancel = new(nameof(input), "UI", "Cancel");
 
         /// <summary>
         /// Event fired when the given screen is opened.
         /// </summary>
-        public event Action<AbstractController> OnScreenOpened;
+        public event Action<AbstractMenuScreen> OnScreenOpened;
 
         /// <summary>
         /// Event fired when the given screen is canceled: the back button is pressed.
         /// </summary>
-        public event Action<AbstractController> OnScreenCanceled;
+        public event Action<AbstractMenuScreen> OnScreenCanceled;
 
         public MenuData Data => menuData;
         public AudioSource Audio => audioSource;
-        public AbstractController LastScreen { get; private set; }
-        public AbstractController CurrentScreen { get; private set; }
+        public AbstractMenuScreen[] Screens { get; private set; }
+        public AbstractMenuScreen LastScreen { get; private set; }
+        public AbstractMenuScreen CurrentScreen { get; private set; }
 
         private InputAction cancelAction;
-        private readonly Stack<AbstractController> undoHistory = new();
+        private readonly Stack<AbstractMenuScreen> undoHistory = new();
 
         protected virtual void Reset()
         {
@@ -59,7 +64,12 @@ namespace ActionCode.UISystem
             FindFirstScreen();
         }
 
-        protected virtual void Awake() => cancelAction = input.FindAction(cancel.GetPath());
+        protected virtual void Awake()
+        {
+            cancelAction = input.FindAction(cancel.GetPath());
+            FindScreens();
+        }
+
         protected virtual void Start() => TryActivateFirstScreen();
         protected virtual void OnEnable() => SubscribeEvents();
         protected virtual void OnDisable() => UnsubscribeEvents();
@@ -87,10 +97,10 @@ namespace ActionCode.UISystem
 
         public void OpenFirstScreen() => OpenScreen(firstScreen, undoable: false);
 
-        public void OpenScreen(AbstractController screen, bool undoable = true) =>
+        public void OpenScreen(AbstractMenuScreen screen, bool undoable = true) =>
             _ = OpenScreenAsync(screen, undoable);
 
-        public async Awaitable OpenScreenAsync(AbstractController screen, bool undoable = true)
+        public async Awaitable OpenScreenAsync(AbstractMenuScreen screen, bool undoable = true)
         {
             Time.timeScale = 1f;
 
@@ -118,24 +128,25 @@ namespace ActionCode.UISystem
             OnScreenOpened?.Invoke(CurrentScreen);
         }
 
-        public bool TryOpenLastScreen(out AbstractController screen)
+        public bool TryOpenLastScreen(out AbstractMenuScreen screen)
         {
             var hasUndoableScreen = undoHistory.TryPop(out screen);
             if (hasUndoableScreen) OpenScreen(screen, undoable: false);
             return hasUndoableScreen;
         }
 
-        protected abstract AbstractController[] GetScreens();
-
         protected virtual void SubscribeEvents() => cancelAction.performed += HandleCancelPerformed;
         protected virtual void UnsubscribeEvents() => cancelAction.performed -= HandleCancelPerformed;
 
         protected virtual void FindFirstScreen() => firstScreen =
-            GetComponentInChildren<AbstractController>(includeInactive: true);
+            GetComponentInChildren<AbstractMenuScreen>(includeInactive: true);
+
+        protected virtual void FindScreens() => Screens =
+            GetComponentsInChildren<AbstractMenuScreen>(includeInactive: true);
 
         protected void DeactivateAllScreens()
         {
-            foreach (var screen in GetScreens())
+            foreach (var screen in Screens)
             {
                 screen.Deactivate();
             }
@@ -148,7 +159,7 @@ namespace ActionCode.UISystem
 
         private void HandleCancelPerformed(InputAction.CallbackContext _)
         {
-            if (!TryOpenLastScreen(out AbstractController screen)) return;
+            if (!TryOpenLastScreen(out AbstractMenuScreen screen)) return;
 
             PlayCancelSound();
             OnScreenCanceled?.Invoke(screen);

@@ -12,7 +12,7 @@ namespace ActionCode.UISystem
         [Header("Screens")]
         [SerializeField] protected AnyButtonScreen anyButton;
         [SerializeField] protected MainMenuScreen mainMenu;
-        [SerializeField] protected AbstractController loadGame;
+        [SerializeField] protected AbstractMenuScreen loadGame;
 
         protected override void Reset()
         {
@@ -24,9 +24,6 @@ namespace ActionCode.UISystem
 
         protected abstract void StartGame();
         protected abstract void ContinueGame();
-
-        protected override AbstractController[] GetScreens() =>
-            new AbstractController[] { anyButton, mainMenu, loadGame };
 
         protected override void SubscribeEvents()
         {
