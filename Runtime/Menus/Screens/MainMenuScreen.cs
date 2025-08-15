@@ -15,7 +15,7 @@ namespace ActionCode.UISystem
     [RequireComponent(typeof(ElementHighlighter))]
     [RequireComponent(typeof(ButtonClickAudioPlayer))]
     [RequireComponent(typeof(ElementFocusAudioPlayer))]
-    public sealed class MainMenuScreen : AbstractController
+    public sealed class MainMenuScreen : AbstractMenuScreen
     {
         [SerializeField, Tooltip("The local Focus Audio Player component.")]
         private ElementFocusAudioPlayer focusPlayer;
