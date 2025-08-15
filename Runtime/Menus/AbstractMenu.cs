@@ -66,7 +66,7 @@ namespace ActionCode.UISystem
 
         protected virtual void Awake()
         {
-            cancelAction = input.FindAction(cancel.GetPath());
+            FindCancelAction();
             FindScreens();
         }
 
@@ -143,6 +143,12 @@ namespace ActionCode.UISystem
 
         protected virtual void FindScreens() => Screens =
             GetComponentsInChildren<AbstractMenuScreen>(includeInactive: true);
+
+        private void FindCancelAction()
+        {
+            cancelAction = input.FindAction(cancel.GetPath());
+            cancelAction.actionMap.Enable();
+        }
 
         protected void DeactivateAllScreens()
         {
