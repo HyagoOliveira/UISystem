@@ -48,6 +48,7 @@ namespace ActionCode.UISystem
         {
             FindReferences();
             SubscribeEvents();
+            IgnorePickingMode();
         }
 
         /// <summary>
@@ -72,6 +73,13 @@ namespace ActionCode.UISystem
         {
             var hasNoComponent = GetComponent<T>() == null;
             if (hasNoComponent) gameObject.AddComponent<T>();
+        }
+
+        private void IgnorePickingMode()
+        {
+            // Necessary to ignore the deselection behavior.
+            // Check BackgroundClickDisabler for more information.
+            Root.pickingMode = PickingMode.Ignore;
         }
     }
 }
