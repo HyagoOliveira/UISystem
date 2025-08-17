@@ -37,8 +37,6 @@ namespace ActionCode.UISystem
         [SerializeField, Tooltip("The cancel input action used to cancel the Popup.")]
         private InputActionPopup cancelInput = new(nameof(input), "UI", "Cancel");
 
-        public static bool IsDisplaying { get; private set; }
-
         private event Action OnConfirm;
         private event Action OnCancel;
 
@@ -50,7 +48,7 @@ namespace ActionCode.UISystem
         private void OnDisable() => UnsubscribeEvents();
 
         /// <summary>
-        /// Displays the dialogue with the given message and title, optionally using localization.
+        /// Shows the dialogue with the given message and title, optionally using localization.
         /// </summary>
         /// <remarks>
         /// If a localization table is provided, the <paramref name="message"/> and <paramref name="title"/> 
@@ -99,19 +97,8 @@ namespace ActionCode.UISystem
             OnCancel = null;
         }
 
-        public static DialoguePopup GetInstance() => FindFirstObjectByType<DialoguePopup>(FindObjectsInactive.Include);
-
-        private void Show()
-        {
-            gameObject.SetActive(true);
-            IsDisplaying = true;
-        }
-
-        private void Hide()
-        {
-            gameObject.SetActive(false);
-            IsDisplaying = false;
-        }
+        private void Show() => gameObject.SetActive(true);
+        private void Hide() => gameObject.SetActive(false);
 
         private void FindActions()
         {
