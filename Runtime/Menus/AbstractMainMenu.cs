@@ -12,7 +12,7 @@ namespace ActionCode.UISystem
         [Header("Screens")]
         [SerializeField] protected AnyButtonScreen anyButton;
         [SerializeField] protected MainMenuScreen mainMenu;
-        [SerializeField] protected AbstractMenuScreen loadGame;
+        [SerializeField] protected AbstractMenuLoadScreen loadMenu;
 
         protected override void Reset()
         {
@@ -20,10 +20,10 @@ namespace ActionCode.UISystem
 
             anyButton = GetComponentInChildren<AnyButtonScreen>(includeInactive: true);
             mainMenu = GetComponentInChildren<MainMenuScreen>(includeInactive: true);
+            loadMenu = GetComponentInChildren<AbstractMenuLoadScreen>(includeInactive: true);
         }
 
-        protected abstract void StartNewGame();
-        protected abstract void ContinueGame();
+        protected abstract void LoadGameScene();
 
         protected override void SubscribeEvents()
         {
@@ -36,6 +36,8 @@ namespace ActionCode.UISystem
             mainMenu.OnLoadClicked += HandleLoadClicked;
             mainMenu.OnOptionsClicked += HandleOptionsClicked;
             mainMenu.OnQuitClicked += HandleQuitClicked;
+
+            loadMenu.OnDataLoadConfirmed += HandleDataLoadConfirmed;
         }
 
         protected override void UnsubscribeEvents()
@@ -49,18 +51,27 @@ namespace ActionCode.UISystem
             mainMenu.OnLoadClicked -= HandleLoadClicked;
             mainMenu.OnOptionsClicked -= HandleOptionsClicked;
             mainMenu.OnQuitClicked -= HandleQuitClicked;
+
+            loadMenu.OnDataLoadConfirmed -= HandleDataLoadConfirmed;
         }
 
-        private void HandleContinueClicked()
+        private async void HandleContinueClicked()
         {
             DeactivateAllScreens();
-            ContinueGame();
+            await loadMenu.LoadFromLastSlotAsync();
+            LoadGameScene();
         }
 
         private void HandleNewGameClicked()
         {
             DeactivateAllScreens();
-            StartNewGame();
+            LoadGameScene();
+        }
+
+        private void HandleDataLoadConfirmed()
+        {
+            DeactivateAllScreens();
+            LoadGameScene();
         }
 
         private async void HandleAnyButtonClicked()
@@ -69,7 +80,7 @@ namespace ActionCode.UISystem
             OpenScreen(mainMenu, undoable: false);
         }
 
-        private void HandleLoadClicked() => OpenScreen(loadGame);
+        private void HandleLoadClicked() => OpenScreen(loadMenu);
         private void HandleOptionsClicked() { } //TODO
         private void HandleQuitClicked() => QuitGame();
     }
