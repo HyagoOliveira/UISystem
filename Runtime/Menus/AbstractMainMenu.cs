@@ -22,7 +22,7 @@ namespace ActionCode.UISystem
             mainMenu = GetComponentInChildren<MainMenuScreen>(includeInactive: true);
         }
 
-        protected abstract void StartGame();
+        protected abstract void StartNewGame();
         protected abstract void ContinueGame();
 
         protected override void SubscribeEvents()
@@ -32,7 +32,7 @@ namespace ActionCode.UISystem
             anyButton.OnAnyClicked += HandleAnyButtonClicked;
 
             mainMenu.OnContinueClicked += HandleContinueClicked;
-            mainMenu.OnStartClicked += HandleStartClicked;
+            mainMenu.OnNewGameClicked += HandleNewGameClicked;
             mainMenu.OnLoadClicked += HandleLoadClicked;
             mainMenu.OnOptionsClicked += HandleOptionsClicked;
             mainMenu.OnQuitClicked += HandleQuitClicked;
@@ -45,7 +45,7 @@ namespace ActionCode.UISystem
             anyButton.OnAnyClicked -= HandleAnyButtonClicked;
 
             mainMenu.OnContinueClicked -= HandleContinueClicked;
-            mainMenu.OnStartClicked -= HandleStartClicked;
+            mainMenu.OnNewGameClicked -= HandleNewGameClicked;
             mainMenu.OnLoadClicked -= HandleLoadClicked;
             mainMenu.OnOptionsClicked -= HandleOptionsClicked;
             mainMenu.OnQuitClicked -= HandleQuitClicked;
@@ -57,10 +57,10 @@ namespace ActionCode.UISystem
             ContinueGame();
         }
 
-        private void HandleStartClicked()
+        private void HandleNewGameClicked()
         {
             DeactivateAllScreens();
-            StartGame();
+            StartNewGame();
         }
 
         private async void HandleAnyButtonClicked()

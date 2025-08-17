@@ -22,19 +22,19 @@ namespace ActionCode.UISystem
 
         [Header("Button Names")]
         [SerializeField] private string continueButtonName = "Continue";
-        [SerializeField] private string startButtonName = "StartGame";
+        [SerializeField] private string newGameButtonName = "NewGame";
         [SerializeField] private string loadButtonName = "LoadGame";
         [SerializeField] private string optionsButtonName = "Options";
         [SerializeField] private string quitButtonName = "Quit";
 
         public event Action OnContinueClicked;
-        public event Action OnStartClicked;
+        public event Action OnNewGameClicked;
         public event Action OnLoadClicked;
         public event Action OnOptionsClicked;
         public event Action OnQuitClicked;
 
         public Button ContinueButton { get; private set; }
-        public Button StartButton { get; private set; }
+        public Button NewGameButton { get; private set; }
         public Button LoadButton { get; private set; }
         public Button OptionsButton { get; private set; }
         public Button QuitButton { get; private set; }
@@ -63,7 +63,7 @@ namespace ActionCode.UISystem
         {
             base.FindReferences();
             ContinueButton = Root.Q<Button>(continueButtonName);
-            StartButton = Root.Q<Button>(startButtonName);
+            NewGameButton = Root.Q<Button>(newGameButtonName);
             LoadButton = Root.Q<Button>(loadButtonName);
             OptionsButton = Root.Q<Button>(optionsButtonName);
             QuitButton = Root.Q<Button>(quitButtonName);
@@ -74,7 +74,7 @@ namespace ActionCode.UISystem
             base.SubscribeEvents();
 
             ContinueButton.clicked += HandleContinueClicked;
-            StartButton.clicked += HandleStartClicked;
+            NewGameButton.clicked += HandleNewGameClicked;
             LoadButton.clicked += HandleLoadClicked;
             OptionsButton.clicked += HandleOptionsClicked;
             QuitButton.clicked += HandleQuitClicked;
@@ -85,21 +85,21 @@ namespace ActionCode.UISystem
             base.UnsubscribeEvents();
 
             ContinueButton.clicked -= HandleContinueClicked;
-            StartButton.clicked -= HandleStartClicked;
+            NewGameButton.clicked -= HandleNewGameClicked;
             LoadButton.clicked -= HandleLoadClicked;
             OptionsButton.clicked -= HandleOptionsClicked;
             QuitButton.clicked -= HandleQuitClicked;
         }
 
         private void HandleContinueClicked() => OnContinueClicked?.Invoke();
-        private void HandleStartClicked() => OnStartClicked?.Invoke();
+        private void HandleNewGameClicked() => OnNewGameClicked?.Invoke();
         private void HandleLoadClicked() => OnLoadClicked?.Invoke();
         private void HandleOptionsClicked() => OnOptionsClicked?.Invoke();
         private void HandleQuitClicked() => OnQuitClicked?.Invoke();
 
         private void CheckContinueButtonAvailability()
         {
-            var firstButton = IsContinueEnabled ? ContinueButton : StartButton;
+            var firstButton = IsContinueEnabled ? ContinueButton : NewGameButton;
 
             ContinueButton.visible = IsContinueEnabled;
             focusPlayer.FocusWithoutSound(firstButton);

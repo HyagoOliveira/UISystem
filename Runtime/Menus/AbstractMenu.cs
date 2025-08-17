@@ -165,6 +165,7 @@ namespace ActionCode.UISystem
 
         private void HandleCancelPerformed(InputAction.CallbackContext _)
         {
+            if (DialoguePopup.IsDisplaying) return;
             if (!TryOpenLastScreen(out AbstractMenuScreen screen)) return;
 
             PlayCancelSound();
