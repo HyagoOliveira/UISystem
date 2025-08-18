@@ -16,6 +16,8 @@ namespace ActionCode.UISystem
         /// <returns></returns>
         public abstract Awaitable LoadFromLastSlotAsync();
 
+        public abstract void ResetGameData();
+
         protected void ConfirmDataLoad() => OnDataLoadConfirmed?.Invoke();
     }
 }

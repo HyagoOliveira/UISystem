@@ -65,6 +65,7 @@ namespace ActionCode.UISystem
         private void HandleNewGameClicked()
         {
             DeactivateAllScreens();
+            loadMenu.ResetGameData();
             LoadGameScene();
         }
 
