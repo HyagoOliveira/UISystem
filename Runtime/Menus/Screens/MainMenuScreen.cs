@@ -13,7 +13,6 @@ namespace ActionCode.UISystem
     /// </summary>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(ElementHighlighter))]
-    [RequireComponent(typeof(ButtonClickAudioPlayer))]
     [RequireComponent(typeof(ElementFocusAudioPlayer))]
     public sealed class MainMenuScreen : AbstractMenuScreen
     {

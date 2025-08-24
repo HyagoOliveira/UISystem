@@ -18,10 +18,13 @@ namespace ActionCode.UISystem
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(-1)]
     [RequireComponent(typeof(AudioSource))]
+    [RequireComponent(typeof(ButtonClickAudioPlayer))]
     public abstract class AbstractMenu : MonoBehaviour
     {
         [SerializeField, Tooltip("The local AudioSource for this menu.")]
         private AudioSource audioSource;
+        [SerializeField, Tooltip("The local Button Click Player for this menu.")]
+        private ButtonClickAudioPlayer buttonClickPlayer;
         [SerializeField, Tooltip("The Global Menu Data.")]
         private MenuData menuData;
 
@@ -51,6 +54,7 @@ namespace ActionCode.UISystem
 
         public MenuData Data => menuData;
         public AudioSource Audio => audioSource;
+        public ButtonClickAudioPlayer ButtonClickPlayer => buttonClickPlayer;
         public AbstractMenuScreen[] Screens { get; private set; }
         public AbstractMenuScreen LastScreen { get; private set; }
         public AbstractMenuScreen CurrentScreen { get; private set; }
@@ -61,6 +65,7 @@ namespace ActionCode.UISystem
         protected virtual void Reset()
         {
             audioSource = GetComponent<AudioSource>();
+            buttonClickPlayer = GetComponent<ButtonClickAudioPlayer>();
             FindFirstScreen();
         }
 
@@ -104,6 +109,14 @@ namespace ActionCode.UISystem
         {
             Time.timeScale = 1f;
 
+            var hasCurrentScreen = CurrentScreen != null;
+            if (hasCurrentScreen)
+            {
+                // Wait so menu components can execute they actions.
+                await Awaitable.NextFrameAsync();
+                ButtonClickPlayer.Dispose();
+            }
+
             LastScreen = CurrentScreen;
             var applyTransition = CurrentScreen && CurrentScreen.IsEnabled;
 
@@ -124,6 +137,8 @@ namespace ActionCode.UISystem
             CurrentScreen = screen;
             CurrentScreen.Activate();
             CurrentScreen.SetVisibility(true);
+
+            ButtonClickPlayer.Initialize(CurrentScreen.Root);
 
             OnScreenOpened?.Invoke(CurrentScreen);
         }
