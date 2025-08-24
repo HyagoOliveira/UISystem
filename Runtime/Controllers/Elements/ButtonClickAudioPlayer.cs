@@ -22,6 +22,8 @@ namespace ActionCode.UISystem
 
         private UQueryBuilder<Button> elements;
 
+        private void Reset() => source = GetComponent<AudioSource>();
+
         public void Initialize(VisualElement root)
         {
             elements = root.Query<Button>(className: className);

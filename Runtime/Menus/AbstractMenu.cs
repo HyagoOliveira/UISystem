@@ -24,10 +24,10 @@ namespace ActionCode.UISystem
     {
         [SerializeField, Tooltip("The local AudioSource for this menu.")]
         private AudioSource audioSource;
-        [SerializeField, Tooltip("The local Button Click Player for this menu.")]
-        private ButtonClickAudioPlayer buttonClickPlayer;
         [SerializeField, Tooltip("The local Element Highlighter for this menu.")]
         private ElementHighlighter highlighter;
+        [SerializeField, Tooltip("The local Button Click Player for this menu.")]
+        private ButtonClickAudioPlayer buttonClickPlayer;
         [SerializeField, Tooltip("The Global Menu Data.")]
         private MenuData menuData;
 

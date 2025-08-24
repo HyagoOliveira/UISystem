@@ -8,7 +8,6 @@ namespace ActionCode.UISystem
     /// Highlights any element found by <see cref="className"/> when any Pointer (like a Mouse) enters into it.
     /// </summary>
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(AudioSource))]
     public sealed class ElementHighlighter : MonoBehaviour, IDisposable
     {
         [Tooltip("The class name used to find the elements.")]
