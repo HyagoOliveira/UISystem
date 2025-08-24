@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -8,30 +9,20 @@ namespace ActionCode.UISystem
     /// </summary>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(AudioSource))]
-    public sealed class ElementHighlighter : AbstractController
+    public sealed class ElementHighlighter : MonoBehaviour, IDisposable
     {
         [Tooltip("The class name used to find the elements.")]
         public string className = "unity-button";
 
         private UQueryBuilder<VisualElement> elements;
 
-        protected override void FindReferences()
+        public void Initialize(VisualElement root)
         {
-            base.FindReferences();
-            elements = Root.Query<VisualElement>(className: className);
-        }
-
-        protected override void SubscribeEvents()
-        {
-            base.SubscribeEvents();
+            elements = root.Query<VisualElement>(className: className);
             elements.ForEach(e => e.RegisterCallback<PointerEnterEvent>(HandlePointerEnterEvent));
         }
 
-        protected override void UnsubscribeEvents()
-        {
-            base.UnsubscribeEvents();
-            elements.ForEach(e => e.UnregisterCallback<PointerEnterEvent>(HandlePointerEnterEvent));
-        }
+        public void Dispose() => elements.ForEach(e => e.UnregisterCallback<PointerEnterEvent>(HandlePointerEnterEvent));
 
         private void HandlePointerEnterEvent(PointerEnterEvent evt)
         {

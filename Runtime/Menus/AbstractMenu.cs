@@ -19,12 +19,15 @@ namespace ActionCode.UISystem
     [DefaultExecutionOrder(-1)]
     [RequireComponent(typeof(AudioSource))]
     [RequireComponent(typeof(ButtonClickAudioPlayer))]
+    [RequireComponent(typeof(ElementHighlighter))]
     public abstract class AbstractMenu : MonoBehaviour
     {
         [SerializeField, Tooltip("The local AudioSource for this menu.")]
         private AudioSource audioSource;
         [SerializeField, Tooltip("The local Button Click Player for this menu.")]
         private ButtonClickAudioPlayer buttonClickPlayer;
+        [SerializeField, Tooltip("The local Element Highlighter for this menu.")]
+        private ElementHighlighter highlighter;
         [SerializeField, Tooltip("The Global Menu Data.")]
         private MenuData menuData;
 
@@ -54,6 +57,7 @@ namespace ActionCode.UISystem
 
         public MenuData Data => menuData;
         public AudioSource Audio => audioSource;
+        public ElementHighlighter Highlighter => highlighter;
         public ButtonClickAudioPlayer ButtonClickPlayer => buttonClickPlayer;
         public AbstractMenuScreen[] Screens { get; private set; }
         public AbstractMenuScreen LastScreen { get; private set; }
@@ -114,6 +118,7 @@ namespace ActionCode.UISystem
             {
                 // Wait so menu components can execute they actions.
                 await Awaitable.NextFrameAsync();
+                Highlighter.Dispose();
                 ButtonClickPlayer.Dispose();
             }
 
@@ -138,6 +143,7 @@ namespace ActionCode.UISystem
             CurrentScreen.Activate();
             CurrentScreen.SetVisibility(true);
 
+            Highlighter.Initialize(CurrentScreen.Root);
             ButtonClickPlayer.Initialize(CurrentScreen.Root);
 
             OnScreenOpened?.Invoke(CurrentScreen);

@@ -12,8 +12,6 @@ namespace ActionCode.UISystem
     /// </para>
     /// </summary>
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(ElementHighlighter))]
-    [RequireComponent(typeof(ElementFocusAudioPlayer))]
     public sealed class MainMenuScreen : AbstractMenuScreen
     {
         [SerializeField, Tooltip("The local Focus Audio Player component.")]
