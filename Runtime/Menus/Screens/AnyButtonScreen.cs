@@ -30,6 +30,10 @@ namespace ActionCode.UISystem
             anyButtonPressListener?.Dispose();
         }
 
-        private void HandleAnyButtonPressed(InputControl _) => OnAnyClicked?.Invoke();
+        private async void HandleAnyButtonPressed(InputControl _)
+        {
+            await Menu.PlaySubmitSoundAndWaitAsync();
+            OnAnyClicked?.Invoke();
+        }
     }
 }

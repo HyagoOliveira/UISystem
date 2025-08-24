@@ -10,6 +10,6 @@ namespace ActionCode.UISystem
     {
         public AbstractMenu Menu { get; private set; }
 
-        protected virtual void Initialize(AbstractMenu menu) => Menu = menu;
+        internal virtual void Initialize(AbstractMenu menu) => Menu = menu;
     }
 }

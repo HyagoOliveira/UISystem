@@ -67,7 +67,7 @@ namespace ActionCode.UISystem
         protected virtual void Awake()
         {
             FindCancelAction();
-            FindScreens();
+            InitializeScreens();
         }
 
         protected virtual void Start() => TryActivateFirstScreen();
@@ -141,8 +141,11 @@ namespace ActionCode.UISystem
         protected virtual void FindFirstScreen() => firstScreen =
             GetComponentInChildren<AbstractMenuScreen>(includeInactive: true);
 
-        protected virtual void FindScreens() => Screens =
-            GetComponentsInChildren<AbstractMenuScreen>(includeInactive: true);
+        protected virtual void InitializeScreens()
+        {
+            Screens = GetComponentsInChildren<AbstractMenuScreen>(includeInactive: true);
+            foreach (var screen in Screens) screen.Initialize(this);
+        }
 
         private void FindCancelAction()
         {

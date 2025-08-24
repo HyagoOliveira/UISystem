@@ -75,12 +75,7 @@ namespace ActionCode.UISystem
             LoadGameScene();
         }
 
-        private async void HandleAnyButtonClicked()
-        {
-            await PlaySubmitSoundAndWaitAsync();
-            OpenScreen(mainMenu, undoable: false);
-        }
-
+        private void HandleAnyButtonClicked() => OpenScreen(mainMenu, undoable: false);
         private void HandleLoadClicked() => OpenScreen(loadMenu);
         private void HandleOptionsClicked() { } //TODO
         private void HandleQuitClicked() => QuitGame();
