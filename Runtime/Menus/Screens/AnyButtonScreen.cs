@@ -32,7 +32,7 @@ namespace ActionCode.UISystem
 
         private async void HandleAnyButtonPressed(InputControl _)
         {
-            await Menu.PlaySubmitSoundAndWaitAsync();
+            await Menu.ButtonClickPlayer.PlaySubmitSoundAndWaitAsync();
             OnAnyClicked?.Invoke();
         }
     }

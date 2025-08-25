@@ -17,21 +17,17 @@ namespace ActionCode.UISystem
     /// </summary>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(-1)]
-    [RequireComponent(typeof(AudioSource))]
-    [RequireComponent(typeof(ButtonClickAudioPlayer))]
     [RequireComponent(typeof(ElementHighlighter))]
+    [RequireComponent(typeof(ButtonClickAudioPlayer))]
+    [RequireComponent(typeof(ElementFocusAudioPlayer))]
     public abstract class AbstractMenu : MonoBehaviour
     {
-        [SerializeField, Tooltip("The local AudioSource for this menu.")]
-        private AudioSource audioSource;
-        [SerializeField, Tooltip("The local Element Highlighter for this menu.")]
+        [SerializeField, Tooltip("The local Highlighter for this menu.")]
         private ElementHighlighter highlighter;
-        [SerializeField, Tooltip("The local Button Click Audio Player for this menu.")]
+        [SerializeField, Tooltip("The local Button Click Player for this menu.")]
         private ButtonClickAudioPlayer buttonClickPlayer;
-        [SerializeField, Tooltip("The local Focus Audio Player for this menu.")]
+        [SerializeField, Tooltip("The local Focus Player for this menu.")]
         private ElementFocusAudioPlayer focusPlayer;
-        [SerializeField, Tooltip("The Global Menu Data.")]
-        private MenuData menuData;
 
         [Header("Screen Transition")]
         [Tooltip("Whether to activate the first screen when start.")]
@@ -57,8 +53,6 @@ namespace ActionCode.UISystem
         /// </summary>
         public event Action<AbstractMenuScreen> OnScreenCanceled;
 
-        public MenuData Data => menuData;
-        public AudioSource Audio => audioSource;
         public ElementHighlighter Highlighter => highlighter;
         public ElementFocusAudioPlayer FocusPlayer => focusPlayer;
         public ButtonClickAudioPlayer ButtonClickPlayer => buttonClickPlayer;
@@ -71,8 +65,7 @@ namespace ActionCode.UISystem
 
         protected virtual void Reset()
         {
-            audioSource = GetComponent<AudioSource>();
-            buttonClickPlayer = GetComponent<ButtonClickAudioPlayer>();
+            FindRequiredComponents();
             FindFirstScreen();
         }
 
@@ -85,15 +78,6 @@ namespace ActionCode.UISystem
         protected virtual void Start() => TryActivateFirstScreen();
         protected virtual void OnEnable() => SubscribeEvents();
         protected virtual void OnDisable() => UnsubscribeEvents();
-
-        public void PlaySubmitSound() => Audio.PlayOneShot(Data.submit);
-        public void PlayCancelSound() => Audio.PlayOneShot(Data.cancel);
-
-        public async Awaitable PlaySubmitSoundAndWaitAsync()
-        {
-            PlaySubmitSound();
-            await Awaitable.WaitForSecondsAsync(menuData.submit.length);
-        }
 
         /// <summary>
         /// Quits the Game, even while in Editor mode.
@@ -131,7 +115,7 @@ namespace ActionCode.UISystem
 
             if (applyTransition)
             {
-                if (undoable) await PlaySubmitSoundAndWaitAsync();
+                if (undoable) await ButtonClickPlayer.PlaySubmitSoundAndWaitAsync();
 
                 DeactivateAllScreens();
                 await Awaitable.WaitForSecondsAsync(transitionTime);
@@ -173,6 +157,13 @@ namespace ActionCode.UISystem
             foreach (var screen in Screens) screen.Initialize(this);
         }
 
+        private void FindRequiredComponents()
+        {
+            highlighter = GetComponent<ElementHighlighter>();
+            focusPlayer = GetComponent<ElementFocusAudioPlayer>();
+            buttonClickPlayer = GetComponent<ButtonClickAudioPlayer>();
+        }
+
         private void FindCancelAction()
         {
             cancelAction = input.FindAction(cancel.GetPath());
@@ -197,7 +188,7 @@ namespace ActionCode.UISystem
             if (Popups.IsDisplayingAnyPopup()) return;
             if (!TryOpenLastScreen(out AbstractMenuScreen screen)) return;
 
-            PlayCancelSound();
+            ButtonClickPlayer.PlayCancelSound();
             OnScreenCanceled?.Invoke(screen);
         }
     }

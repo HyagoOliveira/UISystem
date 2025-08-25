@@ -20,6 +20,8 @@ namespace ActionCode.UISystem
         [Tooltip("The class name used to find the buttons.")]
         public string className = "unity-button";
 
+        public MenuData Data => data;
+
         private UQueryBuilder<Button> elements;
 
         private void Reset() => source = GetComponent<AudioSource>();
@@ -31,8 +33,14 @@ namespace ActionCode.UISystem
         }
 
         public void Dispose() => elements.ForEach(b => b.clicked -= HandleClickEvent);
-        public void PlaySubmitSound() => source.PlayOneShot(data.submit);
-        public void PlayCancelSound() => source.PlayOneShot(data.cancel);
+        public void PlaySubmitSound() => source.PlayOneShot(Data.submit);
+        public void PlayCancelSound() => source.PlayOneShot(Data.cancel);
+
+        public async Awaitable PlaySubmitSoundAndWaitAsync()
+        {
+            PlaySubmitSound();
+            await Awaitable.WaitForSecondsAsync(Data.submit.length);
+        }
 
         private void HandleClickEvent() => PlaySubmitSound();
     }
