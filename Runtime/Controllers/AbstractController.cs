@@ -57,12 +57,6 @@ namespace ActionCode.UISystem
         protected virtual void SubscribeEvents() { }
         protected virtual void UnsubscribeEvents() { }
 
-        private void TryAddComponent<T>() where T : Component
-        {
-            var hasNoComponent = GetComponent<T>() == null;
-            if (hasNoComponent) gameObject.AddComponent<T>();
-        }
-
         private void IgnorePickingMode()
         {
             // Necessary to ignore the deselection behavior.

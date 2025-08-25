@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -9,7 +8,7 @@ namespace ActionCode.UISystem
     /// </summary>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(AudioSource))]
-    public sealed class ElementFocusAudioPlayer : MonoBehaviour, IDisposable
+    public sealed class ElementFocusAudioPlayer : AbstractElement<VisualElement>
     {
         [SerializeField, Tooltip("The local AudioSource component.")]
         private AudioSource source;
@@ -20,17 +19,8 @@ namespace ActionCode.UISystem
         [SerializeField, Tooltip("The class name used to find the elements.")]
         private string className = "unity-button";
 
-        private UQueryBuilder<VisualElement> elements;
-
         private void Reset() => source = GetComponent<AudioSource>();
 
-        public void Initialize(VisualElement root)
-        {
-            elements = root.Query<VisualElement>(className: className);
-            elements.ForEach(e => e.RegisterCallback<FocusEvent>(HandleElementFocused));
-        }
-
-        public void Dispose() => elements.ForEach(e => e.UnregisterCallback<FocusEvent>(HandleElementFocused));
         public void PlaySelectionSound() => source.PlayOneShot(data.selection);
 
         public async void FocusWithoutSound(VisualElement element)
@@ -38,6 +28,10 @@ namespace ActionCode.UISystem
             await Awaitable.NextFrameAsync();
             element.Focus();
         }
+
+        protected override string GetClassName() => className;
+        protected override void RegisterEvent(VisualElement e) => e.RegisterCallback<FocusEvent>(HandleElementFocused);
+        protected override void UnregisterEvent(VisualElement e) => e.UnregisterCallback<FocusEvent>(HandleElementFocused);
 
         private void HandleElementFocused(FocusEvent _) => PlaySelectionSound();
     }

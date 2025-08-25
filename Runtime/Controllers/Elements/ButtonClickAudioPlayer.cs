@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -9,7 +8,7 @@ namespace ActionCode.UISystem
     /// </summary>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(AudioSource))]
-    public sealed class ButtonClickAudioPlayer : MonoBehaviour, IDisposable
+    public sealed class ButtonClickAudioPlayer : AbstractElement<Button>
     {
         [SerializeField, Tooltip("The local AudioSource component.")]
         private AudioSource source;
@@ -22,17 +21,8 @@ namespace ActionCode.UISystem
 
         public MenuData Data => data;
 
-        private UQueryBuilder<Button> elements;
-
         private void Reset() => source = GetComponent<AudioSource>();
 
-        public void Initialize(VisualElement root)
-        {
-            elements = root.Query<Button>(className: className);
-            elements.ForEach(b => b.clicked += HandleClickEvent);
-        }
-
-        public void Dispose() => elements.ForEach(b => b.clicked -= HandleClickEvent);
         public void PlaySubmitSound() => source.PlayOneShot(Data.submit);
         public void PlayCancelSound() => source.PlayOneShot(Data.cancel);
 
@@ -41,6 +31,10 @@ namespace ActionCode.UISystem
             PlaySubmitSound();
             await Awaitable.WaitForSecondsAsync(Data.submit.length);
         }
+
+        protected override string GetClassName() => className;
+        protected override void RegisterEvent(Button b) => b.clicked += HandleClickEvent;
+        protected override void UnregisterEvent(Button b) => b.clicked -= HandleClickEvent;
 
         private void HandleClickEvent() => PlaySubmitSound();
     }
