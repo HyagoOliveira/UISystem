@@ -51,18 +51,6 @@ namespace ActionCode.UISystem
             IgnorePickingMode();
         }
 
-        /// <summary>
-        /// Adds all necessary components for a menu.
-        /// </summary>
-        [ContextMenu("Setup Menu")]
-        public void SetupForMenu()
-        {
-            TryAddComponent<ButtonClickAudioPlayer>();
-            TryAddComponent<ElementHighlighter>();
-            TryAddComponent<ElementFirstSelector>();
-            TryAddComponent<ElementFocusAudioPlayer>();
-        }
-
         public T Find<T>(string name) where T : VisualElement => Root.Find<T>(name);
 
         protected virtual void FindReferences() { }
