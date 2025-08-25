@@ -131,6 +131,9 @@ namespace ActionCode.UISystem
             CurrentScreen.Activate();
             CurrentScreen.SetVisibility(true);
 
+            await Awaitable.NextFrameAsync();
+            CurrentScreen.Focus();
+
             Highlighter.Initialize(CurrentScreen.Root);
             FocusPlayer.Initialize(CurrentScreen.Root);
             ButtonClickPlayer.Initialize(CurrentScreen.Root);

@@ -33,6 +33,12 @@ namespace ActionCode.UISystem
         public Button OptionsButton { get; private set; }
         public Button QuitButton { get; private set; }
 
+        public override void Focus()
+        {
+            base.Focus();
+            ContinueButton.Focus();
+        }
+
         protected override void FindReferences()
         {
             base.FindReferences();
