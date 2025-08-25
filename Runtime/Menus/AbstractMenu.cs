@@ -103,11 +103,9 @@ namespace ActionCode.UISystem
             var hasCurrentScreen = CurrentScreen != null;
             if (hasCurrentScreen)
             {
-                // Wait so menu components can execute they actions.
+                // Wait so menu elements can execute their final actions.
                 await Awaitable.NextFrameAsync();
-                Highlighter.Dispose();
-                FocusPlayer.Dispose();
-                ButtonClickPlayer.Dispose();
+                DisposeElements();
             }
 
             LastScreen = CurrentScreen;
@@ -134,10 +132,7 @@ namespace ActionCode.UISystem
             await Awaitable.NextFrameAsync();
             CurrentScreen.Focus();
 
-            Highlighter.Initialize(CurrentScreen.Root);
-            FocusPlayer.Initialize(CurrentScreen.Root);
-            ButtonClickPlayer.Initialize(CurrentScreen.Root);
-
+            InitializeElements();
             OnScreenOpened?.Invoke(CurrentScreen);
         }
 
@@ -184,6 +179,20 @@ namespace ActionCode.UISystem
         private void TryActivateFirstScreen()
         {
             if (activateFirstScreen) OpenFirstScreen();
+        }
+
+        private void InitializeElements()
+        {
+            Highlighter.Initialize(CurrentScreen.Root);
+            FocusPlayer.Initialize(CurrentScreen.Root);
+            ButtonClickPlayer.Initialize(CurrentScreen.Root);
+        }
+
+        private void DisposeElements()
+        {
+            Highlighter.Dispose();
+            FocusPlayer.Dispose();
+            ButtonClickPlayer.Dispose();
         }
 
         private void HandleCancelPerformed(InputAction.CallbackContext _)
