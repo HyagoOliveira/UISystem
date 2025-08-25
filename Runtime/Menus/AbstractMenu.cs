@@ -26,8 +26,10 @@ namespace ActionCode.UISystem
         private AudioSource audioSource;
         [SerializeField, Tooltip("The local Element Highlighter for this menu.")]
         private ElementHighlighter highlighter;
-        [SerializeField, Tooltip("The local Button Click Player for this menu.")]
+        [SerializeField, Tooltip("The local Button Click Audio Player for this menu.")]
         private ButtonClickAudioPlayer buttonClickPlayer;
+        [SerializeField, Tooltip("The local Focus Audio Player for this menu.")]
+        private ElementFocusAudioPlayer focusPlayer;
         [SerializeField, Tooltip("The Global Menu Data.")]
         private MenuData menuData;
 
@@ -58,6 +60,7 @@ namespace ActionCode.UISystem
         public MenuData Data => menuData;
         public AudioSource Audio => audioSource;
         public ElementHighlighter Highlighter => highlighter;
+        public ElementFocusAudioPlayer FocusPlayer => focusPlayer;
         public ButtonClickAudioPlayer ButtonClickPlayer => buttonClickPlayer;
         public AbstractMenuScreen[] Screens { get; private set; }
         public AbstractMenuScreen LastScreen { get; private set; }
@@ -119,6 +122,7 @@ namespace ActionCode.UISystem
                 // Wait so menu components can execute they actions.
                 await Awaitable.NextFrameAsync();
                 Highlighter.Dispose();
+                FocusPlayer.Dispose();
                 ButtonClickPlayer.Dispose();
             }
 
@@ -144,6 +148,7 @@ namespace ActionCode.UISystem
             CurrentScreen.SetVisibility(true);
 
             Highlighter.Initialize(CurrentScreen.Root);
+            FocusPlayer.Initialize(CurrentScreen.Root);
             ButtonClickPlayer.Initialize(CurrentScreen.Root);
 
             OnScreenOpened?.Invoke(CurrentScreen);

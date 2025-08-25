@@ -14,9 +14,6 @@ namespace ActionCode.UISystem
     [DisallowMultipleComponent]
     public sealed class MainMenuScreen : AbstractMenuScreen
     {
-        [SerializeField, Tooltip("The local Focus Audio Player component.")]
-        private ElementFocusAudioPlayer focusPlayer;
-
         [Header("Button Names")]
         [SerializeField] private string continueButtonName = "Continue";
         [SerializeField] private string newGameButtonName = "NewGame";
@@ -35,26 +32,6 @@ namespace ActionCode.UISystem
         public Button LoadButton { get; private set; }
         public Button OptionsButton { get; private set; }
         public Button QuitButton { get; private set; }
-
-        public bool IsContinueEnabled { get; set; }
-
-        protected override void Reset()
-        {
-            base.Reset();
-            focusPlayer = GetComponentInParent<ElementFocusAudioPlayer>();
-        }
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            CheckContinueButtonAvailability();
-        }
-
-        protected override void OnDisable()
-        {
-            base.OnDisable();
-            ContinueButton.visible = false;
-        }
 
         protected override void FindReferences()
         {
@@ -93,13 +70,5 @@ namespace ActionCode.UISystem
         private void HandleLoadClicked() => OnLoadClicked?.Invoke();
         private void HandleOptionsClicked() => OnOptionsClicked?.Invoke();
         private void HandleQuitClicked() => OnQuitClicked?.Invoke();
-
-        private void CheckContinueButtonAvailability()
-        {
-            var firstButton = IsContinueEnabled ? ContinueButton : NewGameButton;
-
-            ContinueButton.visible = IsContinueEnabled;
-            focusPlayer.FocusWithoutSound(firstButton);
-        }
     }
 }
