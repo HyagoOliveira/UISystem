@@ -37,7 +37,7 @@ namespace ActionCode.UISystem
             mainMenu.OnOptionsClicked += HandleOptionsClicked;
             mainMenu.OnQuitClicked += HandleQuitClicked;
 
-            loadMenu.OnDataLoadConfirmed += HandleDataLoadConfirmed;
+            if (loadMenu) loadMenu.OnDataLoadConfirmed += HandleDataLoadConfirmed;
         }
 
         protected override void UnsubscribeEvents()
@@ -52,7 +52,7 @@ namespace ActionCode.UISystem
             mainMenu.OnOptionsClicked -= HandleOptionsClicked;
             mainMenu.OnQuitClicked -= HandleQuitClicked;
 
-            loadMenu.OnDataLoadConfirmed -= HandleDataLoadConfirmed;
+            if (loadMenu) loadMenu.OnDataLoadConfirmed -= HandleDataLoadConfirmed;
         }
 
         private async void HandleContinueClicked()
