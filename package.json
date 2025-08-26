@@ -10,6 +10,7 @@
   ],
   "dependencies": {
     "com.unity.ugui": "1.0.0",
+    "com.actioncode.awaitable-system": "1.0.0",
     "com.actioncode.input-system": "1.1.0",
     "com.actioncode.serialized-dictionary": "1.2.0"
   },

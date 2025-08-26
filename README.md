@@ -6,6 +6,7 @@
 * License: **MIT**
 * Dependencies:
 	- Unity.Input System : [1.2.0](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.2/changelog/CHANGELOG.html)
+	- ActionCode.Awaitable System : [1.0.0](https://github.com/HyagoOliveira/AwaitableSystem/tree/1.0.0)
 	- ActionCode.Input System : [1.1.0](https://github.com/HyagoOliveira/InputSystem/tree/1.1.0)
 	- ActionCode.Serialized Dictionary : [1.2.0](https://github.com/HyagoOliveira/SerializedDictionary/tree/1.2.0)
 	- com.unity.ugui: [2.0.0](https://docs.unity3d.com/Packages/com.unity.ugui@2.0/changelog/CHANGELOG.html)
