@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 using UnityInputSystem = UnityEngine.InputSystem.InputSystem;
@@ -11,12 +12,24 @@ namespace ActionCode.UISystem
     /// </summary>
     public sealed class AnyButtonScreen : AbstractMenuScreen
     {
+        [Header("Animations")]
+        [SerializeField, Tooltip("The optional animation to play when idle.")]
+        private AbstractAnimator idleAnimator;
+        [SerializeField, Tooltip("The optional animation to play when clicked.")]
+        private AbstractAnimator clickedAnimator;
+
         /// <summary>
         /// Event fired when any button is pressed.
         /// </summary>
         public event Action OnAnyClicked;
 
         private IDisposable anyButtonPressListener;
+
+        public override void Activate()
+        {
+            base.Activate();
+            if (idleAnimator) idleAnimator.Play();
+        }
 
         protected override void SubscribeEvents()
         {
@@ -32,7 +45,11 @@ namespace ActionCode.UISystem
 
         private async void HandleAnyButtonPressed(InputControl _)
         {
-            await Menu.ButtonClickPlayer.PlaySubmitSoundAndWaitAsync();
+            Menu.ButtonClickPlayer.PlaySubmitSound();
+
+            if (idleAnimator) idleAnimator.Stop();
+            if (clickedAnimator) await clickedAnimator.PlayAsync();
+
             OnAnyClicked?.Invoke();
         }
     }

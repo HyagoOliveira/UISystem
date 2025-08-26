@@ -48,6 +48,12 @@ namespace ActionCode.UISystem
 
         public async Awaitable PlayAsync()
         {
+            if (IsPlaying)
+            {
+                Stop();
+                await Awaitable.NextFrameAsync();
+            }
+
             ResetTime();
             IsPlaying = true;
 
