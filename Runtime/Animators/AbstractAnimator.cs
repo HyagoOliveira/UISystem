@@ -3,39 +3,72 @@ using UnityEngine.UIElements;
 
 namespace ActionCode.UISystem
 {
+    /// <summary>
+    /// Abstract animator component for a Visual Elements.
+    /// <para>
+    /// UI Toolkit doesn't have a proper Animation solution for now.
+    /// Use any of its implementation to create Visual Elements animations.
+    /// </para>
+    /// </summary>
     [RequireComponent(typeof(UIDocument))]
-    public abstract class AbstractAnimator : MonoBehaviour
+    public abstract class AbstractAnimator : AbstractController
     {
-        [SerializeField, Tooltip("The local UI Document component.")]
-        private UIDocument document;
+        [SerializeField] private string elementName;
+        [SerializeField, Min(0f)] private float speed = 1f;
+        [SerializeField] private bool playOnStart = true;
+
+        public bool IsPlaying { get; private set; }
+        public float CurrentTime { get; protected set; }
 
         /// <summary>
-        /// The document Root Visual Element.
+        /// The Visual Element been animated.
         /// </summary>
-        public VisualElement Root => Document.rootVisualElement;
+        public VisualElement Element { get; protected set; }
 
-        /// <summary>
-        /// The UI Document component.
-        /// </summary>
-        public UIDocument Document
+        public float Speed
         {
-            get => document;
-            set
+            get => speed;
+            set => speed = Mathf.Max(0f, value);
+        }
+
+        protected virtual void Start() => CheckPlayOnStart();
+
+        public async Awaitable PlayAsync()
+        {
+            ResetTime();
+            IsPlaying = true;
+
+            while (IsPlaying)
             {
-                document = value;
-                Reload();
+                UpdateAnimation();
+                await Awaitable.NextFrameAsync();
             }
         }
 
-        protected virtual void Reset() => document = GetComponent<UIDocument>();
-        protected virtual void OnEnable() => Reload();
-        private void Update() => UpdateAnimation();
+        public void Play() => _ = PlayAsync();
+        public void ResetTime() => CurrentTime = 0f;
 
-        public T Find<T>(string name) where T : VisualElement => Root.Find<T>(name);
+        public void Stop()
+        {
+            ResetTime();
+            IsPlaying = false;
+        }
 
-        protected virtual void Reload() => FindReferences();
+        public static bool HasCurveFinished(AnimationCurve curve, float currentTime)
+        {
+            var isLoop = curve.postWrapMode is WrapMode.Loop or WrapMode.PingPong;
+            if (isLoop || curve.keys.Length == 0) return false;
 
-        protected abstract void FindReferences();
+            var lastTime = curve.keys[^1].time;
+            return currentTime >= lastTime;
+        }
+
         protected abstract void UpdateAnimation();
+        protected override void FindReferences() => Element = Find<VisualElement>(elementName);
+
+        private void CheckPlayOnStart()
+        {
+            if (playOnStart) Play();
+        }
     }
 }

@@ -1,33 +1,32 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace ActionCode.UISystem
 {
     /// <summary>
-    /// Opacity animator for Visual Elements.
-    /// Use the <see cref="animation"/> curve to animate the opacity.
+    /// Opacity animator for a Visual Elements.
+    /// <para>
+    /// Use the <see cref="opacityCurve"/> curve to animate the Visual Element opacity.
+    /// </para>
     /// </summary>
     [DisallowMultipleComponent]
     public sealed class OpacityAnimator : AbstractAnimator
     {
-        [SerializeField] private string elementName;
-#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
-        [SerializeField] private AnimationCurve animation;
-#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
-
-        /// <summary>
-        /// The Visual Element been animated.
-        /// </summary>
-        public VisualElement Element { get; private set; }
+        [Space]
+        [SerializeField, Tooltip("The curve driving the opacity animation.")]
+        private AnimationCurve opacityCurve;
 
         public void SetOpacity(float opacity) => Element.style.opacity = opacity;
 
-        protected override void FindReferences() => Element = Find<VisualElement>(elementName);
-
         protected override void UpdateAnimation()
         {
-            var opacity = animation.Evaluate(Time.timeSinceLevelLoad);
-            SetOpacity(opacity);
+            CurrentTime += Time.deltaTime * Speed;
+            SetOpacity(opacityCurve.Evaluate(CurrentTime));
+            CheckStopCondition();
+        }
+
+        private void CheckStopCondition()
+        {
+            if (HasCurveFinished(opacityCurve, CurrentTime)) Stop();
         }
     }
 }
