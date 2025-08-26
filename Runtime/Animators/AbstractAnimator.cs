@@ -13,11 +13,21 @@ namespace ActionCode.UISystem
     [RequireComponent(typeof(UIDocument))]
     public abstract class AbstractAnimator : AbstractController
     {
-        [SerializeField] private string elementName;
-        [SerializeField, Min(0f)] private float speed = 1f;
-        [SerializeField] private bool playOnStart = true;
+        [SerializeField, Tooltip("The Visual Element been animated.")]
+        private string elementName;
+        [SerializeField, Min(0f), Tooltip("The animation speed.")]
+        private float speed = 1f;
+        [SerializeField, Tooltip("Whether to play the animation on the Start function.")]
+        private bool playOnStart = true;
 
+        /// <summary>
+        /// Whether the animation is currently playing.
+        /// </summary>
         public bool IsPlaying { get; private set; }
+
+        /// <summary>
+        /// The animation current time.
+        /// </summary>
         public float CurrentTime { get; protected set; }
 
         /// <summary>
@@ -25,6 +35,9 @@ namespace ActionCode.UISystem
         /// </summary>
         public VisualElement Element { get; protected set; }
 
+        /// <summary>
+        /// The animation speed.
+        /// </summary>
         public float Speed
         {
             get => speed;

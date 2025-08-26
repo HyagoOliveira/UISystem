@@ -8,7 +8,6 @@ namespace ActionCode.UISystem
     /// Use the <see cref="opacityCurve"/> curve to animate the Visual Element opacity.
     /// </para>
     /// </summary>
-    [DisallowMultipleComponent]
     public sealed class OpacityAnimator : AbstractAnimator
     {
         [Space]
