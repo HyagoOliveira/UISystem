@@ -58,14 +58,14 @@ namespace ActionCode.UISystem
         private async void HandleContinueClicked()
         {
             DeactivateAllScreens();
-            await loadMenu.LoadFromLastSlotAsync();
+            if (loadMenu) await loadMenu.LoadFromLastSlotAsync();
             LoadGameScene();
         }
 
         private void HandleNewGameClicked()
         {
             DeactivateAllScreens();
-            loadMenu.ResetGameData();
+            if (loadMenu) loadMenu.ResetGameData();
             LoadGameScene();
         }
 

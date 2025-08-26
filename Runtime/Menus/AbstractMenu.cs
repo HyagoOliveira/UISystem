@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using ActionCode.InputSystem;
+using ActionCode.AwaitableSystem;
 
 namespace ActionCode.UISystem
 {
@@ -108,13 +109,13 @@ namespace ActionCode.UISystem
                 DisposeElements();
             }
 
+            await AwaitableUtility.WaitForFramesAsync(10);
+
             LastScreen = CurrentScreen;
             var applyTransition = CurrentScreen && CurrentScreen.IsEnabled;
 
             if (applyTransition)
             {
-                if (undoable) await ButtonClickPlayer.PlaySubmitSoundAndWaitAsync();
-
                 DeactivateAllScreens();
                 await Awaitable.WaitForSecondsAsync(transitionTime);
             }

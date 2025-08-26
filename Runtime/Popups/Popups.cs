@@ -16,6 +16,6 @@ namespace ActionCode.UISystem
         private void Awake() => Dialogue = dislogue;
         private void OnDisable() => Dialogue = null;
 
-        public static bool IsDisplayingAnyPopup() => Dialogue.isActiveAndEnabled;
+        public static bool IsDisplayingAnyPopup() => Dialogue && Dialogue.isActiveAndEnabled;
     }
 }
