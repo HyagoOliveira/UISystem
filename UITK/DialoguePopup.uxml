@@ -1,0 +1,16 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Background" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.9); justify-content: center;">
+        <ui:VisualElement name="Popup" style="width: 600px; height: 300px; background-color: rgb(255, 255, 255); border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); align-self: center;">
+            <ui:VisualElement name="Header" style="background-color: rgb(26, 26, 26);">
+                <ui:Label text="Title" name="Title" style="flex-grow: 1; -unity-font-style: bold; -unity-text-align: middle-center; color: rgb(255, 255, 255); font-size: 18px; height: 10%;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Body" style="flex-grow: 1; height: 50%;">
+                <ui:Label text="Message" name="Message" style="flex-grow: 1; -unity-text-align: middle-center; font-size: 16px;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Footer" style="flex-direction: row; justify-content: space-around; background-color: rgb(26, 26, 26); height: 20%; align-items: center;">
+                <ui:Button text="Yes" name="Confirm" style="width: 150px; height: 40px;" />
+                <ui:Button text="No" name="Back" style="width: 150px; height: 40px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
