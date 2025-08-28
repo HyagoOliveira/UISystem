@@ -12,6 +12,9 @@ namespace ActionCode.UISystem
     /// </summary>
     public sealed class AnyButtonScreen : AbstractMenuScreen
     {
+        [Tooltip("Whether can go back to this screen from Main Menu.")]
+        public bool canGoBack;
+
         [Header("Animations")]
         [SerializeField, Tooltip("The optional animation to play when idle.")]
         private AbstractAnimator idleAnimator;

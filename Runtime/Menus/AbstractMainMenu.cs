@@ -75,7 +75,7 @@ namespace ActionCode.UISystem
             LoadGameScene();
         }
 
-        private void HandleAnyButtonClicked() => OpenScreen(mainMenu, undoable: false);
+        private void HandleAnyButtonClicked() => OpenScreen(mainMenu, undoable: anyButton.canGoBack);
         private void HandleLoadClicked() => OpenScreen(loadMenu);
         private void HandleOptionsClicked() { } //TODO
         private void HandleQuitClicked() => QuitGame();
