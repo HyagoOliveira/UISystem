@@ -34,16 +34,28 @@ namespace ActionCode.UISystem
         protected override void SubscribeEvents()
         {
             base.SubscribeEvents();
-            anyButtonPressListener = UnityInputSystem.onAnyButtonPress.CallOnce(HandleAnyButtonPressed);
+            SubscribeAnyButtonPressEvent();
         }
 
         protected override void UnsubscribeEvents()
         {
             base.UnsubscribeEvents();
-            anyButtonPressListener?.Dispose();
+            UnsubscribeAnyButtonPressEvent();
         }
 
-        private async void HandleAnyButtonPressed(InputControl _)
+        private void SubscribeAnyButtonPressEvent() => anyButtonPressListener = UnityInputSystem.onAnyButtonPress.Call(HandleAnyButtonPressed);
+        private void UnsubscribeAnyButtonPressEvent() => anyButtonPressListener?.Dispose();
+
+        private void HandleAnyButtonPressed(InputControl input)
+        {
+            if (IsValidDevicePress(input.device))
+            {
+                PressButton();
+                UnsubscribeAnyButtonPressEvent();
+            }
+        }
+
+        private async void PressButton()
         {
             Menu.ButtonClickPlayer.PlaySubmitSound();
 
@@ -52,5 +64,17 @@ namespace ActionCode.UISystem
 
             OnAnyClicked?.Invoke();
         }
+
+        private static bool IsValidDevicePress(InputDevice device) => !IsInvalidMouseClick(device);
+        private static bool IsInvalidMouseClick(InputDevice device) =>
+            device is Mouse mouse && !IsInsideGameView(mouse.position.value);
+
+        // TODO move into InputSystem package
+        private static bool IsInsideGameView(Vector2 position) => IsInsideGameView(Vector2Int.FloorToInt(position));
+
+        // First mouse click outside Game View has Position = (0, 0)
+        private static bool IsInsideGameView(Vector2Int position) =>
+            position.x > 0 && position.x <= Screen.width &&
+            position.y > 0 && position.y <= Screen.height;
     }
 }
