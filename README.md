@@ -10,6 +10,7 @@
 	- ActionCode.Input System : [1.1.0](https://github.com/HyagoOliveira/InputSystem/tree/1.1.0)
 	- ActionCode.Serialized Dictionary : [1.2.0](https://github.com/HyagoOliveira/SerializedDictionary/tree/1.2.0)
 	- com.unity.ugui: [2.0.0](https://docs.unity3d.com/Packages/com.unity.ugui@2.0/changelog/CHANGELOG.html)
+	- com.unity.modules.uielements: [1.0.0](https://docs.unity3d.com/6000.2/Documentation/ScriptReference/UnityEngine.UIElementsModule.html)
 
 ## Other Features
 
