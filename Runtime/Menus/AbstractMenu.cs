@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using ActionCode.InputSystem;
+using UnityEngine.UIElements;
 using ActionCode.AwaitableSystem;
 
 namespace ActionCode.UISystem
@@ -38,12 +37,6 @@ namespace ActionCode.UISystem
         [Min(0f), Tooltip("The time (in seconds) between screen transitions.")]
         public float transitionTime = 0.2f;
 
-        [Header("Input")]
-        [SerializeField, Tooltip("The Input Asset where the Cancel action is.")]
-        private InputActionAsset input;
-        [SerializeField, Tooltip("The cancel action used to go back to the last Screen if available.")]
-        private InputActionPopup cancel = new(nameof(input), "UI", "Cancel");
-
         /// <summary>
         /// Event fired when the given screen is opened.
         /// </summary>
@@ -61,21 +54,10 @@ namespace ActionCode.UISystem
         public AbstractMenuScreen LastScreen { get; private set; }
         public AbstractMenuScreen CurrentScreen { get; private set; }
 
-        private InputAction cancelAction;
         private readonly Stack<AbstractMenuScreen> undoHistory = new();
 
-        protected virtual void Reset()
-        {
-            FindRequiredComponents();
-            FindFirstScreen();
-        }
-
-        protected virtual void Awake()
-        {
-            FindCancelAction();
-            InitializeScreens();
-        }
-
+        protected virtual void Reset() => FindRequiredComponents();
+        protected virtual void Awake() => InitializeScreens();
         protected virtual void Start() => TryActivateFirstScreen();
         protected virtual void OnEnable() => SubscribeEvents();
         protected virtual void OnDisable() => UnsubscribeEvents();
@@ -93,7 +75,6 @@ namespace ActionCode.UISystem
         }
 
         public void OpenFirstScreen() => OpenScreen(firstScreen, undoable: false);
-
         public void OpenScreen(AbstractMenuScreen screen, bool undoable = true) =>
             _ = OpenScreenAsync(screen, undoable);
 
@@ -104,6 +85,7 @@ namespace ActionCode.UISystem
             var hasCurrentScreen = CurrentScreen != null;
             if (hasCurrentScreen)
             {
+                CurrentScreen.Root.UnregisterCallback<NavigationCancelEvent>(HandleNavigationCancelEvent);
                 // Wait so menu elements can execute their final actions.
                 await Awaitable.NextFrameAsync();
                 DisposeElements();
@@ -126,9 +108,12 @@ namespace ActionCode.UISystem
                 if (hasLastController) undoHistory.Push(LastScreen);
             }
 
+            if (screen == null) return;
+
             CurrentScreen = screen;
             CurrentScreen.Activate();
             CurrentScreen.SetVisibility(true);
+            CurrentScreen.Root.RegisterCallback<NavigationCancelEvent>(HandleNavigationCancelEvent);
 
             await Awaitable.NextFrameAsync();
             CurrentScreen.Focus();
@@ -144,8 +129,8 @@ namespace ActionCode.UISystem
             return hasUndoableScreen;
         }
 
-        protected virtual void SubscribeEvents() => cancelAction.performed += HandleCancelPerformed;
-        protected virtual void UnsubscribeEvents() => cancelAction.performed -= HandleCancelPerformed;
+        protected virtual void SubscribeEvents() { }
+        protected virtual void UnsubscribeEvents() { }
 
         protected virtual void FindFirstScreen() => firstScreen =
             GetComponentInChildren<AbstractMenuScreen>(includeInactive: true);
@@ -161,12 +146,7 @@ namespace ActionCode.UISystem
             highlighter = GetComponent<ElementHighlighter>();
             focusPlayer = GetComponent<ElementFocusAudioPlayer>();
             buttonClickPlayer = GetComponent<ButtonClickAudioPlayer>();
-        }
-
-        private void FindCancelAction()
-        {
-            cancelAction = input.FindAction(cancel.GetPath());
-            cancelAction.actionMap.Enable();
+            FindFirstScreen();
         }
 
         protected void DeactivateAllScreens()
@@ -196,8 +176,10 @@ namespace ActionCode.UISystem
             ButtonClickPlayer.Dispose();
         }
 
-        private void HandleCancelPerformed(InputAction.CallbackContext _)
+        private void HandleNavigationCancelEvent(NavigationCancelEvent evt)
         {
+            Debug.Log($"OnNavCancelEvent {evt.propagationPhase}");
+
             if (Popups.IsDisplayingAnyPopup()) return;
             if (!TryOpenLastScreen(out AbstractMenuScreen screen)) return;
 
