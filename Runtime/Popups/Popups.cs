@@ -9,9 +9,9 @@ namespace ActionCode.UISystem
     [DisallowMultipleComponent]
     public sealed class Popups : MonoBehaviour
     {
-        [SerializeField] private DialoguePopup dislogue;
+        [SerializeField] private CanvasDialoguePopup dislogue;
 
-        public static DialoguePopup Dialogue { get; private set; }
+        public static CanvasDialoguePopup Dialogue { get; private set; }
 
         private void Awake() => Dialogue = dislogue;
         private void OnDisable() => Dialogue = null;

@@ -536,7 +536,7 @@ GameObject:
   - component: {fileID: 3141190436181670601}
   - component: {fileID: 4735874328904904173}
   m_Layer: 5
-  m_Name: DialoguePopup
+  m_Name: DialoguePopup_Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

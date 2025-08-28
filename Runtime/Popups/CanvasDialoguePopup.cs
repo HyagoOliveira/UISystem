@@ -10,11 +10,11 @@ using UnityEngine.Localization.Components;
 namespace ActionCode.UISystem
 {
     /// <summary>
-    /// Component for a Dialogue Popup, with a localized/normal Title and Message 
+    /// Component for a Canvas Dialogue Popup, with a localized/normal Title and Message 
     /// using optional callbacks to Confirm and Cancel.
     /// </summary>
     [DisallowMultipleComponent]
-    public sealed class DialoguePopup : MonoBehaviour
+    public sealed class CanvasDialoguePopup : MonoBehaviour
     {
         [SerializeField] private TMP_Text title;
         [SerializeField] private TMP_Text message;
