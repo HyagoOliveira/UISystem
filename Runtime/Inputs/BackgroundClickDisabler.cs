@@ -5,15 +5,13 @@ using UnityEngine.InputSystem.UI;
 namespace ActionCode.UISystem
 {
     /// <summary>
-    /// Disable the deselection behavior on background click from a local 
+    /// Disables the deselection behavior on background click from a local 
     /// <see cref="InputSystemUIInputModule"/> component.
-    /// 
     /// <para>
     /// Normally, when interacting with an UI Document, if you click outside a 
     /// Visual Element, the last selected element is disabled.
     /// Use this component to disable this behavior.
     /// </para>
-    /// 
     /// <para>
     /// <b>Note</b>: in order to really disable deselection on background clicks,
     /// always set the Picking Mode to Ignore (instead of the default Position)
