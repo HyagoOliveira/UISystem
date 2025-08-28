@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
-using ActionCode.AwaitableSystem;
 
 namespace ActionCode.UISystem
 {
@@ -81,6 +80,7 @@ namespace ActionCode.UISystem
         public async Awaitable OpenScreenAsync(AbstractMenuScreen screen, bool undoable = true)
         {
             Time.timeScale = 1f;
+            SetSendNavigationEvents(false);
 
             var hasCurrentScreen = CurrentScreen != null;
             if (hasCurrentScreen)
@@ -90,8 +90,6 @@ namespace ActionCode.UISystem
                 await Awaitable.NextFrameAsync();
                 DisposeElements();
             }
-
-            await AwaitableUtility.WaitForFramesAsync(10);
 
             LastScreen = CurrentScreen;
             var applyTransition = CurrentScreen && CurrentScreen.IsEnabled;
@@ -119,6 +117,7 @@ namespace ActionCode.UISystem
             CurrentScreen.Focus();
 
             InitializeElements();
+            SetSendNavigationEvents(true);
             OnScreenOpened?.Invoke(CurrentScreen);
         }
 
@@ -185,6 +184,12 @@ namespace ActionCode.UISystem
 
             ButtonClickPlayer.PlayCancelSound();
             OnScreenCanceled?.Invoke(screen);
+        }
+
+        public void SetSendNavigationEvents(bool enabled)
+        {
+            var eventSystem = UnityEngine.EventSystems.EventSystem.current;
+            if (eventSystem) eventSystem.sendNavigationEvents = enabled;
         }
     }
 }
