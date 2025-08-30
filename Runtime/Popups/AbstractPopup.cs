@@ -1,6 +1,9 @@
 using System;
 using UnityEngine;
 using UnityEngine.UIElements;
+#if UNITY_LOCALIZATION
+using UnityEngine.Localization;
+#endif
 
 namespace ActionCode.UISystem
 {
@@ -12,7 +15,14 @@ namespace ActionCode.UISystem
         [SerializeField, Tooltip("The Message Label name inside your UI Document.")]
         private string messageName = "Message";
 
+        /// <summary>
+        /// The Title Label inside your UI Document.
+        /// </summary>
         public Label Title { get; private set; }
+
+        /// <summary>
+        /// Title Message Label inside your UI Document.
+        /// </summary>
         public Label Message { get; private set; }
 
         /// <summary>
@@ -48,7 +58,14 @@ namespace ActionCode.UISystem
             Document.sortingOrder = SORTING_ORDER;
         }
 
-        public void ShowUsingText(
+        /// <summary>
+        /// Shows the popup using the given parameters.
+        /// </summary>
+        /// <param name="message">The popup message using simple text.</param>
+        /// <param name="title">An optional popup title using simple text.</param>
+        /// <param name="onConfirm">An optional action to execute when popup is confirmed.</param>
+        /// <param name="onCancel">An optional action to execute when popup is canceled.</param>
+        public void Show(
             string message,
             string title = "",
             Action onConfirm = null,
@@ -62,6 +79,43 @@ namespace ActionCode.UISystem
             ShowAnyPopup();
         }
 
+        /// <summary>
+        /// Shows the localized popup using the given parameters.
+        /// <para>Requires the Unity Localization package.</para>
+        /// </summary>
+        /// <param name="tableId">
+        /// The table to find the localizations. 
+        /// If empty, it will use the <see cref="Show(string, string, Action, Action)"/> function.
+        /// </param>
+        /// <param name="messageId">The popup localized message id.</param>
+        /// <param name="titleId">The popup localized tile id.</param>
+        /// <param name="onConfirm">An optional action to execute when popup is confirmed.</param>
+        /// <param name="onCancel">An optional action to execute when popup is canceled.</param>
+        public void Show(
+            string tableId,
+            string messageId,
+            string titleId = "",
+            Action onConfirm = null,
+            Action onCancel = null
+        )
+        {
+            var hasInvalidTableId = string.IsNullOrEmpty(tableId);
+            if (hasInvalidTableId)
+            {
+                Show(messageId, titleId, onConfirm, onCancel);
+                return;
+            }
+
+            Activate();
+            SetTexts(tableId, titleId, messageId);
+            SetActions(onConfirm, onCancel);
+            FocusButton();
+            ShowAnyPopup();
+        }
+
+        /// <summary>
+        /// Closes the popup.
+        /// </summary>
         public void Close()
         {
             DestroyEvents();
@@ -82,18 +136,6 @@ namespace ActionCode.UISystem
             FindButtons();
         }
 
-        protected void SetTexts(string title, string message)
-        {
-            Title.text = title;
-            Message.text = message;
-        }
-
-        protected void SetActions(Action onConfirm, Action onCancel)
-        {
-            OnCanceled = onCancel;
-            OnConfirmed = onConfirm;
-        }
-
         protected virtual void Confirm()
         {
             OnConfirmed?.Invoke();
@@ -107,6 +149,32 @@ namespace ActionCode.UISystem
         }
 
         protected virtual void DestroyEvents() => SetActions(null, null);
+
+        private void SetTexts(string title, string message)
+        {
+            Title.text = title;
+            Message.text = message;
+        }
+
+        private void SetTexts(string tableId, string titleId, string messageId)
+        {
+            UpdateLocalization(Title, tableId, titleId);
+            UpdateLocalization(Message, tableId, messageId);
+        }
+
+        protected static void UpdateLocalization(TextElement text, string tableId, string entryId)
+        {
+#if UNITY_LOCALIZATION
+            var localization = new LocalizedString(tableId, entryId);
+            text.SetBinding("text", localization);
+#endif
+        }
+
+        private void SetActions(Action onConfirm, Action onCancel)
+        {
+            OnCanceled = onCancel;
+            OnConfirmed = onConfirm;
+        }
 
         private void ShowAnyPopup() => OnAnyShown?.Invoke(this);
         private void CloseAnyPopup() => OnAnyClosed?.Invoke(this);

@@ -82,7 +82,7 @@ namespace ActionCode.UISystem
 
         private void ShowQuitGameDialogue()
         {
-            Popups.Dialogue.ShowUsingText(
+            Popups.Dialogue.Show(
                 message: "Are you sure you want to quit?",
                 title: "Quit Game",
                 onConfirm: QuitGame
