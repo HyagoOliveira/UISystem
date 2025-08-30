@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9589e5e91f78c5045bb5183f960b46aa, type: 3}
+  m_Name: DefaultMenuData
+  m_EditorClassIdentifier: 
+  selection: {fileID: 8300000, guid: cd56bddd1184ec844bf48c0c85d83a34, type: 3}
+  submit: {fileID: 8300000, guid: b2c2ba6ab9784cf4cb7efc2471d7bf90, type: 3}
+  cancel: {fileID: 8300000, guid: f1acc1aa9f885b7488c713163db606af, type: 3}
