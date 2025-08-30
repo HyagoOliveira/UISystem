@@ -14,7 +14,7 @@
 
 ## Summary
 
-Code to create Menus and Popups using Unity UI Toolkit
+Create Menus and Popups using Unity UI Toolkit
 
 ### Custom Runtime Theme
 
@@ -24,6 +24,8 @@ You can see the overriding style sheet [here](/Settings/Themes/Default.uss).
 When using UI Builder, you can change to this theme:
 
 ![ActionCode UI System Theme](/Docs~/ActionCodeUISystem.png)
+
+To see it in runtime, make sure to use this [PanelSettings](/Settings/PanelSettings.asset) on your UI Document component.
 
 ### UI Background Click Disabler
 
