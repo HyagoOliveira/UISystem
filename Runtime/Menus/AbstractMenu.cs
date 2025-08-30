@@ -23,10 +23,10 @@ namespace ActionCode.UISystem
     {
         [SerializeField, Tooltip("The local Highlighter for this menu.")]
         private ElementHighlighter highlighter;
-        [SerializeField, Tooltip("The local Button Click Player for this menu.")]
-        private ButtonClickAudioPlayer buttonClickPlayer;
         [SerializeField, Tooltip("The local Focus Player for this menu.")]
         private ElementFocusAudioPlayer focusPlayer;
+        [SerializeField, Tooltip("The local Button Click Player for this menu.")]
+        private ButtonClickAudioPlayer buttonClickPlayer;
 
         [Header("Screen Transition")]
         [Tooltip("Whether to activate the first screen when start.")]
@@ -73,6 +73,18 @@ namespace ActionCode.UISystem
 #endif
         }
 
+        /// <summary>
+        /// Enables or disables the sending of navigation events globally.
+        /// </summary>
+        /// <param name="enabled">
+        /// Should the EventSystem allow navigation events (move/submit/cancel).
+        /// </param>
+        public void SetSendNavigationEvents(bool enabled)
+        {
+            var eventSystem = UnityEngine.EventSystems.EventSystem.current;
+            if (eventSystem) eventSystem.sendNavigationEvents = enabled;
+        }
+
         public void OpenFirstScreen() => OpenScreen(firstScreen, undoable: false);
         public void OpenScreen(AbstractMenuScreen screen, bool undoable = true) =>
             _ = OpenScreenAsync(screen, undoable);
@@ -83,13 +95,7 @@ namespace ActionCode.UISystem
             SetSendNavigationEvents(false);
 
             var hasCurrentScreen = CurrentScreen != null;
-            if (hasCurrentScreen)
-            {
-                CurrentScreen.Root.UnregisterCallback<NavigationCancelEvent>(HandleNavigationCancelEvent);
-                // Wait so menu elements can execute their final actions.
-                await Awaitable.NextFrameAsync();
-                DisposeElements();
-            }
+            if (hasCurrentScreen) await DisposeCurrentScreenAsync();
 
             LastScreen = CurrentScreen;
             var applyTransition = CurrentScreen && CurrentScreen.IsEnabled;
@@ -111,12 +117,9 @@ namespace ActionCode.UISystem
             CurrentScreen = screen;
             CurrentScreen.Activate();
             CurrentScreen.SetVisibility(true);
-            CurrentScreen.Root.RegisterCallback<NavigationCancelEvent>(HandleNavigationCancelEvent);
 
-            await Awaitable.NextFrameAsync();
-            CurrentScreen.Focus();
+            await InitializeCurrentScreenAsync();
 
-            InitializeElements();
             SetSendNavigationEvents(true);
             OnScreenOpened?.Invoke(CurrentScreen);
         }
@@ -128,8 +131,17 @@ namespace ActionCode.UISystem
             return hasUndoableScreen;
         }
 
-        protected virtual void SubscribeEvents() { }
-        protected virtual void UnsubscribeEvents() { }
+        protected virtual void SubscribeEvents()
+        {
+            AbstractPopup.OnAnyShown += HandleAnyPopupShown;
+            AbstractPopup.OnAnyClosed += HandleAnyPopupClosed;
+        }
+
+        protected virtual void UnsubscribeEvents()
+        {
+            AbstractPopup.OnAnyShown -= HandleAnyPopupShown;
+            AbstractPopup.OnAnyClosed -= HandleAnyPopupClosed;
+        }
 
         protected virtual void FindFirstScreen() => firstScreen =
             GetComponentInChildren<AbstractMenuScreen>(includeInactive: true);
@@ -161,6 +173,24 @@ namespace ActionCode.UISystem
             if (activateFirstScreen) OpenFirstScreen();
         }
 
+        private async Awaitable InitializeCurrentScreenAsync()
+        {
+            CurrentScreen.Root.RegisterCallback<NavigationCancelEvent>(HandleNavigationCancelEvent);
+
+            await Awaitable.NextFrameAsync();
+
+            CurrentScreen.Focus();
+            InitializeElements();
+        }
+
+        private async Awaitable DisposeCurrentScreenAsync()
+        {
+            CurrentScreen.Root.UnregisterCallback<NavigationCancelEvent>(HandleNavigationCancelEvent);
+            // Wait so menu elements can execute their final actions.
+            await Awaitable.NextFrameAsync();
+            DisposeElements();
+        }
+
         private void InitializeElements()
         {
             Highlighter.Initialize(CurrentScreen.Root);
@@ -177,19 +207,29 @@ namespace ActionCode.UISystem
 
         private void HandleNavigationCancelEvent(NavigationCancelEvent evt)
         {
-            Debug.Log($"OnNavCancelEvent {evt.propagationPhase}");
-
-            if (Popups.IsDisplayingAnyPopup()) return;
+            if (Popups.IsDisplayingAny()) return;
             if (!TryOpenLastScreen(out AbstractMenuScreen screen)) return;
 
             ButtonClickPlayer.PlayCancelSound();
             OnScreenCanceled?.Invoke(screen);
         }
 
-        public void SetSendNavigationEvents(bool enabled)
+        private async void HandleAnyPopupShown(AbstractPopup _)
         {
-            var eventSystem = UnityEngine.EventSystems.EventSystem.current;
-            if (eventSystem) eventSystem.sendNavigationEvents = enabled;
+            if (CurrentScreen == null) return;
+
+            await DisposeCurrentScreenAsync();
+            CurrentScreen.SetEnabled(false);
+        }
+
+        private async void HandleAnyPopupClosed(AbstractPopup _)
+        {
+            if (CurrentScreen == null) return;
+
+            CurrentScreen.SetEnabled(true);
+            CurrentScreen.Focus();
+
+            await InitializeCurrentScreenAsync();
         }
     }
 }

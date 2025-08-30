@@ -78,6 +78,15 @@ namespace ActionCode.UISystem
         private void HandleAnyButtonClicked() => OpenScreen(mainMenu, undoable: anyButton.canGoBack);
         private void HandleLoadClicked() => OpenScreen(loadMenu);
         private void HandleOptionsClicked() { } //TODO
-        private void HandleQuitClicked() => QuitGame();
+        private void HandleQuitClicked() => ShowQuitGameDialogue();
+
+        private void ShowQuitGameDialogue()
+        {
+            Popups.Dialogue.ShowUsingText(
+                message: "Are you sure you want to quit?",
+                title: "Quit Game",
+                onConfirm: QuitGame
+            );
+        }
     }
 }
