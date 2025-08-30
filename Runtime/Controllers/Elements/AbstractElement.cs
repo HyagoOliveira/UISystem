@@ -8,13 +8,21 @@ namespace ActionCode.UISystem
     {
         private UQueryBuilder<T> elements;
 
+        public bool IsInitialized() => elements == default;
+
         public void Initialize(VisualElement root)
         {
             elements = root.Query<T>(className: GetClassName());
             elements.ForEach(RegisterEvent);
         }
 
-        public void Dispose() => elements.ForEach(UnregisterEvent);
+        public void Dispose()
+        {
+            if (!IsInitialized()) return;
+
+            elements.ForEach(UnregisterEvent);
+            elements = default;
+        }
 
         protected abstract string GetClassName();
         protected abstract void RegisterEvent(T e);
