@@ -9,7 +9,7 @@ namespace ActionCode.UISystem
     /// <see cref="InputSystemUIInputModule"/> component.
     /// <para>
     /// Normally, when interacting with an UI Document, if you click outside a 
-    /// Visual Element, the last selected element is disabled.
+    /// Visual Element, the last selected element is disabled. This is not good for UI in games.
     /// Use this component to disable this behavior.
     /// </para>
     /// <para>

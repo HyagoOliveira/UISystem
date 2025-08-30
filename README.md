@@ -12,15 +12,26 @@
 	- com.unity.ugui: [2.0.0](https://docs.unity3d.com/Packages/com.unity.ugui@2.0/changelog/CHANGELOG.html)
 	- com.unity.modules.uielements: [1.0.0](https://docs.unity3d.com/6000.2/Documentation/ScriptReference/UnityEngine.UIElementsModule.html)
 
-## Other Features
+## Summary
+
+Code to create Menus and Popups using Unity UI Toolkit
+
+### Custom Runtime Theme
+
+This package has a custom [runtime theme](/Settings/Themes/ActionCodeUISystem.tss) overriding some classes style sheet.
+You can see the overriding style sheet [here](/Settings/Themes/Default.uss).
+
+When using UI Builder, you can change to this theme:
+
+![ActionCode UI System Theme](/Docs~/ActionCodeUISystem.png)
 
 ### UI Background Click Disabler
 
-Normally, when interacting with an UI, if you click outside a Visual Element, the last selected element is disabled. This is not good for UIs in games on PC.
+Normally, when interacting with an UI Document, if you click outside a Visual Element, the last selected element is disabled. This is not good for UI in games.
 
-To disable this behavior, use the [BackgroundClickDisabler](/Runtime/BackgroundClickDisabler.cs) component inside a Prefab using a EventSystem and InputSystemUIInputModule components:
+To disable this behavior, use the [BackgroundClickDisabler](/Runtime/Inputs/BackgroundClickDisabler.cs) component. 
 
-![Background Click Disabler](/Documentation~/BackgroundClickDisabler.png)
+Just put the prefab [InputEventSystem](/Prefabs/Inputs/InputEventSystem.prefab) into your current/dependency scene. This prefab contains all the components necessary to run your UI correctly.
 
 ## Installation
 
