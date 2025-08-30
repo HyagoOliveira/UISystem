@@ -83,8 +83,9 @@ namespace ActionCode.UISystem
         private void ShowQuitGameDialogue()
         {
             Popups.Dialogue.Show(
-                message: "Are you sure you want to quit?",
-                title: "Quit Game",
+                tableId: "LoadMenu",
+                messageId: "confirm_message",
+                titleId: "delete_title",
                 onConfirm: QuitGame
             );
         }

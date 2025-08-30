@@ -6,22 +6,23 @@ namespace ActionCode.UISystem
 {
     public abstract class AbstractElement<T> : MonoBehaviour, IDisposable where T : VisualElement
     {
-        private UQueryBuilder<T> elements;
+        private UQueryBuilder<T> elements; // its a struct, so its never null
 
-        public bool IsInitialized() => elements == default;
+        public bool IsInitialized { get; private set; }
 
         public void Initialize(VisualElement root)
         {
             elements = root.Query<T>(className: GetClassName());
             elements.ForEach(RegisterEvent);
+            IsInitialized = true;
         }
 
         public void Dispose()
         {
-            if (!IsInitialized()) return;
+            if (!IsInitialized) return;
 
             elements.ForEach(UnregisterEvent);
-            elements = default;
+            IsInitialized = false;
         }
 
         protected abstract string GetClassName();
