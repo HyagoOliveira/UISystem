@@ -15,3 +15,5 @@ MonoBehaviour:
   selection: {fileID: 8300000, guid: cd56bddd1184ec844bf48c0c85d83a34, type: 3}
   submit: {fileID: 8300000, guid: b2c2ba6ab9784cf4cb7efc2471d7bf90, type: 3}
   cancel: {fileID: 8300000, guid: f1acc1aa9f885b7488c713163db606af, type: 3}
+  openPopup: {fileID: 8300000, guid: 9dc7448bde6e4be44af22b021df49238, type: 3}
+  closePopup: {fileID: 8300000, guid: 451faf683037a924e858eb3cf369d7dc, type: 3}
