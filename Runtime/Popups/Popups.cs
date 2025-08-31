@@ -28,12 +28,14 @@ namespace ActionCode.UISystem
         public ElementFocusAudioPlayer FocusPlayer => focusPlayer;
         public ButtonClickAudioPlayer ButtonClickPlayer => buttonClickPlayer;
 
+        public AbstractPopup Current { get; private set; }
+
         /// <summary>
         /// The global Dialogue Popup.
         /// </summary>
         public static DialoguePopup Dialogue => Instance.dialogue;
 
-        public static Popups Instance { get; private set; }
+        private static Popups Instance { get; set; }
 
         private void Reset()
         {
@@ -42,11 +44,13 @@ namespace ActionCode.UISystem
         }
 
         private void Awake() => Instance = this;
-        private void OnEnable() => SubscrivePopups();
-        private void OnDisable() => UnsubscribePopups();
-        private void OnDestroy() => Instance = null;
-
-        public static bool IsDisplayingAny() => Dialogue && Dialogue.isActiveAndEnabled;
+        private void OnEnable() => SubscriveEvents();
+        private void OnDisable() => UnsubscribeEvents();
+        private void OnDestroy()
+        {
+            Instance = null;
+            DisposeElements();
+        }
 
         private void FindPopups() => dialogue = GetComponentInChildren<DialoguePopup>(includeInactive: true);
 
@@ -71,21 +75,29 @@ namespace ActionCode.UISystem
             ButtonClickPlayer.Dispose();
         }
 
-        private static void SubscrivePopups()
+        private void SubscriveEvents()
         {
             AbstractPopup.OnAnyShown += HandleAnyPopupShown;
             AbstractPopup.OnAnyClosed += HandleAnyPopupClosed;
         }
 
-        private static void UnsubscribePopups()
+        private void UnsubscribeEvents()
         {
             AbstractPopup.OnAnyShown -= HandleAnyPopupShown;
             AbstractPopup.OnAnyClosed -= HandleAnyPopupClosed;
-
-            Instance.DisposeElements();
         }
 
-        private static void HandleAnyPopupShown(AbstractPopup popup) => Instance.InitializeElements(popup.Root);
-        private static void HandleAnyPopupClosed(AbstractPopup _) => Instance.DisposeElements();
+        private void HandleAnyPopupShown(AbstractPopup popup)
+        {
+            Current = popup;
+            Current.ButtonClickPlayer = ButtonClickPlayer;
+            InitializeElements(Current.Root);
+        }
+
+        private void HandleAnyPopupClosed(AbstractPopup _)
+        {
+            Current = null;
+            DisposeElements();
+        }
     }
 }

@@ -28,6 +28,8 @@ namespace ActionCode.UISystem
         /// </summary>
         public Label Message { get; private set; }
 
+        internal ButtonClickAudioPlayer ButtonClickPlayer { get; set; }
+
         /// <summary>
         /// Global event fired when any Popup is shown.
         /// <para>The given param is the popup instance.</para>
@@ -171,10 +173,11 @@ namespace ActionCode.UISystem
             AbstractMenu.SetSendNavigationEvents(false);
 
             if (showAnimation) await showAnimation.PlayAsync();
+
             SetActions(onConfirm, onCancel);
             FocusButton();
-
             ShowAnyPopup();
+
             AbstractMenu.SetSendNavigationEvents(true);
         }
 
@@ -182,6 +185,12 @@ namespace ActionCode.UISystem
         {
             CloseAnyPopup();
             AbstractMenu.SetSendNavigationEvents(false);
+
+            if (ButtonClickPlayer)
+            {
+                await ButtonClickPlayer.WaitSubmitSoundAsync();
+                ButtonClickPlayer.PlayCancelSound();
+            }
 
             if (closeAnimation) await closeAnimation.PlayAsync();
             Deactivate();

@@ -26,11 +26,8 @@ namespace ActionCode.UISystem
         public void PlaySubmitSound() => source.PlayOneShot(Data.submit);
         public void PlayCancelSound() => source.PlayOneShot(Data.cancel);
 
-        public async Awaitable PlaySubmitSoundAndWaitAsync()
-        {
-            PlaySubmitSound();
-            await Awaitable.WaitForSecondsAsync(Data.submit.length);
-        }
+        public async Awaitable WaitSubmitSoundAsync() => await Awaitable.WaitForSecondsAsync(Data.submit.length);
+        public async Awaitable WaitCancelSoundAsync() => await Awaitable.WaitForSecondsAsync(Data.cancel.length);
 
         protected override string GetClassName() => className;
         protected override void RegisterEvent(Button b) => b.clicked += HandleClickEvent;

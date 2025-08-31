@@ -205,9 +205,8 @@ namespace ActionCode.UISystem
             ButtonClickPlayer.Dispose();
         }
 
-        private void HandleNavigationCancelEvent(NavigationCancelEvent evt)
+        private void HandleNavigationCancelEvent(NavigationCancelEvent _)
         {
-            if (Popups.IsDisplayingAny()) return;
             if (!TryOpenLastScreen(out AbstractMenuScreen screen)) return;
 
             ButtonClickPlayer.PlayCancelSound();
