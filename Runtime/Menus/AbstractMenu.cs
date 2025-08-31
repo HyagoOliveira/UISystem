@@ -79,7 +79,7 @@ namespace ActionCode.UISystem
         /// <param name="enabled">
         /// Should the EventSystem allow navigation events (move/submit/cancel).
         /// </param>
-        public void SetSendNavigationEvents(bool enabled)
+        public static void SetSendNavigationEvents(bool enabled)
         {
             var eventSystem = UnityEngine.EventSystems.EventSystem.current;
             if (eventSystem) eventSystem.sendNavigationEvents = enabled;

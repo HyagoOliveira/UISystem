@@ -121,6 +121,18 @@ namespace ActionCode.UISystem
             CloseAsync();
         }
 
+        public override void Activate()
+        {
+            base.Activate();
+            ShowAnyPopup();
+        }
+
+        public override void Deactivate()
+        {
+            base.Deactivate();
+            CloseAnyPopup();
+        }
+
         protected abstract void FocusButton();
         protected abstract void FindButtons();
 
@@ -168,19 +180,23 @@ namespace ActionCode.UISystem
 
         private async void ShowAsync(Action onConfirm, Action onCancel)
         {
-            if (showAnimation) await showAnimation.PlayAsync();
+            AbstractMenu.SetSendNavigationEvents(false);
 
+            if (showAnimation) await showAnimation.PlayAsync();
             SetActions(onConfirm, onCancel);
             FocusButton();
-            ShowAnyPopup();
+
+            AbstractMenu.SetSendNavigationEvents(true);
         }
 
         private async void CloseAsync()
         {
-            if (closeAnimation) await closeAnimation.PlayAsync();
+            AbstractMenu.SetSendNavigationEvents(false);
 
+            if (closeAnimation) await closeAnimation.PlayAsync();
             Deactivate();
-            CloseAnyPopup();
+
+            AbstractMenu.SetSendNavigationEvents(true);
         }
 
         private void ShowAnyPopup() => OnAnyShown?.Invoke(this);

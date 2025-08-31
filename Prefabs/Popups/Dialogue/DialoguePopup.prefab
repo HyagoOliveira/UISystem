@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 5325736406204434763}
   - component: {fileID: 1424578512255035772}
   - component: {fileID: 9111449232547980377}
+  - component: {fileID: 563392859201929357}
+  - component: {fileID: 8669315086434765857}
   - component: {fileID: 6990199940637074633}
   m_Layer: 0
   m_Name: DialoguePopup
@@ -152,6 +154,86 @@ MonoBehaviour:
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
   m_WorldSpaceHeight: 1080
+--- !u!114 &563392859201929357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3735850746227625872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc33c31b2edace8408d8ad87ed9bd9c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  document: {fileID: 9111449232547980377}
+  elementName: Popup
+  speed: 1
+  playOnStart: 0
+  scaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 11.164073
+      outSlope: 11.164073
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.039119802
+    - serializedVersion: 3
+      time: 0.2
+      value: 1
+      inSlope: -3.1727202
+      outSlope: -3.1727202
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.05990222
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &8669315086434765857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3735850746227625872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc33c31b2edace8408d8ad87ed9bd9c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  document: {fileID: 9111449232547980377}
+  elementName: Popup
+  speed: 1
+  playOnStart: 0
+  scaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0.40416163
+      outSlope: 0.40416163
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.115924485
+    - serializedVersion: 3
+      time: 0.2
+      value: 0
+      inSlope: -13.425915
+      outSlope: -13.425915
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.04415162
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &6990199940637074633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,6 +247,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   document: {fileID: 9111449232547980377}
+  showAnimation: {fileID: 563392859201929357}
+  closeAnimation: {fileID: 8669315086434765857}
   titleName: Title
   messageName: Message
   cancelButtonName: Cancel
