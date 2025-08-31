@@ -121,18 +121,6 @@ namespace ActionCode.UISystem
             CloseAsync();
         }
 
-        public override void Activate()
-        {
-            base.Activate();
-            ShowAnyPopup();
-        }
-
-        public override void Deactivate()
-        {
-            base.Deactivate();
-            CloseAnyPopup();
-        }
-
         protected abstract void FocusButton();
         protected abstract void FindButtons();
 
@@ -186,11 +174,13 @@ namespace ActionCode.UISystem
             SetActions(onConfirm, onCancel);
             FocusButton();
 
+            ShowAnyPopup();
             AbstractMenu.SetSendNavigationEvents(true);
         }
 
         private async void CloseAsync()
         {
+            CloseAnyPopup();
             AbstractMenu.SetSendNavigationEvents(false);
 
             if (closeAnimation) await closeAnimation.PlayAsync();
