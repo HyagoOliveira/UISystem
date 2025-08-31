@@ -39,15 +39,17 @@ Just put the prefab [InputEventSystem](/Prefabs/Inputs/InputEventSystem.prefab) 
 
 All available popups are ready for simple or localized texts, using show and/or close animations.
 
-You can use any available popup from this package by using the [Popups](/Prefabs/Popups/Popups.prefab) prefab. Put this prefab inside your current/dependency scene and use [Popups](/Runtime/Popups/Popups.cs) component.
+You can use any available popup from this package by using the [Popups](/Prefabs/Popups/Popups.prefab) prefab. Put this prefab inside your current/dependency scene and use the [Popups](/Runtime/Popups/Popups.cs) component.
 
-Alternatively, you can create your own popups prefabs, place them inside Popups global prefab and use them for your project.
+Alternatively, you can create your own popups prefabs, place them inside a Popups global prefab and use them for your project.
 
 The next section shows how to use any available popup.
 
 ### Dialogue Popup
 
 This Popup has a message, an optional title and a Confirm and Cancel buttons, with optional callbacks to each button click action.
+
+![Dialogue Popup](/Docs~/DialoguePopup.png)
 
 You can use the default [DialoguePopup](/Prefabs/Popups/Dialogue/DialoguePopup.prefab) implementation found in this package or create your own using the [DialoguePopup](/Runtime/Popups/DialoguePopup.cs) component.
 
@@ -76,9 +78,9 @@ private void ShowLocalizedQuitGameDialogue()
 }
 ```
 
->>Note: For the above example, a [Popups](/Runtime/Popups/Popups.cs) instance should be instantiated into your current/dependency scene.
+>Note: For the above example, a [Popups](/Runtime/Popups/Popups.cs) instance should be instantiated into your current/dependency scene.
 
-Finally, you can close the popup by using the Cancel button, the Navigation Cancel from the keyboard (Esc button) or gamepad (East button).
+Finally, you can close the popup by using the its own Cancel button or the Navigation Cancel from the keyboard (Esc button) or gamepad (East button).
 
 ## Installation
 
