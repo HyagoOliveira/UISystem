@@ -15,6 +15,7 @@ namespace ActionCode.UISystem
         private AnimationCurve scaleCurve;
 
         public void SetScale(float scale) => Element.transform.scale = Vector3.one * scale;
+        public override float GetDuration() => GetDuration(scaleCurve);
 
         protected override void UpdateAnimation()
         {

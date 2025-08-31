@@ -15,6 +15,7 @@ namespace ActionCode.UISystem
         private AnimationCurve opacityCurve;
 
         public void SetOpacity(float opacity) => Element.style.opacity = opacity;
+        public override float GetDuration() => GetDuration(opacityCurve);
 
         protected override void UpdateAnimation()
         {

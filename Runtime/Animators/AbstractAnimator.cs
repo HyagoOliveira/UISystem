@@ -73,14 +73,16 @@ namespace ActionCode.UISystem
             IsPlaying = false;
         }
 
+        public abstract float GetDuration();
+
         public static bool HasCurveFinished(AnimationCurve curve, float currentTime)
         {
             var isLoop = curve.postWrapMode is WrapMode.Loop or WrapMode.PingPong;
-            if (isLoop || curve.keys.Length == 0) return false;
-
-            var lastTime = curve.keys[^1].time;
-            return currentTime >= lastTime;
+            if (isLoop) return false;
+            return currentTime >= GetDuration(curve);
         }
+
+        public static float GetDuration(AnimationCurve curve) => curve.keys.Length > 0 ? curve.keys[^1].time : 0f;
 
         protected abstract void UpdateAnimation();
         protected override void FindReferences() => Element = Find<VisualElement>(elementName);
