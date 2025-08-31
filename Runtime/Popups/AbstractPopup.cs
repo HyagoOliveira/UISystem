@@ -9,6 +9,10 @@ namespace ActionCode.UISystem
 {
     public abstract class AbstractPopup : AbstractController
     {
+        [Header("Animations")]
+        [SerializeField] private AbstractAnimator showAnimation;
+        [SerializeField] private AbstractAnimator closeAnimation;
+
         [Header("Texts")]
         [SerializeField, Tooltip("The Title Label name inside your UI Document.")]
         private string titleName = "Title";
@@ -74,9 +78,7 @@ namespace ActionCode.UISystem
         {
             Activate();
             SetTexts(title, message);
-            SetActions(onConfirm, onCancel);
-            FocusButton();
-            ShowAnyPopup();
+            ShowAsync(onConfirm, onCancel);
         }
 
         /// <summary>
@@ -108,9 +110,7 @@ namespace ActionCode.UISystem
 
             Activate();
             SetTexts(tableId, titleId, messageId);
-            SetActions(onConfirm, onCancel);
-            FocusButton();
-            ShowAnyPopup();
+            ShowAsync(onConfirm, onCancel);
         }
 
         /// <summary>
@@ -119,8 +119,7 @@ namespace ActionCode.UISystem
         public void Close()
         {
             DestroyEvents();
-            Deactivate();
-            CloseAnyPopup();
+            CloseAsync();
         }
 
         protected abstract void FocusButton();
@@ -174,6 +173,23 @@ namespace ActionCode.UISystem
         {
             OnCanceled = onCancel;
             OnConfirmed = onConfirm;
+        }
+
+        private async void ShowAsync(Action onConfirm, Action onCancel)
+        {
+            if (showAnimation) await showAnimation.PlayAsync();
+
+            SetActions(onConfirm, onCancel);
+            FocusButton();
+            ShowAnyPopup();
+        }
+
+        private async void CloseAsync()
+        {
+            if (closeAnimation) await closeAnimation.PlayAsync();
+
+            Deactivate();
+            CloseAnyPopup();
         }
 
         private void ShowAnyPopup() => OnAnyShown?.Invoke(this);
