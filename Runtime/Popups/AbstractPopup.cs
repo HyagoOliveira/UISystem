@@ -2,7 +2,6 @@ using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 #if UNITY_LOCALIZATION
-using UnityEngine.Localization;
 #endif
 
 namespace ActionCode.UISystem
@@ -157,16 +156,8 @@ namespace ActionCode.UISystem
 
         private void SetTexts(string tableId, string titleId, string messageId)
         {
-            UpdateLocalization(Title, tableId, titleId);
-            UpdateLocalization(Message, tableId, messageId);
-        }
-
-        protected static void UpdateLocalization(TextElement text, string tableId, string entryId)
-        {
-#if UNITY_LOCALIZATION
-            var localization = new LocalizedString(tableId, entryId);
-            text.SetBinding("text", localization);
-#endif
+            Title.UpdateLocalization(tableId, titleId);
+            Message.UpdateLocalization(tableId, messageId);
         }
 
         private void SetActions(Action onConfirm, Action onCancel)
