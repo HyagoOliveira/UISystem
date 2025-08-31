@@ -86,8 +86,14 @@ namespace ActionCode.UISystem
                 tableId: "LoadMenu",
                 messageId: "confirm_message",
                 titleId: "delete_title",
-                onConfirm: QuitGame
+                onConfirm: QuitGameAfterCloseAnimation
             );
+        }
+
+        private void QuitGameAfterCloseAnimation()
+        {
+            var time = Popups.Dialogue.GetCloseAnimationTime() + 0.1f;
+            QuitGame(time);
         }
     }
 }

@@ -161,6 +161,8 @@ namespace ActionCode.UISystem
             Close();
         }
 
+        protected virtual void OnFinishShow() { }
+        protected virtual void OnStartClose() { }
         protected virtual void DestroyEvents() => SetActions(null, null);
 
         private void SetTexts(string title, string message)
@@ -192,10 +194,12 @@ namespace ActionCode.UISystem
             FocusButton();
 
             AbstractMenu.SetSendNavigationEvents(true);
+            OnFinishShow();
         }
 
         private async void CloseAsync()
         {
+            OnStartClose();
             OnAnyStartClose?.Invoke(this);
             AbstractMenu.SetSendNavigationEvents(false);
 

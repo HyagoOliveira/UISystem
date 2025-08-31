@@ -62,6 +62,16 @@ namespace ActionCode.UISystem
         protected virtual void OnDisable() => UnsubscribeEvents();
 
         /// <summary>
+        /// Quits the Game, even while in Editor mode, after the given time.
+        /// </summary>
+        /// <param name="time">The time (in seconds).</param>
+        public static async void QuitGame(float time)
+        {
+            await Awaitable.WaitForSecondsAsync(time);
+            QuitGame();
+        }
+
+        /// <summary>
         /// Quits the Game, even while in Editor mode.
         /// </summary>
         public static void QuitGame()

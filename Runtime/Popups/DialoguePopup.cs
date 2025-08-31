@@ -41,5 +41,27 @@ namespace ActionCode.UISystem
             CancelButton.clicked -= Cancel;
             ConfirmButton.clicked -= Confirm;
         }
+
+        protected override void OnFinishShow()
+        {
+            base.OnFinishShow();
+            Root.RegisterCallback<NavigationCancelEvent>(HandleNavigationCancelEvent);
+        }
+
+        protected override void OnStartClose()
+        {
+            base.OnStartClose();
+            Root.UnregisterCallback<NavigationCancelEvent>(HandleNavigationCancelEvent);
+        }
+
+        private async void HandleNavigationCancelEvent(NavigationCancelEvent _)
+        {
+            AbstractMenu.SetSendNavigationEvents(false);
+
+            CancelButton.Focus();
+            await Awaitable.WaitForSecondsAsync(0.2f);
+
+            Cancel();
+        }
     }
 }
