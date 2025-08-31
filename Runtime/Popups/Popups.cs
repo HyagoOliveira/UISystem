@@ -87,19 +87,22 @@ namespace ActionCode.UISystem
 
         private void SubscriveEvents()
         {
-            AbstractPopup.OnAnyShown += HandleAnyPopupShown;
+            AbstractPopup.OnAnyStartShow += HandleAnyPopupStartShow;
+            AbstractPopup.OnAnyFinishShow += HandleAnyPopupFinishShow;
             AbstractPopup.OnAnyStartClose += HandleAnyPopupStartClose;
         }
 
         private void UnsubscribeEvents()
         {
-            AbstractPopup.OnAnyShown -= HandleAnyPopupShown;
+            AbstractPopup.OnAnyStartShow -= HandleAnyPopupStartShow;
+            AbstractPopup.OnAnyFinishShow -= HandleAnyPopupFinishShow;
             AbstractPopup.OnAnyStartClose -= HandleAnyPopupStartClose;
         }
 
-        private void HandleAnyPopupShown(AbstractPopup popup)
+        private void HandleAnyPopupStartShow(AbstractPopup _) => Audio.PlayOneShot(Data.openPopup);
+
+        private void HandleAnyPopupFinishShow(AbstractPopup popup)
         {
-            Audio.PlayOneShot(Data.openPopup);
             Current = popup;
             InitializeElements(Current.Root);
         }

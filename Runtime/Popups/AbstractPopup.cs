@@ -29,22 +29,28 @@ namespace ActionCode.UISystem
         public Label Message { get; private set; }
 
         /// <summary>
-        /// Global event fired when any Popup is shown, before executing the show animation.
+        /// Global event fired when any Popup is starting to shown, before executing the show animation.
         /// <para>The given param is the popup instance.</para>
         /// </summary>
-        public static event Action<AbstractPopup> OnAnyShown;
+        public static event Action<AbstractPopup> OnAnyStartShow;
 
         /// <summary>
-        /// Global event fired when any Popup is closed (by confirming or canceling), after executing the close animation.
+        /// Global event fired when any Popup is finish to shown, after executing the show animation.
         /// <para>The given param is the popup instance.</para>
         /// </summary>
-        public static event Action<AbstractPopup> OnAnyClosed;
+        public static event Action<AbstractPopup> OnAnyFinishShow;
 
         /// <summary>
         /// Global event fired when any Popup is starting to close (by confirming or canceling), before executing the close animation.
         /// <para>The given param is the popup instance.</para>
         /// </summary>
         public static event Action<AbstractPopup> OnAnyStartClose;
+
+        /// <summary>
+        /// Global event fired when any Popup is finished to close (by confirming or canceling), after executing the close animation.
+        /// <para>The given param is the popup instance.</para>
+        /// </summary>
+        public static event Action<AbstractPopup> OnAnyFinishClose;
 
         /// <summary>
         /// Event fired when canceling the popup.
@@ -69,8 +75,8 @@ namespace ActionCode.UISystem
 
         private void OnDestroy()
         {
-            OnAnyShown = null;
-            OnAnyClosed = null;
+            OnAnyStartShow = null;
+            OnAnyFinishClose = null;
         }
 
         /// <summary>
@@ -185,7 +191,7 @@ namespace ActionCode.UISystem
 
         private async void ShowAsync(Action onConfirm, Action onCancel)
         {
-            ShowAnyPopup();
+            OnAnyStartShow?.Invoke(this);
             AbstractMenu.SetSendNavigationEvents(false);
 
             if (showAnimation) await showAnimation.PlayAsync();
@@ -194,6 +200,7 @@ namespace ActionCode.UISystem
             FocusButton();
 
             AbstractMenu.SetSendNavigationEvents(true);
+            OnAnyFinishShow?.Invoke(this);
             OnFinishShow();
         }
 
@@ -207,10 +214,7 @@ namespace ActionCode.UISystem
             Deactivate();
 
             AbstractMenu.SetSendNavigationEvents(true);
-            CloseAnyPopup();
+            OnAnyFinishClose?.Invoke(this);
         }
-
-        private void ShowAnyPopup() => OnAnyShown?.Invoke(this);
-        private void CloseAnyPopup() => OnAnyClosed?.Invoke(this);
     }
 }

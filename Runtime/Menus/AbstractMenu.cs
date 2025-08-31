@@ -143,14 +143,14 @@ namespace ActionCode.UISystem
 
         protected virtual void SubscribeEvents()
         {
-            AbstractPopup.OnAnyShown += HandleAnyPopupShown;
-            AbstractPopup.OnAnyClosed += HandleAnyPopupClosed;
+            AbstractPopup.OnAnyStartShow += HandleAnyPopupStartShow;
+            AbstractPopup.OnAnyFinishClose += HandleAnyPopupFinishClose;
         }
 
         protected virtual void UnsubscribeEvents()
         {
-            AbstractPopup.OnAnyShown -= HandleAnyPopupShown;
-            AbstractPopup.OnAnyClosed -= HandleAnyPopupClosed;
+            AbstractPopup.OnAnyStartShow -= HandleAnyPopupStartShow;
+            AbstractPopup.OnAnyFinishClose -= HandleAnyPopupFinishClose;
         }
 
         protected virtual void FindFirstScreen() => firstScreen =
@@ -223,7 +223,7 @@ namespace ActionCode.UISystem
             OnScreenCanceled?.Invoke(screen);
         }
 
-        private async void HandleAnyPopupShown(AbstractPopup _)
+        private async void HandleAnyPopupStartShow(AbstractPopup _)
         {
             if (CurrentScreen == null) return;
 
@@ -231,7 +231,7 @@ namespace ActionCode.UISystem
             CurrentScreen.SetEnabled(false);
         }
 
-        private async void HandleAnyPopupClosed(AbstractPopup _)
+        private async void HandleAnyPopupFinishClose(AbstractPopup _)
         {
             if (CurrentScreen == null) return;
 
