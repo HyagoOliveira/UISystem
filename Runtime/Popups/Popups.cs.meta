@@ -1,2 +1,17 @@
 fileFormatVersion: 2
 guid: 43add2367e610f14e8ce4fb34491eeaa
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - source: {instanceID: 0}
+  - data: {fileID: 11400000, guid: 72c08699c7dc0264b9c90b7700369edf, type: 2}
+  - highlighter: {instanceID: 0}
+  - focusPlayer: {instanceID: 0}
+  - buttonClickPlayer: {instanceID: 0}
+  - dialogue: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

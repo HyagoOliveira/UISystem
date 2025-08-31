@@ -28,19 +28,23 @@ namespace ActionCode.UISystem
         /// </summary>
         public Label Message { get; private set; }
 
-        internal ButtonClickAudioPlayer ButtonClickPlayer { get; set; }
-
         /// <summary>
-        /// Global event fired when any Popup is shown.
+        /// Global event fired when any Popup is shown, before executing the show animation.
         /// <para>The given param is the popup instance.</para>
         /// </summary>
         public static event Action<AbstractPopup> OnAnyShown;
 
         /// <summary>
-        /// Global event fired when any Popup is closed, by confirming or canceling it.
+        /// Global event fired when any Popup is closed (by confirming or canceling), after executing the close animation.
         /// <para>The given param is the popup instance.</para>
         /// </summary>
         public static event Action<AbstractPopup> OnAnyClosed;
+
+        /// <summary>
+        /// Global event fired when any Popup is starting to close (by confirming or canceling), before executing the close animation.
+        /// <para>The given param is the popup instance.</para>
+        /// </summary>
+        public static event Action<AbstractPopup> OnAnyStartClose;
 
         /// <summary>
         /// Event fired when canceling the popup.
@@ -61,6 +65,12 @@ namespace ActionCode.UISystem
         {
             base.Reset();
             Document.sortingOrder = SORTING_ORDER;
+        }
+
+        private void OnDestroy()
+        {
+            OnAnyShown = null;
+            OnAnyClosed = null;
         }
 
         /// <summary>
@@ -123,6 +133,9 @@ namespace ActionCode.UISystem
             CloseAsync();
         }
 
+        public float GetShowAnimationTime() => showAnimation ? showAnimation.GetDuration() : 0.1f;
+        public float GetCloseAnimationTime() => closeAnimation ? closeAnimation.GetDuration() : 0.1f;
+
         protected abstract void FocusButton();
         protected abstract void FindButtons();
 
@@ -170,32 +183,27 @@ namespace ActionCode.UISystem
 
         private async void ShowAsync(Action onConfirm, Action onCancel)
         {
+            ShowAnyPopup();
             AbstractMenu.SetSendNavigationEvents(false);
 
             if (showAnimation) await showAnimation.PlayAsync();
 
             SetActions(onConfirm, onCancel);
             FocusButton();
-            ShowAnyPopup();
 
             AbstractMenu.SetSendNavigationEvents(true);
         }
 
         private async void CloseAsync()
         {
-            CloseAnyPopup();
+            OnAnyStartClose?.Invoke(this);
             AbstractMenu.SetSendNavigationEvents(false);
-
-            if (ButtonClickPlayer)
-            {
-                await ButtonClickPlayer.WaitSubmitSoundAsync();
-                ButtonClickPlayer.PlayCancelSound();
-            }
 
             if (closeAnimation) await closeAnimation.PlayAsync();
             Deactivate();
 
             AbstractMenu.SetSendNavigationEvents(true);
+            CloseAnyPopup();
         }
 
         private void ShowAnyPopup() => OnAnyShown?.Invoke(this);

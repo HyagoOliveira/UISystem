@@ -21,7 +21,5 @@ namespace ActionCode.UISystem
         public AudioClip openPopup;
         [Tooltip("The audio played when closing a Popup.")]
         public AudioClip closePopup;
-
-        public float GetSubmitTime() => submit.length;
     }
 }

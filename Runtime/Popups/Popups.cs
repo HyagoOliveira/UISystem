@@ -8,11 +8,18 @@ namespace ActionCode.UISystem
     /// <para>Use it to access any popup in the game.</para>
     /// </summary>
     [DisallowMultipleComponent]
+    [RequireComponent(typeof(AudioSource))]
     [RequireComponent(typeof(ElementHighlighter))]
     [RequireComponent(typeof(ButtonClickAudioPlayer))]
     [RequireComponent(typeof(ElementFocusAudioPlayer))]
     public sealed class Popups : MonoBehaviour
     {
+        [SerializeField, Tooltip("The local AudioSource component.")]
+        private AudioSource source;
+        [SerializeField, Tooltip("The Global Menu Data.")]
+        private MenuData data;
+
+        [Header("Elements")]
         [SerializeField, Tooltip("The local Highlighter for all Popups.")]
         private ElementHighlighter highlighter;
         [SerializeField, Tooltip("The local Focus Player for all Popups.")]
@@ -24,6 +31,8 @@ namespace ActionCode.UISystem
         [SerializeField, Tooltip("The local Dialogue Popup.")]
         private DialoguePopup dialogue;
 
+        public MenuData Data => data;
+        public AudioSource Audio => source;
         public ElementHighlighter Highlighter => highlighter;
         public ElementFocusAudioPlayer FocusPlayer => focusPlayer;
         public ButtonClickAudioPlayer ButtonClickPlayer => buttonClickPlayer;
@@ -39,7 +48,7 @@ namespace ActionCode.UISystem
 
         private void Reset()
         {
-            FindElements();
+            FindComponents();
             FindPopups();
         }
 
@@ -54,8 +63,9 @@ namespace ActionCode.UISystem
 
         private void FindPopups() => dialogue = GetComponentInChildren<DialoguePopup>(includeInactive: true);
 
-        private void FindElements()
+        private void FindComponents()
         {
+            source = GetComponent<AudioSource>();
             highlighter = GetComponent<ElementHighlighter>();
             focusPlayer = GetComponent<ElementFocusAudioPlayer>();
             buttonClickPlayer = GetComponent<ButtonClickAudioPlayer>();
@@ -78,24 +88,25 @@ namespace ActionCode.UISystem
         private void SubscriveEvents()
         {
             AbstractPopup.OnAnyShown += HandleAnyPopupShown;
-            AbstractPopup.OnAnyClosed += HandleAnyPopupClosed;
+            AbstractPopup.OnAnyStartClose += HandleAnyPopupStartClose;
         }
 
         private void UnsubscribeEvents()
         {
             AbstractPopup.OnAnyShown -= HandleAnyPopupShown;
-            AbstractPopup.OnAnyClosed -= HandleAnyPopupClosed;
+            AbstractPopup.OnAnyStartClose -= HandleAnyPopupStartClose;
         }
 
         private void HandleAnyPopupShown(AbstractPopup popup)
         {
+            Audio.PlayOneShot(Data.openPopup);
             Current = popup;
-            Current.ButtonClickPlayer = ButtonClickPlayer;
             InitializeElements(Current.Root);
         }
 
-        private void HandleAnyPopupClosed(AbstractPopup _)
+        private void HandleAnyPopupStartClose(AbstractPopup _)
         {
+            Audio.PlayOneShot(Data.closePopup);
             Current = null;
             DisposeElements();
         }
