@@ -2,7 +2,7 @@
   "name": "com.actioncode.ui-system",
   "displayName": "ActionCode-UI System",
   "version": "0.2.0",
-  "unity": "2022.3",
+  "unity": "6000.1",
   "description": "Extension for Unity UI Toolkit System.",
   "keywords": [
     "UITK",

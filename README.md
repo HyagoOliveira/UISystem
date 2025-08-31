@@ -1,7 +1,7 @@
 # UI System
 
 * This package is an extension for Unity UI Toolkit System.
-* Unity minimum version: **2022.3**
+* Unity minimum version: **6000.1**
 * Current version: **0.2.0**
 * License: **MIT**
 * Dependencies:
