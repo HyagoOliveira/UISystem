@@ -18,10 +18,10 @@ Create Menus and Popups using Unity UI Toolkit
 
 ### Custom Runtime Theme
 
-This package has a custom [runtime theme](/Settings/Themes/ActionCodeUISystem.tss) overriding some classes style sheet.
+This package has a custom [runtime theme](/Settings/Themes/ActionCodeUISystem.tss) overriding some classes styles.
 You can see the overriding style sheet [here](/Settings/Themes/Default.uss).
 
-When using UI Builder, you can change to this theme:
+When using UI Builder, you can select this theme:
 
 ![ActionCode UI System Theme](/Docs~/ActionCodeUISystem.png)
 
@@ -34,6 +34,51 @@ Normally, when interacting with an UI Document, if you click outside a Visual El
 To disable this behavior, use the [BackgroundClickDisabler](/Runtime/Inputs/BackgroundClickDisabler.cs) component. 
 
 Just put the prefab [InputEventSystem](/Prefabs/Inputs/InputEventSystem.prefab) into your current/dependency scene. This prefab contains all the components necessary to run your UI correctly.
+
+### Popups
+
+All available popups are ready for simple or localized texts, using show and/or close animations.
+
+You can use any available popup from this package by using the [Popups](/Prefabs/Popups/Popups.prefab) prefab. Put this prefab inside your current/dependency scene and use [Popups](/Runtime/Popups/Popups.cs) component.
+
+Alternatively, you can create your own popups prefabs, place them inside Popups global prefab and use them for your project.
+
+The next section shows how to use any available popup.
+
+### Dialogue Popup
+
+This Popup has a message, an optional title and a Confirm and Cancel buttons, with optional callbacks to each button click action.
+
+You can use the default [DialoguePopup](/Prefabs/Popups/Dialogue/DialoguePopup.prefab) implementation found in this package or create your own using the [DialoguePopup](/Runtime/Popups/DialoguePopup.cs) component.
+
+You can show show the dialogue as follow:
+
+```csharp
+private void ShowQuitGameDialogue()
+{
+    Popups.Dialogue.Show(
+        message: "Are you sure?",
+        title: "Quitting the game",
+        onConfirm: QuitGame, // Action to execute when confirming the quit
+        onCancel: GoToMainMenu // Action to execute when canceling the quit
+    );
+}
+
+private void ShowLocalizedQuitGameDialogue()
+{
+    Popups.Dialogue.Show(
+        tableId: "LoadMenu", // A localization Table with this name must exist in the project.
+        messageId: "confirm_message", // The message id inside the localization table.
+        titleId: "delete_title", // The title id inside the localization table.
+        onConfirm: QuitGame,
+        onCancel: GoToMainMenu
+    );
+}
+```
+
+>>Note: For the above example, a [Popups](/Runtime/Popups/Popups.cs) instance should be instantiated into your current/dependency scene.
+
+Finally, you can close the popup by using the Cancel button, the Navigation Cancel from the keyboard (Esc button) or gamepad (East button).
 
 ## Installation
 
