@@ -14,6 +14,14 @@ namespace ActionCode.UISystem
         [SerializeField] protected MainMenuScreen mainMenu;
         [SerializeField] protected AbstractMenuLoadScreen loadMenu;
 
+        [Header("Quit Game Popup")]
+        [SerializeField, Tooltip("The optional localization Popup table name. If empty, message and title will use simple text.")]
+        private string tableId;
+        [SerializeField, Tooltip("The localized message id or simple text.")]
+        private string message = "Are you sure?";
+        [SerializeField, Tooltip("The localized title id or simple text.")]
+        private string title = "Quitting the Game";
+
         protected override void Reset()
         {
             base.Reset();
@@ -83,9 +91,9 @@ namespace ActionCode.UISystem
         private void ShowQuitGameDialogue()
         {
             Popups.Dialogue.Show(
-                tableId: "LoadMenu",
-                messageId: "confirm_message",
-                titleId: "delete_title",
+                tableId,
+                message,
+                title,
                 onConfirm: QuitGameAfterCloseAnimation
             );
         }
