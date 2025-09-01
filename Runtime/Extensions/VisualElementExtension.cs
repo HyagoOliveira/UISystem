@@ -38,5 +38,13 @@ namespace ActionCode.UISystem
         /// <param name="enabled">Whether the element can be selected.</param>
         public static void SetSelectableEnabled(this VisualElement element, bool enabled) =>
             element.pickingMode = enabled ? PickingMode.Position : PickingMode.Ignore;
+
+        /// <summary>
+        /// Whether the element is currently focused.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns>True of false, whether the element is currently focused.</returns>
+        public static bool IsFocused(this VisualElement element) =>
+            element.panel?.focusController?.focusedElement == element;
     }
 }

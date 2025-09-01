@@ -37,7 +37,7 @@ Just put the prefab [InputEventSystem](/Prefabs/Inputs/InputEventSystem.prefab) 
 
 ### Extensions
 
-There are some usefull extensions you can fiund on [Extensions Folder](/Runtime/Extensions/).
+There are some usefull extensions you can find on the [Extensions Folder](/Runtime/Extensions/).
 
 Here are some examples:
 
@@ -50,6 +50,8 @@ var label = root.Find<Label>(name: "MyText"); // Finds a Label with 'MyText' nam
 label.SetDisplayEnabled(true); // Sets whether the element should be displayed in the layout.
 label.SetSelectableEnabled(false); // Sets whether the element can be selected.
 label.UpdateLocalization(tableId: "MyLocTable", entryId: "MyLocId"); // Updates the localization binding using the given table and entry IDs (need Unity Localization package).
+
+if (label.IsFocused()) { } // Whether the element is currently focused.
 ```
 
 ### Popups
