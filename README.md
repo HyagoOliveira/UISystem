@@ -35,6 +35,23 @@ To disable this behavior, use the [BackgroundClickDisabler](/Runtime/Inputs/Back
 
 Just put the prefab [InputEventSystem](/Prefabs/Inputs/InputEventSystem.prefab) into your current/dependency scene. This prefab contains all the components necessary to run your UI correctly.
 
+### Extensions
+
+There are some usefull extensions you can fiund on [Extensions Folder](/Runtime/Extensions/).
+
+Here are some examples:
+
+```csharp
+using ActionCode.UISystem; // Add UISystem namespace
+
+var root = // find a VisualElement from a UIDocument.
+var label = root.Find<Label>(name: "MyText"); // Finds a Label with 'MyText' name. Shows an error if element is not found.
+
+label.SetDisplayEnabled(true); // Sets whether the element should be displayed in the layout.
+label.SetSelectableEnabled(false); // Sets whether the element can be selected.
+label.UpdateLocalization(tableId: "MyLocTable", entryId: "MyLocId"); // Updates the localization binding using the given table and entry IDs (need Unity Localization package).
+```
+
 ### Popups
 
 All available popups are ready for simple or localized texts, using show and/or close animations.
