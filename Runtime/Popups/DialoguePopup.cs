@@ -58,8 +58,11 @@ namespace ActionCode.UISystem
         {
             AbstractMenu.SetSendNavigationEvents(false);
 
-            CancelButton.Focus();
-            await Awaitable.WaitForSecondsAsync(0.2f);
+            if (!CancelButton.IsFocused())
+            {
+                CancelButton.Focus();
+                await Awaitable.WaitForSecondsAsync(0.2f);
+            }
 
             Cancel();
         }
