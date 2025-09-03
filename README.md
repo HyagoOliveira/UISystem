@@ -16,7 +16,7 @@
 
 Create Menus and Popups using Unity UI Toolkit
 
-### Custom Runtime Theme
+## Custom Runtime Theme
 
 This package has a custom [runtime theme](/Settings/Themes/ActionCodeUISystem.tss) overriding some classes styles.
 You can see the overriding style sheet [here](/Settings/Themes/Default.uss).
@@ -27,7 +27,7 @@ When using UI Builder, you can select this theme:
 
 To see it in runtime, make sure to use this [PanelSettings](/Settings/PanelSettings.asset) on your UI Document component.
 
-### UI Background Click Disabler
+## UI Background Click Disabler
 
 Normally, when interacting with an UI Document, if you click outside a Visual Element, the last selected element is disabled. This is not good for UI in games.
 
@@ -35,7 +35,7 @@ To disable this behavior, use the [BackgroundClickDisabler](/Runtime/Inputs/Back
 
 Just put the prefab [InputEventSystem](/Prefabs/Inputs/InputEventSystem.prefab) into your current/dependency scene. This prefab contains all the components necessary to run your UI correctly.
 
-### Extensions
+## Extensions
 
 There are some usefull extensions you can find on the [Extensions Folder](/Runtime/Extensions/).
 
@@ -54,7 +54,7 @@ label.UpdateLocalization(tableId: "MyLocTable", entryId: "MyLocId"); // Updates 
 if (label.IsFocused()) { } // Whether the element is currently focused.
 ```
 
-### Popups
+## Popups
 
 All available popups are ready for simple or localized texts, using show and/or close animations.
 
@@ -120,6 +120,33 @@ private void ShowSaveGameConfirmationDialogue()
 ```
 
 Use it to show important confirmation messages to the player.
+
+## Localization
+
+You can show localized text by using the [LocalizedString](/Runtime/Localization/LocalizedString.cs) struct.
+
+```csharp
+var label = root.Find<Label>(name: "PressAnyButtonLabel");
+var localization = new LocalizedString(
+    tableId: "MainMenu",            // The Table Id where the entry is located.
+    entryId: "press_any_button",    // The Entry Id to be localized.
+    fallback: "Press any button"    // The fallback text to be used when an available localization is not found.
+);
+
+label.UpdateLocalization(localization); // Updates the localization here.
+```
+
+You can show any Dialogue using ```LocalizedString```.
+
+```csharp
+public static void ShowWebGLQuitConfirmation()
+{
+    Popups.Confirmation.Show(
+        message: new LocalizedString("Popups", "webgl_quit_message", "You must close your browser manually!"),
+        title: new LocalizedString("Popups", "webgl_quit_title", "Quitting the Browser")
+    );
+}
+```
 
 ## Installation
 
