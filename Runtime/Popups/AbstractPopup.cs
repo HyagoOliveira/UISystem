@@ -104,12 +104,12 @@ namespace ActionCode.UISystem
         /// </summary>
         /// <param name="tableId">
         /// The table to find the localizations. 
-        /// If empty, it will use the <see cref="Show(string, string, Action, Action)"/> function.
+        /// If empty, it will use the <see cref="Show(string, string, Action, Action)"/> function to show simple text.
         /// </param>
         /// <param name="messageId">The popup localized message id.</param>
         /// <param name="titleId">The popup localized tile id.</param>
-        /// <param name="onConfirm">An optional action to execute when popup is confirmed.</param>
-        /// <param name="onCancel">An optional action to execute when popup is canceled.</param>
+        /// <param name="onConfirm"><inheritdoc cref="Show(string, string, Action, Action)" path="/param[@name='onConfirm']"/></param>
+        /// <param name="onCancel"><inheritdoc cref="Show(string, string, Action, Action)" path="/param[@name='onCancel']"/></param>
         public void Show(
             string tableId,
             string messageId,
@@ -118,15 +118,31 @@ namespace ActionCode.UISystem
             Action onCancel = null
         )
         {
-            var hasInvalidTableId = string.IsNullOrEmpty(tableId);
-            if (hasInvalidTableId)
-            {
-                Show(messageId, titleId, onConfirm, onCancel);
-                return;
-            }
-
             Activate();
-            SetTexts(tableId, titleId, messageId);
+            SetTexts(tableId, titleId, tableId, messageId);
+            ShowAsync(onConfirm, onCancel);
+        }
+
+        /// <summary>
+        /// Shows the localized popup using the given parameters.
+        /// <para>
+        /// Requires the Unity Localization package to show the correct localization.
+        /// Otherwise it will show the fallback text.
+        /// </para>
+        /// </summary>
+        /// <param name="message">The popup localized message with optional fallback text.</param>
+        /// <param name="title">The popup localized title  with optional fallback text.</param>
+        /// <param name="onConfirm"><inheritdoc cref="Show(string, string, Action, Action)" path="/param[@name='onConfirm']"/></param>
+        /// <param name="onCancel"><inheritdoc cref="Show(string, string, Action, Action)" path="/param[@name='onCancel']"/></param>
+        public void Show(
+            LocalizedString message,
+            LocalizedString title,
+            Action onConfirm = null,
+            Action onCancel = null
+        )
+        {
+            Activate();
+            SetTexts(title, message);
             ShowAsync(onConfirm, onCancel);
         }
 
@@ -177,10 +193,18 @@ namespace ActionCode.UISystem
             Message.text = message;
         }
 
-        private void SetTexts(string tableId, string titleId, string messageId)
+        private void SetTexts(
+            string titleTableId, string titleId,
+            string messageTableId, string messageId)
         {
-            Title.UpdateLocalization(tableId, titleId);
-            Message.UpdateLocalization(tableId, messageId);
+            Title.UpdateLocalization(titleTableId, titleId);
+            Message.UpdateLocalization(messageTableId, messageId);
+        }
+
+        private async void SetTexts(LocalizedString title, LocalizedString message)
+        {
+            await Title.UpdateLocalization(title);
+            await Message.UpdateLocalization(message);
         }
 
         private void SetActions(Action onConfirm, Action onCancel)

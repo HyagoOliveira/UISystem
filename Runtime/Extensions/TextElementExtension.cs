@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace ActionCode.UISystem
@@ -19,6 +20,13 @@ namespace ActionCode.UISystem
             var localization = new UnityEngine.Localization.LocalizedString(tableId, entryId);
             text.SetBinding("text", localization);
 #endif
+        }
+
+        public static async Awaitable UpdateLocalization(this TextElement text, LocalizedString localization)
+        {
+            var isValid = await localization.HasLocalization();
+            if (isValid) text.UpdateLocalization(localization.tableId, localization.entryId);
+            else text.text = localization.fallback;
         }
     }
 }
