@@ -72,7 +72,7 @@ This Popup has a message, an optional title and a Confirm and Cancel buttons, wi
 
 You can use the default [DialoguePopup](/Prefabs/Popups/Dialogue/DialoguePopup.prefab) implementation found in this package or create your own using the [DialoguePopup](/Runtime/Popups/DialoguePopup.cs) component.
 
-You can show show the dialogue as follow:
+You can show the dialogue as follow:
 
 ```csharp
 private void ShowQuitGameDialogue()
@@ -100,6 +100,26 @@ private void ShowLocalizedQuitGameDialogue()
 >Note: For the above example, a [Popups](/Runtime/Popups/Popups.cs) instance should be instantiated into your current/dependency scene.
 
 Finally, you can close the popup by using the its own Cancel button or the Navigation Cancel from the keyboard (Esc button) or gamepad (East button).
+
+### Confirmation Popup
+
+Similar to Dialogue Popup but with only a Confirm button.
+
+![Confirmation Popup](/Docs~/ConfirmationPopup.png)
+
+You can show the confirmation dialog as follow:
+
+```csharp
+private void ShowSaveGameConfirmationDialogue()
+{
+    Popups.Confirmation.Show(
+        message: "Your game was saved!",
+        title: "Save Game"
+    );
+}
+```
+
+Use it to show important confirmation messages to the player.
 
 ## Installation
 
