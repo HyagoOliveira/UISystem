@@ -1,0 +1,155 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3735850746227625872
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5325736406204434763}
+  - component: {fileID: 9111449232547980377}
+  - component: {fileID: 563392859201929357}
+  - component: {fileID: 8669315086434765857}
+  - component: {fileID: 4984506822778445298}
+  m_Layer: 0
+  m_Name: ConfirmationPopup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5325736406204434763
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3735850746227625872}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9111449232547980377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3735850746227625872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: 1309a6e1e2273374c86806f238ac77fe, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 1f57187c35f6f754986d073f0c1cba81,
+    type: 3}
+  m_SortingOrder: 10
+  m_WorldSpaceSizeMode: 1
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080
+--- !u!114 &563392859201929357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3735850746227625872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc33c31b2edace8408d8ad87ed9bd9c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  document: {fileID: 9111449232547980377}
+  elementName: Popup
+  speed: 1
+  playOnStart: 0
+  scaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 11.164073
+      outSlope: 11.164073
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.039119802
+    - serializedVersion: 3
+      time: 0.2
+      value: 1
+      inSlope: -3.1727202
+      outSlope: -3.1727202
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.05990222
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &8669315086434765857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3735850746227625872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc33c31b2edace8408d8ad87ed9bd9c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  document: {fileID: 9111449232547980377}
+  elementName: Popup
+  speed: 1
+  playOnStart: 0
+  scaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0.40416163
+      outSlope: 0.40416163
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.115924485
+    - serializedVersion: 3
+      time: 0.2
+      value: 0
+      inSlope: -13.425915
+      outSlope: -13.425915
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.04415162
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &4984506822778445298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3735850746227625872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3f012663be402e40a2a661e4299826e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  document: {fileID: 9111449232547980377}
+  showAnimation: {fileID: 563392859201929357}
+  closeAnimation: {fileID: 8669315086434765857}
+  titleName: Title
+  messageName: Message
+  confirmButtonName: Confirm

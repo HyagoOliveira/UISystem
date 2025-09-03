@@ -30,6 +30,8 @@ namespace ActionCode.UISystem
         [Header("Popups")]
         [SerializeField, Tooltip("The local Dialogue Popup.")]
         private DialoguePopup dialogue;
+        [SerializeField, Tooltip("The local Confirmation Popup.")]
+        private ConfirmationPopup confirmation;
 
         public MenuData Data => data;
         public AudioSource Audio => source;
@@ -43,6 +45,11 @@ namespace ActionCode.UISystem
         /// The global Dialogue Popup.
         /// </summary>
         public static DialoguePopup Dialogue => Instance.dialogue;
+
+        /// <summary>
+        /// The global Confirmation Popup.
+        /// </summary>
+        public static ConfirmationPopup Confirmation => Instance.confirmation;
 
         private static Popups Instance { get; set; }
 

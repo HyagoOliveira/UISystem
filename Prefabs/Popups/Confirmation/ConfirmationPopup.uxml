@@ -1,0 +1,15 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Background" picking-mode="Ignore" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.98); justify-content: center;">
+        <ui:VisualElement name="Popup" picking-mode="Ignore" style="width: 1200px; height: 630px; background-color: rgb(255, 255, 255); border-top-width: 6px; border-right-width: 6px; border-bottom-width: 6px; border-left-width: 6px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); align-self: center;">
+            <ui:VisualElement name="Header" picking-mode="Ignore" style="background-color: rgb(26, 26, 26); height: 15%;">
+                <ui:Label text="Title" name="Title" picking-mode="Ignore" style="flex-grow: 1; -unity-font-style: bold; -unity-text-align: middle-center; color: rgb(255, 255, 255); font-size: 52px; height: 10%;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Body" picking-mode="Ignore" style="flex-grow: 1; height: 60%;">
+                <ui:Label text="Message" name="Message" picking-mode="Ignore" style="flex-grow: 1; -unity-text-align: middle-center; font-size: 70%; text-overflow: ellipsis; white-space: pre-wrap;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Footer" picking-mode="Ignore" style="flex-direction: row; justify-content: space-around; background-color: rgb(26, 26, 26); height: 20%; align-items: center;">
+                <ui:Button text="Confirm" name="Confirm" style="width: 400px; height: 80px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

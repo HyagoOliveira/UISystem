@@ -35,6 +35,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6344906800917369976}
+  - {fileID: 7358032698285520552}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &7691783139861726462
@@ -195,6 +196,7 @@ MonoBehaviour:
   focusPlayer: {fileID: 410407661690086155}
   buttonClickPlayer: {fileID: 869881962055430017}
   dialogue: {fileID: 8135576643657579002}
+  confirmation: {fileID: 7699092960579838481}
 --- !u!1001 &1289562302874230067
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -284,5 +286,96 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d9af271aba06811478709cac34f762c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1001 &3455433862382501859
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 8900754914791869109}
+    m_Modifications:
+    - target: {fileID: 3735850746227625872, guid: 413b06642ffc1734d8ab166af1c101c0,
+        type: 3}
+      propertyPath: m_Name
+      value: ConfirmationPopup
+      objectReference: {fileID: 0}
+    - target: {fileID: 3735850746227625872, guid: 413b06642ffc1734d8ab166af1c101c0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5325736406204434763, guid: 413b06642ffc1734d8ab166af1c101c0,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5325736406204434763, guid: 413b06642ffc1734d8ab166af1c101c0,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5325736406204434763, guid: 413b06642ffc1734d8ab166af1c101c0,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5325736406204434763, guid: 413b06642ffc1734d8ab166af1c101c0,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5325736406204434763, guid: 413b06642ffc1734d8ab166af1c101c0,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5325736406204434763, guid: 413b06642ffc1734d8ab166af1c101c0,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5325736406204434763, guid: 413b06642ffc1734d8ab166af1c101c0,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5325736406204434763, guid: 413b06642ffc1734d8ab166af1c101c0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5325736406204434763, guid: 413b06642ffc1734d8ab166af1c101c0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5325736406204434763, guid: 413b06642ffc1734d8ab166af1c101c0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 413b06642ffc1734d8ab166af1c101c0, type: 3}
+--- !u!4 &7358032698285520552 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5325736406204434763, guid: 413b06642ffc1734d8ab166af1c101c0,
+    type: 3}
+  m_PrefabInstance: {fileID: 3455433862382501859}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7699092960579838481 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4984506822778445298, guid: 413b06642ffc1734d8ab166af1c101c0,
+    type: 3}
+  m_PrefabInstance: {fileID: 3455433862382501859}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3f012663be402e40a2a661e4299826e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
