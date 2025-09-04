@@ -73,14 +73,19 @@ namespace ActionCode.UISystem
 
         /// <summary>
         /// Quits the Game, even while in Editor mode.
+        /// <para>Shows a Quit Browser Confirmation Popup if in WebGL.</para>
         /// </summary>
         public static void QuitGame()
         {
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#else
-            Application.Quit();
-#endif
+            if (Application.isEditor) UnityEditor.EditorApplication.isPlaying = false;
+            else if (Application.platform == RuntimePlatform.WebGLPlayer)
+            {
+                Popups.Confirmation.Show(
+                    message: new LocalizedString("Popups", "webgl_quit_message", "You must close your browser manually!"),
+                    title: new LocalizedString("Popups", "webgl_quit_title", "Quitting the Browser")
+                );
+            }
+            else Application.Quit();
         }
 
         /// <summary>
