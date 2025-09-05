@@ -18,14 +18,13 @@ Create Menus and Popups using Unity UI Toolkit
 
 ## Custom Runtime Theme
 
-This package has a custom [runtime theme](/Settings/Themes/ActionCodeUISystem.tss) overriding some classes styles.
-You can see the overriding style sheet [here](/Settings/Themes/Default.uss).
+This package has a custom theme style sheet called [ActionCode-UISystem](/Settings/Themes/ActionCode-UISystem.tss), overriding some classes styles by using the [ActionCode-Global](/Settings/StyleSheets/ActionCode-Global.uss) style sheet.
 
 When using UI Builder, you can select this theme:
 
 ![ActionCode UI System Theme](/Docs~/ActionCodeUISystem.png)
 
-To see it in runtime, make sure to use this [PanelSettings](/Settings/PanelSettings.asset) on your UI Document component.
+To see it in runtime on your UI Document component, make sure to use a Panel Settings with this Theme Style Sheet.
 
 ## UI Background Click Disabler
 
