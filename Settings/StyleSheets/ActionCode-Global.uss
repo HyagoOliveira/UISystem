@@ -1,5 +1,5 @@
 :root {
-  --button-background-color: rgb(248, 160, 0); /* Declaring a variable */
+  --button-selected-color: rgb(248, 160, 0); /* Declaring a variable */
 }
 
 .unity-button {
@@ -18,11 +18,11 @@
 }
 
 .unity-button:focus {
-    background-color: var(--button-background-color); /* Using a variable */
+    background-color: var(--button-selected-color); /* Using a variable */
 }
 
 .unity-button:hover:focus { /* When button is hovered and focused at same time. */
-    background-color: var(--button-background-color);
+    background-color: var(--button-selected-color);
 }
 
 .navigation-label {
