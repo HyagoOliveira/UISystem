@@ -18,9 +18,9 @@
 }
 
 .unity-button:focus {
-    background-color: var(--button-background-color);
+    background-color: var(--button-background-color); /* Using a variable */
 }
 
-.unity-button:hover:focus { /* When button is hovered and focused together. */
+.unity-button:hover:focus { /* When button is hovered and focused at same time. */
     background-color: var(--button-background-color);
 }

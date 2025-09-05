@@ -14,17 +14,17 @@
 
 ## Summary
 
-Create Menus and Popups using Unity UI Toolkit
+Create Menus and Popups faster using Unity UI Toolkit.
 
 ## Custom Runtime Theme
 
-This package has a custom theme style sheet called [ActionCode-UISystem](/Settings/Themes/ActionCode-UISystem.tss), overriding some classes styles by using the [ActionCode-Global](/Settings/StyleSheets/ActionCode-Global.uss) style sheet.
+This package has a custom Theme Style Sheet called [ActionCode-UISystem](/Settings/Themes/ActionCode-UISystem.tss), overriding some classes styles by using the [ActionCode-Global](/Settings/StyleSheets/ActionCode-Global.uss) style sheet.
 
-When using UI Builder, you can select this theme:
+When using UI Builder, you can select this theme on the Viewport:
 
 ![ActionCode UI System Theme](/Docs~/ActionCodeUISystem.png)
 
-To see it in runtime on your UI Document component, make sure to use a Panel Settings with this Theme Style Sheet.
+To see it in runtime on your UI Document component, make sure to use a Panel Settings with this Theme Style Sheet set.
 
 ## UI Background Click Disabler
 
@@ -32,11 +32,11 @@ Normally, when interacting with an UI Document, if you click outside a Visual El
 
 To disable this behavior, use the [BackgroundClickDisabler](/Runtime/Inputs/BackgroundClickDisabler.cs) component. 
 
-Just put the prefab [InputEventSystem](/Prefabs/Inputs/InputEventSystem.prefab) into your current/dependency scene. This prefab contains all the components necessary to run your UI correctly.
+Just put the prefab [InputEventSystem](/Prefabs/Inputs/InputEventSystem.prefab) into your current/dependency scene. This prefab contains all the components necessary to run your UI input correctly.
 
 ## Extensions
 
-There are some usefull extensions you can find on the [Extensions Folder](/Runtime/Extensions/).
+There are some usefull extensions you can use on the [Extensions Folder](/Runtime/Extensions/).
 
 Here are some examples:
 
@@ -50,22 +50,23 @@ label.SetDisplayEnabled(true); // Sets whether the element should be displayed i
 label.SetSelectableEnabled(false); // Sets whether the element can be selected.
 label.UpdateLocalization(tableId: "MyLocTable", entryId: "MyLocId"); // Updates the localization binding using the given table and entry IDs (need Unity Localization package).
 
-if (label.IsFocused()) { } // Whether the element is currently focused.
+if (label.IsFocused()) { } // Check whether the element is currently focused.
 ```
 
 ## Popups
 
-All available popups are ready for simple or localized texts, using show and/or close animations.
+All available Popups are ready for normal or localized texts, also using show/close animations.
 
-You can use any available popup from this package by using the [Popups](/Prefabs/Popups/Popups.prefab) prefab. Put this prefab inside your current/dependency scene and use the [Popups](/Runtime/Popups/Popups.cs) component.
+You can use any available Popup from this package by using the [Popups](/Prefabs/Popups/Popups.prefab) prefab.
+This prefab contains all Popups ready to use. You just need to put this prefab inside your current/dependency Scene and use the [Popups](/Runtime/Popups/Popups.cs) component on your code (examples in the next sections).
 
-Alternatively, you can create your own popups prefabs, place them inside a Popups global prefab and use them for your project.
+Alternatively, you can create your own Popup prefabs, place them inside a your Popups global prefab and use them in your projects.
 
 The next section shows how to use any available popup.
 
 ### Dialogue Popup
 
-This Popup has a message, an optional title and a Confirm and Cancel buttons, with optional callbacks to each button click action.
+This Popup has a message, an optional title and a Confirm and Cancel buttons, with optional callbacks to each button action.
 
 ![Dialogue Popup](/Docs~/DialoguePopup.png)
 
@@ -79,30 +80,28 @@ private void ShowQuitGameDialogue()
     Popups.Dialogue.Show(
         message: "Are you sure?",
         title: "Quitting the game",
-        onConfirm: QuitGame, // Action to execute when confirming the quit
-        onCancel: GoToMainMenu // Action to execute when canceling the quit
+        onConfirm: QuitGame,    // Action to execute when confirming the quit
+        onCancel: GoToMainMenu  // Action to execute when canceling the quit
     );
 }
 
 private void ShowLocalizedQuitGameDialogue()
 {
     Popups.Dialogue.Show(
-        tableId: "LoadMenu", // A localization Table with this name must exist in the project.
-        messageId: "confirm_message", // The message id inside the localization table.
-        titleId: "delete_title", // The title id inside the localization table.
+        tableId: "LoadMenu",            // A localization Table with this name must exist in the project.
+        messageId: "confirm_message",   // The message id inside the localization table.
+        titleId: "delete_title",        // The title id inside the localization table.
         onConfirm: QuitGame,
         onCancel: GoToMainMenu
     );
 }
 ```
 
->Note: For the above example, a [Popups](/Runtime/Popups/Popups.cs) instance should be instantiated into your current/dependency scene.
-
-Finally, you can close the popup by using the its own Cancel button or the Navigation Cancel from the keyboard (Esc button) or gamepad (East button).
+>Note: For the above example, a [Popups](/Runtime/Popups/Popups.cs) instance should be instantiated into your current/dependency Scene.
 
 ### Confirmation Popup
 
-Similar to Dialogue Popup but with only a Confirm button.
+Similar to Dialogue Popup but with only a Confirmation button.
 
 ![Confirmation Popup](/Docs~/ConfirmationPopup.png)
 
@@ -120,9 +119,11 @@ private void ShowSaveGameConfirmationDialogue()
 
 Use it to show important confirmation messages to the player.
 
+>Note: You can close the any Popup by using the its own Cancel button or the Navigation Cancel from the Keyboard (usually the Esc button) or Gamepad (usually the East button).
+
 ## Localization
 
-You can show localized text by using the [LocalizedString](/Runtime/Localization/LocalizedString.cs) struct.
+You can show localized texts by using the [LocalizedString](/Runtime/Localization/LocalizedString.cs) struct.
 
 ```csharp
 var label = root.Find<Label>(name: "PressAnyButtonLabel");
@@ -135,7 +136,7 @@ var localization = new LocalizedString(
 label.UpdateLocalization(localization); // Updates the localization here.
 ```
 
-You can show any Dialogue using ```LocalizedString```.
+You can also show in any Dialogue:
 
 ```csharp
 public static void ShowWebGLQuitConfirmation()
@@ -163,7 +164,7 @@ You will need a **Git client** installed on your computer with the Path variable
 - You can also manually modify you `Packages/manifest.json` file and add this line inside `dependencies` attribute: 
 
 ```json
-"com.actioncode.input-system":"https://github.com/HyagoOliveira/UISystem.git"
+"com.actioncode.ui-system":"https://github.com/HyagoOliveira/UISystem.git"
 ```
 
 ---
