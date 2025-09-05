@@ -4,13 +4,13 @@
 
 .unity-button {
     font-size: 52px;
+    color: white;
+    border-width: 2px;
+    border-color: black;
     -unity-font-style: bold;
     -unity-text-align: middle-center;
     -unity-text-outline-width: 2px;
     -unity-text-outline-color: black;
-    color: white;
-    border-width: 2px;
-    border-color: black;
 }
 
 .unity-button:active {
@@ -23,4 +23,13 @@
 
 .unity-button:hover:focus { /* When button is hovered and focused at same time. */
     background-color: var(--button-background-color);
+}
+
+.navigation-label {
+    font-size: 64px;
+    color: white;
+    -unity-font-style: bold;
+    -unity-text-align: middle-right;
+    padding-top: 20px; 
+    padding-bottom: 20px;
 }
