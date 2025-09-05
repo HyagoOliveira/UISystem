@@ -1,0 +1,28 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <engine:Template name="Navigation_SelectConfirmDeleteCancel" src="project://database/Assets/1M%20Game/Prefabs/UI/Navigations/Navigation_SelectConfirmDeleteCancel.uxml?fileID=9197481963319205126&amp;guid=cbab068e6a82dce49877a9aa7314ac99&amp;type=3#Navigation_SelectConfirmDeleteCancel" />
+    <engine:Template name="Navigation_Cancel" src="project://database/Assets/1M%20Game/Prefabs/UI/Navigations/Navigation_Cancel.uxml?fileID=9197481963319205126&amp;guid=0f0b58224fcd3034188779361fb4c6ee&amp;type=3#Navigation_Cancel" />
+    <engine:VisualElement name="LoadMenu" style="flex-grow: 1;">
+        <engine:VisualElement name="AvailableData" style="flex-grow: 1;">
+            <engine:VisualElement name="Data" style="flex-grow: 1; flex-direction: row; height: 85%; margin-top: 60px; margin-right: 60px; margin-bottom: 60px; margin-left: 60px; border-top-width: 4px; border-right-width: 4px; border-bottom-width: 4px; border-left-width: 4px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
+                <engine:ListView name="DataNames" style="background-color: rgb(53, 60, 103); width: 20%;" />
+                <engine:ScrollView name="DataDetails" horizontal-scroller-visibility="Hidden" enabled="false" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.5); padding-top: 20px; padding-right: 20px; padding-bottom: 20px; padding-left: 20px;">
+                    <engine:Label text="Player Name" name="PlayerName" style="-unity-font-style: bold; color: rgb(255, 255, 255); font-size: 22px;" />
+                    <engine:Label text="Player Level" name="PlayerLevel" style="-unity-font-style: bold; color: rgb(255, 255, 255); font-size: 22px;" />
+                    <engine:Label text="Player Color" name="PlayerColor" style="-unity-font-style: bold; color: rgb(255, 255, 255); font-size: 22px;" />
+                    <engine:Label text="Language" name="Language" style="-unity-font-style: bold; color: rgb(255, 255, 255); font-size: 22px;" />
+                </engine:ScrollView>
+            </engine:VisualElement>
+            <engine:Instance template="Navigation_SelectConfirmDeleteCancel" />
+        </engine:VisualElement>
+        <engine:VisualElement name="UnavailableData" style="flex-grow: 1; display: none; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px;">
+            <engine:VisualElement name="Data" style="flex-grow: 1; border-top-width: 4px; border-right-width: 4px; border-bottom-width: 4px; border-left-width: 4px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-top: 60px; margin-right: 60px; margin-bottom: 60px; margin-left: 60px;">
+                <engine:Label name="Message" style="-unity-text-align: middle-center; -unity-text-outline-color: rgb(255, 255, 255); -unity-font-style: bold; font-size: 38px; flex-grow: 1; color: rgb(255, 255, 255);">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="GUID:578cb9c7f62c0d74c9d2f580b8f4788c" entry="Id(416392667136)" />
+                    </Bindings>
+                </engine:Label>
+            </engine:VisualElement>
+            <engine:Instance template="Navigation_Cancel" />
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>

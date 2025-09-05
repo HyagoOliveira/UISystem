@@ -1,0 +1,23 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <engine:Template name="Navigation_SelectConfirm" src="project://database/Assets/1M%20Game/Prefabs/UI/Navigations/Navigation_SelectConfirm.uxml?fileID=9197481963319205126&amp;guid=3971b808f667e46488b00c4ccf77c933&amp;type=3#Navigation_SelectConfirm" />
+    <engine:VisualElement name="Background" style="background-color: rgba(0, 0, 0, 0.8); flex-grow: 1;">
+        <engine:VisualElement name="Options" style="justify-content: center; flex-grow: 1; width: 50%; align-self: center;">
+            <engine:Button text="Button" name="Resume" class="unity-button">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:63dfe95b873ba0649a37dc7e3463acf2" entry="Id(649218482177)" />
+                </Bindings>
+            </engine:Button>
+            <engine:Button text="Button" name="Options" enabled="false">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:63dfe95b873ba0649a37dc7e3463acf2" entry="Id(649222676481)" />
+                </Bindings>
+            </engine:Button>
+            <engine:Button text="Button" name="MainMenu">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:63dfe95b873ba0649a37dc7e3463acf2" entry="Id(649176539136)" />
+                </Bindings>
+            </engine:Button>
+        </engine:VisualElement>
+        <engine:Instance template="Navigation_SelectConfirm" />
+    </engine:VisualElement>
+</engine:UXML>

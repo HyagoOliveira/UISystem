@@ -1,0 +1,33 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <engine:Template name="Navigation_SelectConfirm" src="project://database/Assets/1M%20Game/Prefabs/UI/Navigations/Navigation_SelectConfirm.uxml?fileID=9197481963319205126&amp;guid=3971b808f667e46488b00c4ccf77c933&amp;type=3#Navigation_SelectConfirm" />
+    <engine:VisualElement name="MainMenu" picking-mode="Ignore" style="flex-grow: 1; align-items: flex-start;">
+        <engine:VisualElement name="Buttons" style="flex-grow: 1; justify-content: center; padding-top: 40px; padding-right: 40px; padding-bottom: 40px; padding-left: 40px; width: 50%;">
+            <engine:Button text="Button" name="Continue" class="unity-button">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:63dfe95b873ba0649a37dc7e3463acf2" entry="Id(649218482177)" />
+                </Bindings>
+            </engine:Button>
+            <engine:Button text="Button" name="NewGame">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:63dfe95b873ba0649a37dc7e3463acf2" entry="Id(4072884417847296)" />
+                </Bindings>
+            </engine:Button>
+            <engine:Button text="Button" name="LoadGame">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:63dfe95b873ba0649a37dc7e3463acf2" entry="Id(649222676480)" />
+                </Bindings>
+            </engine:Button>
+            <engine:Button text="Button" name="Options" enabled="false">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:63dfe95b873ba0649a37dc7e3463acf2" entry="Id(649222676481)" />
+                </Bindings>
+            </engine:Button>
+            <engine:Button text="Button" name="Quit">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:63dfe95b873ba0649a37dc7e3463acf2" entry="Id(649222676482)" />
+                </Bindings>
+            </engine:Button>
+        </engine:VisualElement>
+    </engine:VisualElement>
+    <engine:Instance template="Navigation_SelectConfirm" />
+</engine:UXML>
