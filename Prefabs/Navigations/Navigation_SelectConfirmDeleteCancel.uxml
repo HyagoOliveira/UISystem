@@ -1,0 +1,12 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <engine:Template name="Navigation_Select" src="project://database/Assets/1M%20Game/Prefabs/UI/Navigations/Navigation_Select.uxml?fileID=9197481963319205126&amp;guid=8ef3713517f6b4043aa9a34ec06ede0b&amp;type=3#Navigation_Select" />
+    <engine:Template name="Navigation_Confirm" src="project://database/Assets/1M%20Game/Prefabs/UI/Navigations/Navigation_Confirm.uxml?fileID=9197481963319205126&amp;guid=7dd008f6daea339439b6e24c2e9a9125&amp;type=3#Navigation_Confirm" />
+    <engine:Template name="Navigation_Delete" src="project://database/Assets/1M%20Game/Prefabs/UI/Navigations/Navigation_Delete.uxml?fileID=9197481963319205126&amp;guid=ab228677eedb34c4c8fbc9323addab9c&amp;type=3#Navigation_Delete" />
+    <engine:Template name="Navigation_Cancel" src="project://database/Assets/1M%20Game/Prefabs/UI/Navigations/Navigation_Cancel.uxml?fileID=9197481963319205126&amp;guid=0f0b58224fcd3034188779361fb4c6ee&amp;type=3#Navigation_Cancel" />
+    <engine:VisualElement name="Navegation" style="flex-direction: row; justify-content: flex-end;">
+        <engine:Instance template="Navigation_Select" />
+        <engine:Instance template="Navigation_Confirm" />
+        <engine:Instance template="Navigation_Delete" />
+        <engine:Instance template="Navigation_Cancel" />
+    </engine:VisualElement>
+</engine:UXML>
