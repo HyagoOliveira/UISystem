@@ -1,7 +1,3 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <engine:Label text="Label" name="AnyButton" style="position: absolute; bottom: 10%; width: 100%; color: rgb(255, 255, 255); -unity-font-style: bold; -unity-text-align: middle-center; font-size: 64px; -unity-text-outline-width: 1px; -unity-text-outline-color: rgb(0, 0, 0);">
-        <Bindings>
-            <UnityEngine.Localization.LocalizedString property="text" table="GUID:63dfe95b873ba0649a37dc7e3463acf2" entry="Id(649218482176)" />
-        </Bindings>
-    </engine:Label>
+    <engine:Label name="AnyButton" text="Press any button" style="position: absolute; bottom: 10%; width: 100%; color: rgb(255, 255, 255); -unity-font-style: bold; -unity-text-align: middle-center; font-size: 64px; -unity-text-outline-width: 1px; -unity-text-outline-color: rgb(0, 0, 0);" />
 </engine:UXML>

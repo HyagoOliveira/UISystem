@@ -1,7 +1,3 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <engine:Label name="Confirm" class="navigation-label">
-        <Bindings>
-            <UnityEngine.Localization.LocalizedString property="text" table="GUID:ae974ad070cf6dd4286a842c334c147f" entry="Id(74597484574269441)" />
-        </Bindings>
-    </engine:Label>
+    <engine:Label name="Confirm" text="{01} Confirm" class="navigation-label" />
 </engine:UXML>

@@ -1,6 +1,6 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <engine:Template name="Navigation_Select" src="project://database/Assets/1M%20Game/Prefabs/UI/Navigations/Navigation_Select.uxml?fileID=9197481963319205126&amp;guid=8ef3713517f6b4043aa9a34ec06ede0b&amp;type=3#Navigation_Select" />
-    <engine:Template name="Navigation_Confirm" src="project://database/Assets/1M%20Game/Prefabs/UI/Navigations/Navigation_Confirm.uxml?fileID=9197481963319205126&amp;guid=7dd008f6daea339439b6e24c2e9a9125&amp;type=3#Navigation_Confirm" />
+    <engine:Template name="Navigation_Select" src="/Packages/com.actioncode.ui-system/Prefabs/Navigations/Navigation_Select.uxml"/>
+    <engine:Template name="Navigation_Confirm" src="/Packages/com.actioncode.ui-system/Prefabs/Navigations/Navigation_Confirm.uxml"/>
     <engine:VisualElement name="Navegation" style="flex-direction: row; justify-content: flex-end;">
         <engine:Instance template="Navigation_Select" />
         <engine:Instance template="Navigation_Confirm" />
