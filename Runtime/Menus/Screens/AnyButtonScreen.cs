@@ -1,4 +1,5 @@
 using System;
+using ActionCode.InputSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
@@ -68,16 +69,7 @@ namespace ActionCode.UISystem
             OnAnyClicked?.Invoke();
         }
 
-        private static bool IsValidDevicePress(InputDevice device) => !IsInvalidMouseClick(device);
-        private static bool IsInvalidMouseClick(InputDevice device) =>
-            device is Mouse mouse && !IsInsideGameView(mouse.position.value);
-
-        // TODO move into InputSystem package
-        private static bool IsInsideGameView(Vector2 position) => IsInsideGameView(Vector2Int.FloorToInt(position));
-
-        // First mouse click outside Game View has Position = (0, 0)
-        private static bool IsInsideGameView(Vector2Int position) =>
-            position.x > 0 && position.x <= Screen.width &&
-            position.y > 0 && position.y <= Screen.height;
+        private static bool IsValidDevicePress(InputDevice device) => IsValidMouseClick(device);
+        private static bool IsValidMouseClick(InputDevice device) => device is Mouse mouse && mouse.IsInsideGameView();
     }
 }
