@@ -69,7 +69,6 @@ namespace ActionCode.UISystem
             OnAnyClicked?.Invoke();
         }
 
-        private static bool IsValidDevicePress(InputDevice device) => IsValidMouseClick(device);
-        private static bool IsValidMouseClick(InputDevice device) => device is Mouse mouse && mouse.IsInsideGameView();
+        private static bool IsValidDevicePress(InputDevice device) => device is not Mouse mouse || mouse.IsInsideGameView();
     }
 }
