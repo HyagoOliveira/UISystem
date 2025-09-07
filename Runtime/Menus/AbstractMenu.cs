@@ -77,7 +77,12 @@ namespace ActionCode.UISystem
         /// </summary>
         public static void QuitGame()
         {
-            if (Application.isEditor) UnityEditor.EditorApplication.isPlaying = false;
+            if (Application.isEditor)
+            {
+#if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+#endif
+            }
             else if (Application.platform == RuntimePlatform.WebGLPlayer)
             {
                 Popups.Confirmation.Show(
