@@ -11,13 +11,12 @@ namespace ActionCode.UISystem
     /// Use the available events to handle item selection or confirmation.
     /// </summary>
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(AudioSource))]
     public sealed class ListController : AbstractController
     {
-        [SerializeField, Tooltip("The Global Menu Data.")]
-        private MenuData data;
-        [SerializeField, Tooltip("The local AudioSource component.")]
-        private AudioSource source;
+        [Tooltip("The Global Menu Data.")]
+        public MenuData data;
+        [Tooltip("The AudioSource component.")]
+        public AudioSource audioSource;
 
         [Space]
         [Tooltip("The ListView name inside the UI Document.")]
@@ -47,13 +46,20 @@ namespace ActionCode.UISystem
         /// </summary>
         public object SelectedItem => List.selectedItem;
 
+        /// <summary>
+        /// Function called when setting the item name.
+        /// </summary>
         public Func<object, string> GetItemName { get; set; }
+
+        /// <summary>
+        /// Function called when settings the item text.
+        /// </summary>
         public Func<object, string> GetItemText { get; set; }
 
         protected override void Reset()
         {
             base.Reset();
-            source = GetComponent<AudioSource>();
+            audioSource = GetComponentInParent<AudioSource>();
         }
 
         /// <summary>
@@ -143,7 +149,7 @@ namespace ActionCode.UISystem
             OnItemConfirmed?.Invoke(item);
         }
 
-        private void PlayConfirmSound() => source.PlayOneShot(data.submit);
-        private void PlaySelectionSound() => source.PlayOneShot(data.selection);
+        private void PlayConfirmSound() => audioSource.PlayOneShot(data.submit);
+        private void PlaySelectionSound() => audioSource.PlayOneShot(data.selection);
     }
 }
