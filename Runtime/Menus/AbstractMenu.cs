@@ -33,8 +33,6 @@ namespace ActionCode.UISystem
         public bool activateFirstScreen = true;
         [Tooltip("The first screen to activated when start.")]
         public AbstractMenuScreen firstScreen;
-        [Min(0f), Tooltip("The time (in seconds) between screen transitions.")]
-        public float transitionTime = 0.2f;
 
         /// <summary>
         /// Event fired when the given screen is opened.
@@ -123,7 +121,6 @@ namespace ActionCode.UISystem
             if (applyTransition)
             {
                 DeactivateAllScreens();
-                await Awaitable.WaitForSecondsAsync(transitionTime);
             }
 
             if (undoable)
