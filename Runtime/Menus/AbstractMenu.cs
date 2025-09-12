@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using ActionCode.ScreenFadeSystem;
 
 namespace ActionCode.UISystem
 {
@@ -33,6 +34,8 @@ namespace ActionCode.UISystem
         public bool activateFirstScreen = true;
         [Tooltip("The first screen to activated when start.")]
         public AbstractMenuScreen firstScreen;
+        [SerializeField, Tooltip("Optional Screen Fader Prefab to use when transitioning screens.")]
+        private AbstractScreenFader faderPrefab;
 
         /// <summary>
         /// Event fired when the given screen is opened.
@@ -47,6 +50,7 @@ namespace ActionCode.UISystem
         public ElementHighlighter Highlighter => highlighter;
         public ElementFocusAudioPlayer FocusPlayer => focusPlayer;
         public ButtonClickAudioPlayer ButtonClickPlayer => buttonClickPlayer;
+        public AbstractScreenFader Fader { get; private set; }
         public AbstractMenuScreen[] Screens { get; private set; }
         public AbstractMenuScreen LastScreen { get; private set; }
         public AbstractMenuScreen CurrentScreen { get; private set; }
@@ -120,8 +124,8 @@ namespace ActionCode.UISystem
 
             if (applyTransition)
             {
+                if (Fader && screen.applyFadeOut) await Fader.FadeOutAsync();
                 DeactivateAllScreens();
-                await CurrentScreen.FadeOutAsync();
             }
 
             if (undoable)
@@ -132,7 +136,7 @@ namespace ActionCode.UISystem
 
             if (screen == null) return;
 
-            await screen.FadeInAsync();
+            if (Fader && screen.applyFadeIn) await Fader.FadeInAsync();
 
             CurrentScreen = screen;
             CurrentScreen.Activate();
@@ -168,6 +172,7 @@ namespace ActionCode.UISystem
 
         protected virtual void InitializeScreens()
         {
+            Fader = ScreenFadeFactory.Create(faderPrefab);
             Screens = GetComponentsInChildren<AbstractMenuScreen>(includeInactive: true);
             foreach (var screen in Screens) screen.Initialize(this);
         }
