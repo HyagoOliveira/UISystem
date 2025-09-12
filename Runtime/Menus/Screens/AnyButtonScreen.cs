@@ -13,6 +13,7 @@ namespace ActionCode.UISystem
     /// </summary>
     public sealed class AnyButtonScreen : AbstractMenuScreen
     {
+        [Space]
         [Tooltip("Whether can go back to this screen from Main Menu.")]
         public bool canGoBack;
 

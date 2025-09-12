@@ -121,6 +121,7 @@ namespace ActionCode.UISystem
             if (applyTransition)
             {
                 DeactivateAllScreens();
+                await CurrentScreen.FadeOutAsync();
             }
 
             if (undoable)
@@ -130,6 +131,8 @@ namespace ActionCode.UISystem
             }
 
             if (screen == null) return;
+
+            await screen.FadeInAsync();
 
             CurrentScreen = screen;
             CurrentScreen.Activate();
