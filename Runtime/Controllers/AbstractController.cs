@@ -37,8 +37,10 @@ namespace ActionCode.UISystem
         protected virtual void OnEnable() => Reload();
         protected virtual void OnDisable() => UnsubscribeEvents();
 
+        public virtual void Focus() => Root.Focus();
         public virtual void Activate() => gameObject.SetActive(true);
         public virtual void Deactivate() => gameObject.SetActive(false);
+
         public void Show() => SetVisibility(true);
         public void Hide() => SetVisibility(false);
         public void SetEnabled(bool enabled) => Root.SetEnabled(enabled);
