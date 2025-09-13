@@ -44,7 +44,7 @@ namespace ActionCode.UISystem
             set => speed = Mathf.Max(0f, value);
         }
 
-        public static float DeltaTime => Time.unscaledTime;
+        public static float DeltaTime => Time.unscaledDeltaTime;
 
         protected virtual void Start() => CheckPlayOnStart();
 
