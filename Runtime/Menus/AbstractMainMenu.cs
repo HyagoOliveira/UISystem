@@ -79,20 +79,5 @@ namespace ActionCode.UISystem
         private void HandleLoadClicked() => OpenScreen(loadMenu);
         private void HandleOptionsClicked() { } //TODO
         private void HandleQuitClicked() => ShowQuitGameDialogue();
-
-        private void ShowQuitGameDialogue()
-        {
-            Popups.Dialogue.Show(
-                message: new LocalizedString("Popups", "are_you_sure", "Are you sure?"),
-                title: new LocalizedString("Popups", "quit_title", "Quitting the game"),
-                onConfirm: QuitGameAfterCloseAnimation
-            );
-        }
-
-        private void QuitGameAfterCloseAnimation()
-        {
-            var time = Popups.Dialogue.GetCloseAnimationTime() + 0.1f;
-            QuitGame(time);
-        }
     }
 }

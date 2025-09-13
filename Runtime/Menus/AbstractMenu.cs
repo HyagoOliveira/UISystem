@@ -34,7 +34,7 @@ namespace ActionCode.UISystem
         public bool activateFirstScreen = true;
         [Tooltip("The first screen to activated when start.")]
         public AbstractMenuScreen firstScreen;
-        [SerializeField, Tooltip("Optional Screen Fader Prefab to use when transitioning screens.")]
+        [SerializeField, Tooltip("[Optional] Screen Fader Prefab to use when transitioning screens.")]
         private AbstractScreenFader faderPrefab;
 
         /// <summary>
@@ -58,10 +58,33 @@ namespace ActionCode.UISystem
         private readonly Stack<AbstractMenuScreen> undoHistory = new();
 
         protected virtual void Reset() => FindRequiredComponents();
-        protected virtual void Awake() => InitializeScreens();
-        protected virtual void Start() => TryActivateFirstScreen();
-        protected virtual void OnEnable() => SubscribeEvents();
+
+        protected virtual void Awake()
+        {
+            TryFindFader();
+            InitializeScreens();
+        }
+
+        protected virtual void OnEnable()
+        {
+            SubscribeEvents();
+            TryActivateFirstScreen();
+        }
+
         protected virtual void OnDisable() => UnsubscribeEvents();
+
+        /// <summary>
+        /// Shows the Quit Game Dialogue Popup using localization if available.
+        /// Quits the game when confirmed.
+        /// </summary>
+        public static void ShowQuitGameDialogue()
+        {
+            Popups.Dialogue.Show(
+                message: new LocalizedString("Popups", "are_you_sure", "Are you sure?"),
+                title: new LocalizedString("Popups", "quit_title", "Quitting the game"),
+                onConfirm: QuitGameAfterDialogueCloseAnimation
+            );
+        }
 
         /// <summary>
         /// Quits the Game, even while in Editor mode, after the given time.
@@ -172,9 +195,21 @@ namespace ActionCode.UISystem
 
         protected virtual void InitializeScreens()
         {
-            Fader = ScreenFadeFactory.Create(faderPrefab);
             Screens = GetComponentsInChildren<AbstractMenuScreen>(includeInactive: true);
             foreach (var screen in Screens) screen.Initialize(this);
+        }
+
+        protected virtual void OnCancel()
+        {
+            if (!TryOpenLastScreen(out AbstractMenuScreen screen)) return;
+
+            ButtonClickPlayer.PlayCancelSound();
+            OnScreenCanceled?.Invoke(screen);
+        }
+
+        private void TryFindFader()
+        {
+            if (faderPrefab) Fader = ScreenFadeFactory.Create(faderPrefab);
         }
 
         private void FindRequiredComponents()
@@ -230,13 +265,7 @@ namespace ActionCode.UISystem
             ButtonClickPlayer.Dispose();
         }
 
-        private void HandleNavigationCancelEvent(NavigationCancelEvent _)
-        {
-            if (!TryOpenLastScreen(out AbstractMenuScreen screen)) return;
-
-            ButtonClickPlayer.PlayCancelSound();
-            OnScreenCanceled?.Invoke(screen);
-        }
+        private void HandleNavigationCancelEvent(NavigationCancelEvent _) => OnCancel();
 
         private async void HandleAnyPopupStartShow(AbstractPopup _)
         {
@@ -254,6 +283,12 @@ namespace ActionCode.UISystem
             CurrentScreen.Focus();
 
             await InitializeCurrentScreenAsync();
+        }
+
+        private static void QuitGameAfterDialogueCloseAnimation()
+        {
+            var time = Popups.Dialogue.GetCloseAnimationTime() + 0.1f;
+            QuitGame(time);
         }
     }
 }
