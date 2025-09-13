@@ -44,6 +44,8 @@ namespace ActionCode.UISystem
             set => speed = Mathf.Max(0f, value);
         }
 
+        public static float DeltaTime => Time.unscaledTime;
+
         protected virtual void Start() => CheckPlayOnStart();
 
         public async Awaitable PlayAsync()
@@ -83,6 +85,8 @@ namespace ActionCode.UISystem
         }
 
         public static float GetDuration(AnimationCurve curve) => curve.keys.Length > 0 ? curve.keys[^1].time : 0f;
+
+        protected void UpdateCurrentTime() => CurrentTime += DeltaTime * Speed;
 
         protected abstract void UpdateAnimation();
         protected override void FindReferences() => Element = Find<VisualElement>(elementName);

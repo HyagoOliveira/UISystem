@@ -19,7 +19,7 @@ namespace ActionCode.UISystem
 
         protected override void UpdateAnimation()
         {
-            CurrentTime += Time.deltaTime * Speed;
+            UpdateCurrentTime();
             SetScale(scaleCurve.Evaluate(CurrentTime));
             CheckStopCondition();
         }
