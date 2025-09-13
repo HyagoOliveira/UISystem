@@ -44,6 +44,9 @@ namespace ActionCode.UISystem
             set => speed = Mathf.Max(0f, value);
         }
 
+        /// <summary>
+        /// The timeScale-independent interval in seconds from the last frame to the current one.
+        /// </summary>
         public static float DeltaTime => Time.unscaledDeltaTime;
 
         protected virtual void Start() => CheckPlayOnStart();

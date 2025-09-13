@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UIElements;
+using ActionCode.AwaitableSystem;
 
 namespace ActionCode.UISystem
 {
@@ -61,7 +62,7 @@ namespace ActionCode.UISystem
             if (!CancelButton.IsFocused())
             {
                 CancelButton.Focus();
-                await Awaitable.WaitForSecondsAsync(0.2f);
+                await AwaitableUtility.WaitForSecondsRealtimeAsync(0.2f);
             }
 
             Cancel();
