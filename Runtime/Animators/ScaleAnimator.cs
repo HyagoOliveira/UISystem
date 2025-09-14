@@ -19,8 +19,10 @@ namespace ActionCode.UISystem
 
         protected override void UpdateAnimation()
         {
+            var scale = scaleCurve.Evaluate(CurrentTime);
+
+            SetScale(scale);
             UpdateCurrentTime();
-            SetScale(scaleCurve.Evaluate(CurrentTime));
             CheckStopCondition();
         }
 

@@ -62,10 +62,17 @@ namespace ActionCode.UISystem
             ResetTime();
             IsPlaying = true;
 
-            while (IsPlaying)
+            try
             {
-                UpdateAnimation();
-                await Awaitable.NextFrameAsync();
+                while (IsPlaying)
+                {
+                    UpdateAnimation();
+                    await Awaitable.NextFrameAsync();
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogException(e);
             }
         }
 

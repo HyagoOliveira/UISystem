@@ -19,8 +19,10 @@ namespace ActionCode.UISystem
 
         protected override void UpdateAnimation()
         {
-            CurrentTime += Time.deltaTime * Speed;
-            SetOpacity(opacityCurve.Evaluate(CurrentTime));
+            var opacity = opacityCurve.Evaluate(CurrentTime);
+
+            SetOpacity(opacity);
+            UpdateCurrentTime();
             CheckStopCondition();
         }
 
