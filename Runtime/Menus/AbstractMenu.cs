@@ -126,7 +126,6 @@ namespace ActionCode.UISystem
 
         public async Awaitable OpenScreenAsync(AbstractMenuScreen screen, bool undoable = true)
         {
-            Time.timeScale = 1f;
             SetSendNavigationEvents(false);
 
             var hasCurrentScreen = CurrentScreen != null;
