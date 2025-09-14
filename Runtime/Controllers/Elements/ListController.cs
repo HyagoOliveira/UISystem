@@ -62,6 +62,12 @@ namespace ActionCode.UISystem
             audioSource = GetComponentInParent<AudioSource>();
         }
 
+        public override void Focus()
+        {
+            base.Focus();
+            List?.Focus();
+        }
+
         /// <summary>
         /// Set the ListView source and the selected index.
         /// </summary>
