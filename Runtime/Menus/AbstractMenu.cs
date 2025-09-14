@@ -87,16 +87,6 @@ namespace ActionCode.UISystem
         }
 
         /// <summary>
-        /// Quits the Game, even while in Editor mode, after the given time.
-        /// </summary>
-        /// <param name="time">The time (in seconds).</param>
-        public static async void QuitGame(float time)
-        {
-            await Awaitable.WaitForSecondsAsync(time);
-            QuitGame();
-        }
-
-        /// <summary>
         /// Quits the Game, even while in Editor mode.
         /// <para>Shows a Quit Browser Confirmation Popup if in WebGL.</para>
         /// </summary>
@@ -228,9 +218,13 @@ namespace ActionCode.UISystem
             }
         }
 
-        private void TryActivateFirstScreen()
+        private async void TryActivateFirstScreen()
         {
-            if (activateFirstScreen) OpenFirstScreen();
+            if (!activateFirstScreen) return;
+
+            // Await one frame to let the First Screen components initialize
+            await Awaitable.NextFrameAsync();
+            OpenFirstScreen();
         }
 
         private async Awaitable InitializeCurrentScreenAsync()
@@ -285,10 +279,17 @@ namespace ActionCode.UISystem
             await InitializeCurrentScreenAsync();
         }
 
-        private static void QuitGameAfterDialogueCloseAnimation()
+        private static async void QuitGameAfterDialogueCloseAnimation()
         {
+            Time.timeScale = 1f;
+
             var time = Popups.Dialogue.GetCloseAnimationTime() + 0.1f;
-            QuitGame(time);
+            await Awaitable.WaitForSecondsAsync(time);
+
+            var hasAvailableFader = ScreenFadeFactory.TryGetFirst(out AbstractScreenFader fader);
+            if (hasAvailableFader) await fader.FadeOutAsync();
+
+            QuitGame();
         }
     }
 }
