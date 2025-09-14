@@ -16,7 +16,7 @@ namespace ActionCode.UISystem
     [RequireComponent(typeof(ElementHighlighter))]
     [RequireComponent(typeof(ButtonClickAudioPlayer))]
     [RequireComponent(typeof(ElementFocusAudioPlayer))]
-    public sealed class TabMenuController : AbstractController
+    public sealed class TabMenu : AbstractController
     {
         [Tooltip("The local ElementFocusAudioPlayer component.")]
         public ElementFocusAudioPlayer focuser;
