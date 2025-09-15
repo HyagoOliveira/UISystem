@@ -24,6 +24,7 @@ namespace ActionCode.UISystem
             SubscribeEvents();
         }
 
+        public virtual string GetName() => GetType().Name;
         public T Find<T>(string name) where T : VisualElement => Tab.Find<T>(name);
         public virtual Button GetFirstButton() => Tab.Q<Button>();
 

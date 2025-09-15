@@ -1,11 +1,8 @@
 using System;
-using System.Linq;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UIElements;
-using UnityEngine.InputSystem;
 using ActionCode.InputSystem;
-using ActionCode.SerializedDictionaries;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 namespace ActionCode.UISystem
 {
@@ -22,12 +19,12 @@ namespace ActionCode.UISystem
         public ElementFocusAudioPlayer focuser;
 
         [Space]
-        [Tooltip("If enabled, moving tab will warp from the other side when reaching the end.")]
-        public bool isWarpAllowed = true;
         [Tooltip("The name used to find the TabView element.")]
         public string tabViewName;
-        [Tooltip("The name used to find the first tab. Empty uses the default one.")]
-        public string firstTabName;
+        [Tooltip("The first tab to activated when start.")]
+        public AbstractTab firstTab;
+        [Tooltip("If enabled, moving tab will warp from the other side when reaching the end.")]
+        public bool isWarpAllowed = true;
 
         [Header("Audio")]
         [Tooltip("The local AudioSource component.")]
@@ -41,13 +38,20 @@ namespace ActionCode.UISystem
         [Tooltip("The 1D Axis input where negative moves to left and positive moves to the right.")]
         public InputActionPopup inputAction = new(nameof(input), "UI");
 
-        [Space]
-        [SerializeField] private SerializedDictionary<string, AbstractTab> tabs;
-
         /// <summary>
-        /// Action fired when tab changed.
+        /// The current selected tab index.
+        /// Values bellow/above from the TabView capacity will be clamped.
+        /// <para>Only sets the value if different from the current.</para>
         /// </summary>
-        public event Action<Tab> OnTabChanged;
+        public int CurrentTabIndex
+        {
+            get => TabView.selectedTabIndex;
+            set
+            {
+                var isNewValue = TabView.selectedTabIndex != value;
+                if (isNewValue) TabView.selectedTabIndex = value;
+            }
+        }
 
         /// <summary>
         /// The input action used to move between tabs.
@@ -65,22 +69,12 @@ namespace ActionCode.UISystem
         /// <summary>
         /// All the Tabs.
         /// </summary>
-        public List<Tab> Tabs { get; private set; }
+        public AbstractTab[] Tabs { get; private set; }
 
         /// <summary>
-        /// The current selected tab index.
-        /// Values bellow/above from the TabView capacity will be clamped.
-        /// <para>Only sets the value if different from the current.</para>
+        /// Action fired when tab changed.
         /// </summary>
-        public int CurrentTabIndex
-        {
-            get => TabView.selectedTabIndex;
-            set
-            {
-                var isNewValue = TabView.selectedTabIndex != value;
-                if (isNewValue) TabView.selectedTabIndex = value;
-            }
-        }
+        public event Action<Tab> OnTabChanged;
 
         protected override void Reset()
         {
@@ -94,9 +88,8 @@ namespace ActionCode.UISystem
         protected override void OnEnable()
         {
             base.OnEnable();
-
             InitializeTabs();
-            SelectTabFirstButton();
+            //TrySelectFirstTab();
         }
 
         /// <summary>
@@ -109,7 +102,7 @@ namespace ActionCode.UISystem
             if (direction == 0) return;
 
             var nextIndex = CurrentTabIndex + direction;
-            var canMove = nextIndex >= 0 && nextIndex < Tabs.Count;
+            var canMove = nextIndex >= 0 && nextIndex < Tabs.Length;
 
             if (canMove)
             {
@@ -126,11 +119,7 @@ namespace ActionCode.UISystem
         protected override void FindReferences()
         {
             base.FindReferences();
-
             TabView = Find<TabView>(tabViewName);
-            Tabs = TabView.Query<Tab>().ToList();
-
-            SelectFirstTab();
         }
 
         protected override void SubscribeEvents()
@@ -147,47 +136,25 @@ namespace ActionCode.UISystem
             InputAction.performed -= HandleInputActionPerformed;
         }
 
-        private int GetWarpedIndex(int index) => index < 0 ? Tabs.Count - 1 : 0;
+        private int GetWarpedIndex(int index) => index < 0 ? Tabs.Length - 1 : 0;
 
         private void InitializeTabs()
         {
-            foreach (var tabPair in tabs)
+            Tabs = GetComponentsInChildren<AbstractTab>(includeInactive: true);
+
+            foreach (var tab in Tabs)
             {
-                var tab = Root.Find<Tab>(tabPair.Key);
-                tabPair.Value.Initialize(tab);
+                var name = tab.GetName();
+                tab.Initialize(Root.Find<Tab>(name));
             }
         }
 
-        private void SelectFirstTab()
+        private void TrySelectFirstTab()
         {
-            var hasNoFirstTab = string.IsNullOrEmpty(firstTabName);
-            if (hasNoFirstTab) return;
-
-            if (TryGetTabIndex(firstTabName, out var index))
-                CurrentTabIndex = index;
+            if (firstTab) focuser.FocusWithoutSound(firstTab.GetFirstButton());
         }
-
-        private void SelectTabFirstButton()
-        {
-            var hasTab = tabs.TryGetValueUsingIndex(CurrentTabIndex, out var tab);
-            if (hasTab) SelectFirstTabButton(tab);
-        }
-
-        private void SelectTabFirstButton(string name)
-        {
-            var hasTab = tabs.TryGetValue(name, out var tab);
-            if (hasTab) SelectFirstTabButton(tab);
-        }
-
-        private void SelectFirstTabButton(AbstractTab tab) => focuser.FocusWithoutSound(tab.GetFirstButton());
 
         private void FindInputAction() => InputAction = input.FindAction(inputAction.GetPath());
-
-        private bool TryGetTabIndex(string tabName, out int index)
-        {
-            index = tabs.Keys.ToList().IndexOf(tabName);
-            return index > 0;
-        }
 
         private void HandleInputActionPerformed(InputAction.CallbackContext ctx)
         {
@@ -199,7 +166,7 @@ namespace ActionCode.UISystem
         private void HandleActiveTabChanged(Tab _, Tab current)
         {
             PlayMoveSound();
-            SelectTabFirstButton(current.name);
+            //SelectTabFirstButton(current.name);
             OnTabChanged?.Invoke(current);
         }
     }
