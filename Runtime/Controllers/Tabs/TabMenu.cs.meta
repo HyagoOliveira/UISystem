@@ -1,2 +1,17 @@
 fileFormatVersion: 2
 guid: d254f41cfd81f824c8bc4d0b2ad0c3cf
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - document: {instanceID: 0}
+  - focuser: {instanceID: 0}
+  - data: {fileID: 11400000, guid: 3de3756b09c57d34189f5d24d338c51d, type: 2}
+  - firstTab: {instanceID: 0}
+  - source: {instanceID: 0}
+  - input: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

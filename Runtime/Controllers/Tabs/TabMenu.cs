@@ -15,6 +15,8 @@ namespace ActionCode.UISystem
     [RequireComponent(typeof(ElementFocusAudioPlayer))]
     public sealed class TabMenu : AbstractController
     {
+        [SerializeField, Tooltip("The Global Menu Data.")]
+        private MenuData data;
         [Tooltip("The local ElementFocusAudioPlayer component.")]
         public ElementFocusAudioPlayer focuser;
 
@@ -29,8 +31,6 @@ namespace ActionCode.UISystem
         [Header("Audio")]
         [Tooltip("The local AudioSource component.")]
         public AudioSource source;
-        [Tooltip("The audio played when tab is moved.")]
-        public AudioClip moveSound;
 
         [Header("Input")]
         [Tooltip("The Input Action asset whet your move tabs input is")]
@@ -114,7 +114,7 @@ namespace ActionCode.UISystem
 
         public void MoveRight() => Move(1);
         public void MoveLeft() => Move(-1);
-        public void PlayMoveSound() => source.PlayOneShot(moveSound);
+        public void PlaySelectionSound() => source.PlayOneShot(data.selectTab);
 
         protected override void FindReferences()
         {
@@ -165,7 +165,7 @@ namespace ActionCode.UISystem
 
         private void HandleActiveTabChanged(Tab _, Tab current)
         {
-            PlayMoveSound();
+            PlaySelectionSound();
             //SelectTabFirstButton(current.name);
             OnTabChanged?.Invoke(current);
         }
