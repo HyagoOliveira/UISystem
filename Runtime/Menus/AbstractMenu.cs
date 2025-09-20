@@ -17,11 +17,14 @@ namespace ActionCode.UISystem
     /// </summary>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(-1)]
+    [RequireComponent(typeof(AudioSource))]
     [RequireComponent(typeof(ElementHighlighter))]
     [RequireComponent(typeof(ButtonClickAudioPlayer))]
     [RequireComponent(typeof(ElementFocusAudioPlayer))]
     public abstract class AbstractMenu : MonoBehaviour
     {
+        [SerializeField, Tooltip("The local Audio Source for this menu.")]
+        private AudioSource audioSource;
         [SerializeField, Tooltip("The local Highlighter for this menu.")]
         private ElementHighlighter highlighter;
         [SerializeField, Tooltip("The local Focus Player for this menu.")]
@@ -47,6 +50,7 @@ namespace ActionCode.UISystem
         /// </summary>
         public event Action<AbstractMenuScreen> OnScreenCanceled;
 
+        public AudioSource AudioSource => audioSource;
         public ElementHighlighter Highlighter => highlighter;
         public ElementFocusAudioPlayer FocusPlayer => focusPlayer;
         public ButtonClickAudioPlayer ButtonClickPlayer => buttonClickPlayer;

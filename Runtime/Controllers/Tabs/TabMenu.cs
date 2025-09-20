@@ -9,18 +9,9 @@ namespace ActionCode.UISystem
     /// <summary>
     /// Controller for a Tab menu like Game Options.
     /// </summary>
-    [RequireComponent(typeof(AudioSource))]
-    [RequireComponent(typeof(ElementHighlighter))]
-    [RequireComponent(typeof(ButtonClickAudioPlayer))]
-    [RequireComponent(typeof(ElementFocusAudioPlayer))]
-    public sealed class TabMenu : AbstractController
+    public sealed class TabMenu : AbstractMenuScreen
     {
-        [SerializeField, Tooltip("The Global Menu Data.")]
-        private MenuData data;
-        [Tooltip("The local ElementFocusAudioPlayer component.")]
-        public ElementFocusAudioPlayer focuser;
-
-        [Space]
+        [Header("Tab")]
         [Tooltip("The name used to find the TabView element.")]
         public string tabViewName;
         [Tooltip("The first tab to activated when start.")]
@@ -29,8 +20,8 @@ namespace ActionCode.UISystem
         public bool isWarpAllowed = true;
 
         [Header("Audio")]
-        [Tooltip("The local AudioSource component.")]
-        public AudioSource source;
+        [SerializeField, Tooltip("The Global Menu Data.")]
+        private MenuData data;
 
         [Header("Input")]
         [Tooltip("The Input Action asset whet your move tabs input is")]
@@ -76,13 +67,6 @@ namespace ActionCode.UISystem
         /// </summary>
         public event Action<Tab> OnTabChanged;
 
-        protected override void Reset()
-        {
-            base.Reset();
-            source = GetComponent<AudioSource>();
-            focuser = GetComponent<ElementFocusAudioPlayer>();
-        }
-
         private void Awake() => FindInputAction();
 
         protected override void OnEnable()
@@ -114,7 +98,7 @@ namespace ActionCode.UISystem
 
         public void MoveRight() => Move(1);
         public void MoveLeft() => Move(-1);
-        public void PlaySelectionSound() => source.PlayOneShot(data.selectTab);
+        public void PlaySelectionSound() => Menu.AudioSource.PlayOneShot(data.selectTab);
 
         protected override void FindReferences()
         {
@@ -125,6 +109,7 @@ namespace ActionCode.UISystem
         protected override void SubscribeEvents()
         {
             base.SubscribeEvents();
+
             TabView.activeTabChanged += HandleActiveTabChanged;
             InputAction.performed += HandleInputActionPerformed;
         }
@@ -132,6 +117,7 @@ namespace ActionCode.UISystem
         protected override void UnsubscribeEvents()
         {
             base.UnsubscribeEvents();
+
             TabView.activeTabChanged -= HandleActiveTabChanged;
             InputAction.performed -= HandleInputActionPerformed;
         }
@@ -147,11 +133,6 @@ namespace ActionCode.UISystem
                 var name = tab.GetName();
                 tab.Initialize(Root.Find<Tab>(name));
             }
-        }
-
-        private void TrySelectFirstTab()
-        {
-            if (firstTab) focuser.FocusWithoutSound(firstTab.GetFirstButton());
         }
 
         private void FindInputAction() => InputAction = input.FindAction(inputAction.GetPath());
