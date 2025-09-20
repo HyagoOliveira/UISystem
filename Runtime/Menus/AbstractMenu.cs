@@ -132,8 +132,8 @@ namespace ActionCode.UISystem
             if (hasCurrentScreen) await DisposeCurrentScreenAsync();
 
             LastScreen = CurrentScreen;
-            var applyTransition = CurrentScreen && CurrentScreen.IsEnabled;
 
+            var applyTransition = CurrentScreen && CurrentScreen.IsEnabled;
             if (applyTransition)
             {
                 if (Fader && screen.applyFadeOut) await Fader.FadeOutAsync();
@@ -160,6 +160,14 @@ namespace ActionCode.UISystem
             OnScreenOpened?.Invoke(CurrentScreen);
         }
 
+        public async void CloseCurrrentScreen()
+        {
+            if (CurrentScreen == null) return;
+
+            await DisposeCurrentScreenAsync();
+            CurrentScreen.Deactivate();
+        }
+
         public bool TryOpenLastScreen(out AbstractMenuScreen screen)
         {
             var hasUndoableScreen = undoHistory.TryPop(out screen);
@@ -182,6 +190,14 @@ namespace ActionCode.UISystem
         protected virtual void FindFirstScreen() => firstScreen =
             GetComponentInChildren<AbstractMenuScreen>(includeInactive: true);
 
+        protected virtual void FindRequiredComponents()
+        {
+            highlighter = GetComponent<ElementHighlighter>();
+            focusPlayer = GetComponent<ElementFocusAudioPlayer>();
+            buttonClickPlayer = GetComponent<ButtonClickAudioPlayer>();
+            FindFirstScreen();
+        }
+
         protected virtual void InitializeScreens()
         {
             Screens = GetComponentsInChildren<AbstractMenuScreen>(includeInactive: true);
@@ -199,14 +215,6 @@ namespace ActionCode.UISystem
         private void TryFindFader()
         {
             if (faderPrefab) Fader = ScreenFadeFactory.Create(faderPrefab);
-        }
-
-        private void FindRequiredComponents()
-        {
-            highlighter = GetComponent<ElementHighlighter>();
-            focusPlayer = GetComponent<ElementFocusAudioPlayer>();
-            buttonClickPlayer = GetComponent<ButtonClickAudioPlayer>();
-            FindFirstScreen();
         }
 
         protected void DeactivateAllScreens()
