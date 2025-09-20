@@ -128,7 +128,7 @@ namespace ActionCode.UISystem
         {
             SetSendNavigationEvents(false);
 
-            var hasCurrentScreen = CurrentScreen != null;
+            var hasCurrentScreen = CurrentScreen && CurrentScreen.IsValid();
             if (hasCurrentScreen) await DisposeCurrentScreenAsync();
 
             LastScreen = CurrentScreen;
@@ -166,6 +166,8 @@ namespace ActionCode.UISystem
 
             await DisposeCurrentScreenAsync();
             CurrentScreen.Deactivate();
+
+            CurrentScreen = null;
         }
 
         public bool TryOpenLastScreen(out AbstractMenuScreen screen)

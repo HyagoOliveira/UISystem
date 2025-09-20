@@ -41,6 +41,7 @@ namespace ActionCode.UISystem
         public virtual void Activate() => gameObject.SetActive(true);
         public virtual void Deactivate() => gameObject.SetActive(false);
 
+        public bool IsValid() => Root != null;
         public void Show() => SetVisibility(true);
         public void Hide() => SetVisibility(false);
         public void SetEnabled(bool enabled) => Root.SetEnabled(enabled);

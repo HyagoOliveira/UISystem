@@ -15,7 +15,7 @@ namespace ActionCode.UISystem
     /// <para>
     /// <b>Note</b>: in order to really disable deselection on background clicks,
     /// always set the Picking Mode to Ignore (instead of the default Position)
-    /// inside every Visual Tree Asset topmost Visual Element.
+    /// inside every Visual Element your mouse can click in.
     /// </para>
     /// </summary>
     [DisallowMultipleComponent]
