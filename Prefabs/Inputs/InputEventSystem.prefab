@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1696322141578861038}
   - component: {fileID: 2409490837372596486}
   - component: {fileID: 5228546050664515960}
-  - component: {fileID: 8258124594049520202}
   - component: {fileID: 4240317226721456101}
   m_Layer: 0
   m_Name: InputEventSystem
@@ -87,24 +86,10 @@ MonoBehaviour:
     type: 3}
   m_TrackedDeviceOrientationAction: {fileID: 7970375526676320489, guid: e61476503bdafdd47b9be0165731d034,
     type: 3}
-  m_DeselectOnBackgroundClick: 1
+  m_DeselectOnBackgroundClick: 0
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
   m_ScrollDeltaPerTick: 6
---- !u!114 &8258124594049520202
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3004781069249135276}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22c9263b6ed07624b83496bd40e0a356, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  eventSystem: {fileID: 2409490837372596486}
-  module: {fileID: 5228546050664515960}
 --- !u!114 &4240317226721456101
 MonoBehaviour:
   m_ObjectHideFlags: 0

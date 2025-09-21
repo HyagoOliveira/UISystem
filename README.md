@@ -31,9 +31,9 @@ To see it in runtime on your UI Document component, make sure to use a Panel Set
 
 Normally, when interacting with an UI Document, if you click outside a Visual Element, the last selected element is disabled. This is not good for UI in games.
 
-To disable this behavior, use the [BackgroundClickDisabler](/Runtime/Inputs/BackgroundClickDisabler.cs) component. 
+To disable this behavior, put the prefab [InputEventSystem](/Prefabs/Inputs/InputEventSystem.prefab) into your current/dependency scene. This prefab contains all the Input Components necessary to run your UI input correctly, with `InputSystemUIInputModule.DeselectOnBackgroundClick` disabled.
 
-Just put the prefab [InputEventSystem](/Prefabs/Inputs/InputEventSystem.prefab) into your current/dependency scene. This prefab contains all the components necessary to run your UI input correctly.
+>Note: in order to really disable deselection on background clicks, always set the Picking Mode to Ignore (instead of the default Position) inside every background Visual Element your mouse can click in outside selectable elements.
 
 ## Extensions
 
