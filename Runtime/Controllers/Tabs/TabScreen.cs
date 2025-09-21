@@ -7,9 +7,12 @@ using UnityEngine.UIElements;
 namespace ActionCode.UISystem
 {
     /// <summary>
-    /// Controller for a Tab menu like Game Options.
+    /// Controller for a Tab Screen like Game Options.
+    /// <para>
+    /// You can move between tabs using UI Buttons or the Gamepad.
+    /// </para>
     /// </summary>
-    public sealed class TabMenu : AbstractMenuScreen
+    public sealed class TabScreen : AbstractMenuScreen
     {
         [Header("Tab")]
         [Tooltip("The name used to find the TabView element.")]
