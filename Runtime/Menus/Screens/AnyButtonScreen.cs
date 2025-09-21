@@ -9,24 +9,21 @@ namespace ActionCode.UISystem
 {
     /// <summary>
     /// Controller for a UI Toolkit "Press Any Button" Screen.
-    /// Use the <see cref="OnAnyClicked"/> event when any key is pressed.
+    /// It moves to the <see cref="AbstractMainMenuScreen"/> when any key is pressed.
     /// </summary>
     public sealed class AnyButtonScreen : AbstractMenuScreen
     {
         [Space]
-        [Tooltip("Whether can go back to this screen from Main Menu.")]
-        public bool canGoBack;
+        [SerializeField, Tooltip("Whether can go back to this screen from Main Menu.")]
+        private bool canGoBack;
+        [SerializeField, Tooltip("The next menu screen to open when any key is pressed.")]
+        private string nextScreenName = "MainMenuScreen";
 
         [Header("Animations")]
         [SerializeField, Tooltip("The optional animation to play when idle.")]
         private AbstractAnimator idleAnimator;
         [SerializeField, Tooltip("The optional animation to play when clicked.")]
         private AbstractAnimator clickedAnimator;
-
-        /// <summary>
-        /// Event fired when any button is pressed.
-        /// </summary>
-        public event Action OnAnyClicked;
 
         private IDisposable anyButtonPressListener;
 
@@ -67,7 +64,7 @@ namespace ActionCode.UISystem
             if (idleAnimator) idleAnimator.Stop();
             if (clickedAnimator) await clickedAnimator.PlayAsync();
 
-            OnAnyClicked?.Invoke();
+            _ = Menu.OpenScreenAsync(nextScreenName, canGoBack);
         }
 
         private static bool IsValidDevicePress(InputDevice device) => device is not Mouse mouse || mouse.IsInsideGameView();

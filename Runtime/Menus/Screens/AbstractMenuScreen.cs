@@ -19,8 +19,12 @@ namespace ActionCode.UISystem
         /// <summary>
         /// The current Menu for this screen.
         /// </summary>
-        public AbstractMenu Menu { get; private set; }
+        public MenuController Menu { get; private set; }
 
-        public virtual void Initialize(AbstractMenu menu) => Menu = menu;
+        /// <summary>
+        /// Initializes this screen with the given Menu.
+        /// </summary>
+        /// <param name="menu">The menu this screen belongs to.</param>
+        public virtual void Initialize(MenuController menu) => Menu = menu;
     }
 }

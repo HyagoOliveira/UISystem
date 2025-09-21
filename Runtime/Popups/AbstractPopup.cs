@@ -216,14 +216,14 @@ namespace ActionCode.UISystem
         private async void ShowAsync(Action onConfirm, Action onCancel)
         {
             OnAnyStartShow?.Invoke(this);
-            AbstractMenu.SetSendNavigationEvents(false);
+            MenuController.SetSendNavigationEvents(false);
 
             if (showAnimation) await showAnimation.PlayAsync();
 
             SetActions(onConfirm, onCancel);
             FocusButton();
 
-            AbstractMenu.SetSendNavigationEvents(true);
+            MenuController.SetSendNavigationEvents(true);
             OnAnyFinishShow?.Invoke(this);
             OnFinishShow();
         }
@@ -232,12 +232,12 @@ namespace ActionCode.UISystem
         {
             OnStartClose();
             OnAnyStartClose?.Invoke(this);
-            AbstractMenu.SetSendNavigationEvents(false);
+            MenuController.SetSendNavigationEvents(false);
 
             if (closeAnimation) await closeAnimation.PlayAsync();
             Deactivate();
 
-            AbstractMenu.SetSendNavigationEvents(true);
+            MenuController.SetSendNavigationEvents(true);
             OnAnyFinishClose?.Invoke(this);
         }
     }

@@ -62,9 +62,9 @@ namespace ActionCode.UISystem
             audioSource = GetComponentInParent<AudioSource>();
         }
 
-        public override void Focus()
+        public override async Awaitable FocusAsync()
         {
-            base.Focus();
+            await base.FocusAsync();
             List?.Focus();
         }
 

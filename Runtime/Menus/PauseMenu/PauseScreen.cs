@@ -24,9 +24,9 @@ namespace ActionCode.UISystem
         public event Action OnMainMenuClicked;
         public event Action OnQuitClicked;
 
-        public override void Focus()
+        public override async Awaitable FocusAsync()
         {
-            base.Focus();
+            await base.FocusAsync();
             Continue.Focus();
         }
 

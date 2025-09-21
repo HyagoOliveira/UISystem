@@ -1,5 +1,4 @@
 using UnityEngine;
-using ActionCode.AwaitableSystem;
 
 namespace ActionCode.UISystem
 {
@@ -7,36 +6,26 @@ namespace ActionCode.UISystem
     /// Abstract component for a Pause Menu.
     /// Use any <see cref="PauseScreen"/> component.
     /// </summary>
-    public abstract class AbstractPauseMenu : AbstractMenu
+    public abstract class AbstractPauseMenu : MonoBehaviour// AbstractMenu
     {
         [Space]
         public PauseScreen pauseScreen;
 
-        protected override void FindRequiredComponents()
+        protected void SubscribeEvents()
         {
-            base.FindRequiredComponents();
-            pauseScreen = GetComponentInChildren<PauseScreen>();
-        }
-
-        protected override void SubscribeEvents()
-        {
-            base.SubscribeEvents();
-
             pauseScreen.OnContinueClicked += HandleContinueClicked;
             pauseScreen.OnMainMenuClicked += HandleMainMenuClicked;
             pauseScreen.OnQuitClicked += HandleQuitClicked;
         }
 
-        protected override void UnsubscribeEvents()
+        protected void UnsubscribeEvents()
         {
-            base.UnsubscribeEvents();
-
             pauseScreen.OnContinueClicked -= HandleContinueClicked;
             pauseScreen.OnMainMenuClicked -= HandleMainMenuClicked;
             pauseScreen.OnQuitClicked -= HandleQuitClicked;
         }
 
-        protected override async void OnCancel()
+        /*protected override async void OnCancel()
         {
             var shouldSelectContinueButton = !pauseScreen.Continue.IsFocused();
             if (shouldSelectContinueButton)
@@ -47,10 +36,10 @@ namespace ActionCode.UISystem
             }
 
             HandleContinueClicked();
-        }
+        }*/
 
         protected abstract void HandleContinueClicked();
         protected abstract void HandleMainMenuClicked();
-        protected virtual void HandleQuitClicked() => ShowQuitGameDialogue();
+        protected virtual void HandleQuitClicked() => Popups.ShowQuitGameDialogue();
     }
 }

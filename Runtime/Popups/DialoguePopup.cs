@@ -57,7 +57,7 @@ namespace ActionCode.UISystem
 
         private async void HandleNavigationCancelEvent(NavigationCancelEvent _)
         {
-            AbstractMenu.SetSendNavigationEvents(false);
+            MenuController.SetSendNavigationEvents(false);
 
             if (!CancelButton.IsFocused())
             {

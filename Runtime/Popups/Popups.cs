@@ -1,3 +1,4 @@
+using ActionCode.ScreenFadeSystem;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -62,10 +63,59 @@ namespace ActionCode.UISystem
         private void Awake() => Instance = this;
         private void OnEnable() => SubscriveEvents();
         private void OnDisable() => UnsubscribeEvents();
+
         private void OnDestroy()
         {
-            Instance = null;
             DisposeElements();
+            Instance = null;
+        }
+
+        /// <summary>
+        /// Shows the Quit Game Dialogue Popup using localization if available.
+        /// Quits the game when confirmed.
+        /// </summary>
+        public static void ShowQuitGameDialogue()
+        {
+            Dialogue.Show(
+                message: new LocalizedString("Popups", "are_you_sure", "Are you sure?"),
+                title: new LocalizedString("Popups", "quit_title", "Quitting the game"),
+                onConfirm: QuitGameAfterCloseAnimation
+            );
+        }
+
+        /// <summary>
+        /// Quits the Game, even while in Editor mode.
+        /// <para>Shows a Quit Browser Confirmation Popup if in Web GL.</para>
+        /// </summary>
+        public static void QuitGame()
+        {
+            if (Application.isEditor)
+            {
+#if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+#endif
+            }
+            else if (Application.platform == RuntimePlatform.WebGLPlayer)
+            {
+                Confirmation.Show(
+                    message: new LocalizedString("Popups", "webgl_quit_message", "You must close your browser manually!"),
+                    title: new LocalizedString("Popups", "webgl_quit_title", "Quitting the Browser")
+                );
+            }
+            else Application.Quit();
+        }
+
+        private static async void QuitGameAfterCloseAnimation()
+        {
+            Time.timeScale = 1f;
+
+            var time = Dialogue.GetCloseAnimationTime() + 0.1f;
+            await Awaitable.WaitForSecondsAsync(time);
+
+            var hasAvailableFader = ScreenFadeFactory.TryGetFirst(out AbstractScreenFader fader);
+            if (hasAvailableFader) await fader.FadeOutAsync();
+
+            QuitGame();
         }
 
         private void FindPopups() => dialogue = GetComponentInChildren<DialoguePopup>(includeInactive: true);
