@@ -13,6 +13,7 @@ namespace ActionCode.UISystem
         [SerializeField] protected AnyButtonScreen anyButton;
         [SerializeField] protected MainMenuScreen mainMenu;
         [SerializeField] protected AbstractMenuLoadScreen loadMenu;
+        [SerializeField] protected TabScreen optionsMenu;
 
         protected override void Reset()
         {
@@ -21,6 +22,7 @@ namespace ActionCode.UISystem
             anyButton = GetComponentInChildren<AnyButtonScreen>(includeInactive: true);
             mainMenu = GetComponentInChildren<MainMenuScreen>(includeInactive: true);
             loadMenu = GetComponentInChildren<AbstractMenuLoadScreen>(includeInactive: true);
+            optionsMenu = GetComponentInChildren<TabScreen>(includeInactive: true);
         }
 
         protected abstract void LoadGameScene();
@@ -77,7 +79,7 @@ namespace ActionCode.UISystem
 
         private void HandleAnyButtonClicked() => OpenScreen(mainMenu, undoable: anyButton.canGoBack);
         private void HandleLoadClicked() => OpenScreen(loadMenu);
-        private void HandleOptionsClicked() { } //TODO
+        private void HandleOptionsClicked() => OpenScreen(optionsMenu);
         private void HandleQuitClicked() => ShowQuitGameDialogue();
     }
 }
