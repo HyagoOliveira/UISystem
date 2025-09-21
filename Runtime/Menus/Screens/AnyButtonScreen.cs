@@ -13,9 +13,11 @@ namespace ActionCode.UISystem
     /// </summary>
     public sealed class AnyButtonScreen : AbstractMenuScreen
     {
-        [Space]
+        [Header("Transition")]
         [SerializeField, Tooltip("Whether can go back to this screen from Main Menu.")]
         private bool canGoBack;
+        [SerializeField, Tooltip("Whether to fade the screen when opening the next screen.")]
+        private bool fadeScreen;
         [SerializeField, Tooltip("The next menu screen to open when any key is pressed.")]
         private string nextScreenName = "MainMenuScreen";
 
@@ -64,7 +66,7 @@ namespace ActionCode.UISystem
             if (idleAnimator) idleAnimator.Stop();
             if (clickedAnimator) await clickedAnimator.PlayAsync();
 
-            _ = Menu.OpenScreenAsync(nextScreenName, canGoBack);
+            _ = Menu.OpenScreenAsync(nextScreenName, canGoBack, fadeScreen);
         }
 
         private static bool IsValidDevicePress(InputDevice device) => device is not Mouse mouse || mouse.IsInsideGameView();

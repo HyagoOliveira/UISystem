@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 namespace ActionCode.UISystem
 {
     /// <summary>
-    /// Plays a submit sound when any Button found by <see cref="className"/> is clicked.
+    /// Plays a submit sound when any Button found by the class names is clicked.
     /// </summary>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(AudioSource))]
@@ -14,10 +14,6 @@ namespace ActionCode.UISystem
         private AudioSource source;
         [SerializeField, Tooltip("The Global Menu Data.")]
         private MenuData data;
-
-        [Space]
-        [Tooltip("The class name used to find the buttons.")]
-        public string className = "unity-button";
 
         public MenuData Data => data;
 
@@ -29,7 +25,6 @@ namespace ActionCode.UISystem
         public async Awaitable WaitSubmitSoundAsync() => await Awaitable.WaitForSecondsAsync(Data.submit.length);
         public async Awaitable WaitCancelSoundAsync() => await Awaitable.WaitForSecondsAsync(Data.cancel.length);
 
-        protected override string GetClassName() => className;
         protected override void RegisterEvent(Button b) => b.clicked += HandleClickEvent;
         protected override void UnregisterEvent(Button b) => b.clicked -= HandleClickEvent;
 

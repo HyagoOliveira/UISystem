@@ -4,15 +4,12 @@ using UnityEngine.UIElements;
 namespace ActionCode.UISystem
 {
     /// <summary>
-    /// Highlights any element found by <see cref="className"/> when any Pointer (like a Mouse) enters into it.
+    /// Highlights any element found by the class names when any Pointer (like a Mouse) enters into it.
     /// </summary>
     [DisallowMultipleComponent]
     public sealed class ElementHighlighter : AbstractElement<VisualElement>
     {
-        [Tooltip("The class name used to find the elements.")]
-        public string className = "unity-button";
-
-        protected override string GetClassName() => className;
+        protected override string[] GetQueryClasses() => new[] { "unity-button", "unity-base-slider" };
         protected override void RegisterEvent(VisualElement e) => e.RegisterCallback<PointerEnterEvent>(HandlePointerEnterEvent);
         protected override void UnregisterEvent(VisualElement e) => e.UnregisterCallback<PointerEnterEvent>(HandlePointerEnterEvent);
 

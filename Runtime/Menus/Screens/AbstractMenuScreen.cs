@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace ActionCode.UISystem
 {
     /// <summary>
@@ -10,12 +8,6 @@ namespace ActionCode.UISystem
     /// </summary>
     public abstract class AbstractMenuScreen : AbstractController
     {
-        [Header("Fades")]
-        [Tooltip("Whether to apply the fade in animation (screen appears).")]
-        public bool applyFadeIn;
-        [Tooltip("Whether to apply the fade out animation (screen disappears).")]
-        public bool applyFadeOut;
-
         /// <summary>
         /// The current Menu for this screen.
         /// </summary>

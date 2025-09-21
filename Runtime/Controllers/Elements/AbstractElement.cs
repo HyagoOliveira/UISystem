@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -6,26 +7,32 @@ namespace ActionCode.UISystem
 {
     public abstract class AbstractElement<T> : MonoBehaviour, IDisposable where T : VisualElement
     {
-        private UQueryBuilder<T> elements; // its a struct, so its never null
-
-        public bool IsInitialized { get; private set; }
+        private readonly List<UQueryBuilder<T>> builders = new(10);
 
         public void Initialize(VisualElement root)
         {
-            elements = root.Query<T>(className: GetClassName());
-            elements.ForEach(RegisterEvent);
-            IsInitialized = true;
+            builders.Clear();
+
+            foreach (var className in GetQueryClasses())
+            {
+                var builder = root.Query<T>(className: className);
+                builder.ForEach(RegisterEvent);
+
+                builders.Add(builder);
+            }
         }
 
         public void Dispose()
         {
-            if (!IsInitialized) return;
-
-            elements.ForEach(UnregisterEvent);
-            IsInitialized = false;
+            foreach (var builder in builders)
+            {
+                builder.ForEach(UnregisterEvent);
+            }
+            builders.Clear();
         }
 
-        protected abstract string GetClassName();
+        protected virtual string[] GetQueryClasses() => new[] { "unity-button" };
+
         protected abstract void RegisterEvent(T e);
         protected abstract void UnregisterEvent(T e);
     }

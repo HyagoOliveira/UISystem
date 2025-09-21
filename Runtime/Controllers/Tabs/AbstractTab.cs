@@ -8,6 +8,8 @@ namespace ActionCode.UISystem
     /// </summary>
     public abstract class AbstractTab : MonoBehaviour
     {
+        [SerializeField] private string firstInput;
+
         /// <summary>
         /// The document Root Visual Element.
         /// </summary>
@@ -15,18 +17,30 @@ namespace ActionCode.UISystem
 
         public bool IsEnabled => gameObject.activeInHierarchy;
 
-        protected virtual void OnDisable() => UnsubscribeEvents();
-
-        public void Initialize(Tab tab)
+        private void OnEnable()
         {
-            Tab = tab;
             FindReferences();
             SubscribeEvents();
         }
 
+        private void OnDisable() => UnsubscribeEvents();
+
+        public void Initialize(Tab tab) => Tab = tab;
+
         public virtual string GetName() => GetType().Name;
         public T Find<T>(string name) where T : VisualElement => Tab.Find<T>(name);
-        public virtual Button GetFirstButton() => Tab.Q<Button>();
+
+        public bool TryGetFirstInput(out VisualElement input)
+        {
+            input = Find<VisualElement>(firstInput);
+            return input != null;
+        }
+
+        public virtual void Focus()
+        {
+            if (TryGetFirstInput(out VisualElement input))
+                input.Focus();
+        }
 
         protected virtual void FindReferences() { }
         protected virtual void SubscribeEvents() { }

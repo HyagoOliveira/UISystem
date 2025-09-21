@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using ActionCode.InputSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -61,22 +62,26 @@ namespace ActionCode.UISystem
         public TabView TabView { get; private set; }
 
         /// <summary>
-        /// All the Tabs.
+        /// All available Tabs in this screen, indexed by their Tab element.
         /// </summary>
-        public AbstractTab[] Tabs { get; private set; }
+        public Dictionary<Tab, AbstractTab> Tabs { get; private set; }
 
         /// <summary>
         /// Action fired when tab changed.
         /// </summary>
-        public event Action<Tab> OnTabChanged;
+        public event Action<AbstractTab> OnTabChanged;
 
-        private void Awake() => FindInputAction();
-
-        protected override void OnEnable()
+        public override void Initialize(MenuController menu)
         {
-            base.OnEnable();
-            InitializeTabs();
-            //TrySelectFirstTab();
+            base.Initialize(menu);
+            InputAction = input.FindAction(inputAction.GetPath());
+        }
+
+        public override async Awaitable FocusAsync()
+        {
+            await base.FocusAsync();
+            TabView.Focus();
+            if (firstTab) firstTab.Focus();
         }
 
         /// <summary>
@@ -89,7 +94,7 @@ namespace ActionCode.UISystem
             if (direction == 0) return;
 
             var nextIndex = CurrentTabIndex + direction;
-            var canMove = nextIndex >= 0 && nextIndex < Tabs.Length;
+            var canMove = nextIndex >= 0 && nextIndex < Tabs.Count;
 
             if (canMove)
             {
@@ -106,7 +111,9 @@ namespace ActionCode.UISystem
         protected override void FindReferences()
         {
             base.FindReferences();
+
             TabView = Find<TabView>(tabViewName);
+            InitializeTabs();
         }
 
         protected override void SubscribeEvents()
@@ -125,20 +132,22 @@ namespace ActionCode.UISystem
             InputAction.performed -= HandleInputActionPerformed;
         }
 
-        private int GetWarpedIndex(int index) => index < 0 ? Tabs.Length - 1 : 0;
+        private int GetWarpedIndex(int index) => index < 0 ? Tabs.Count - 1 : 0;
 
         private void InitializeTabs()
         {
-            Tabs = GetComponentsInChildren<AbstractTab>(includeInactive: true);
+            var tabs = GetComponentsInChildren<AbstractTab>(includeInactive: true);
+            Tabs = new(tabs.Length);
 
-            foreach (var tab in Tabs)
+            foreach (var tab in tabs)
             {
                 var name = tab.GetName();
-                tab.Initialize(Root.Find<Tab>(name));
+                var tabElement = Root.Find<Tab>(name);
+
+                tab.Initialize(tabElement);
+                Tabs.Add(tabElement, tab);
             }
         }
-
-        private void FindInputAction() => InputAction = input.FindAction(inputAction.GetPath());
 
         private void HandleInputActionPerformed(InputAction.CallbackContext ctx)
         {
@@ -149,9 +158,13 @@ namespace ActionCode.UISystem
 
         private void HandleActiveTabChanged(Tab _, Tab current)
         {
+            var tab = Tabs[current];
+
+            if (tab.TryGetFirstInput(out var input))
+                Menu.FocusPlayer.FocusWithoutSound(input);
+
             PlaySelectionSound();
-            //SelectTabFirstButton(current.name);
-            OnTabChanged?.Invoke(current);
+            OnTabChanged?.Invoke(tab);
         }
     }
 }

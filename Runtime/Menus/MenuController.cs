@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using ActionCode.ScreenFadeSystem;
 using UnityEngine;
 using UnityEngine.UIElements;
-using ActionCode.ScreenFadeSystem;
 
 namespace ActionCode.UISystem
 {
@@ -95,7 +95,7 @@ namespace ActionCode.UISystem
         private void OnEnable()
         {
             SubscribeEvents();
-            TryActivateFirstScreen();
+            TryOpenFirstScreen();
         }
 
         private void OnDisable() => UnsubscribeEvents();
@@ -122,34 +122,36 @@ namespace ActionCode.UISystem
         /// <summary>
         /// Opens the <see cref="FirstScreen"/> if available."/>
         /// </summary>
-        public void OpenFirstScreen() => _ = OpenScreenAsync(firstScreen, undoable: false);
+        public void OpenFirstScreen() => _ = OpenScreenAsync(firstScreen, undoable: false, fadeScreen: false);
 
         /// <summary>
-        /// Opens the given screen asynchronously if available. 
-        /// Checks whether the menu is available before trying to open it.
+        /// Opens the given screen asynchronously. 
+        /// Checks whether the screen is available before trying to open it.
         /// </summary>
-        /// <param name="name">The name of the menu. Use its type.</param>
+        /// <param name="name">The name of the screen. Use its type.</param>
         /// <param name="undoable">Whether this screen can be closed using the back button.</param>
+        /// <param name="fadeScreen">Whether to fade the screen in/out.</param>
         /// <returns>An asynchronously operation.</returns>
-        public async Awaitable OpenScreenAsync(string name, bool undoable = true)
+        public async Awaitable OpenScreenAsync(string name, bool undoable = true, bool fadeScreen = true)
         {
             var hasScreen = TryGetMenuScreen(name, out AbstractMenuScreen screen);
-            if (hasScreen) await OpenScreenAsync(screen, undoable);
+            if (hasScreen) await OpenScreenAsync(screen, undoable, fadeScreen);
             else Debug.LogError($"Screen {name} is not available.");
         }
 
         /// <summary>
-        /// Opens the generic screen asynchronously if available. 
-        /// Checks whether the menu is available before trying to open it.
+        /// Opens the generic screen asynchronously. 
+        /// Checks whether the screen is available before trying to open it.
         /// </summary>
-        /// <typeparam name="T">The menu type to open.</typeparam>
-        /// <param name="undoable">Whether this screen can be closed using the back button.</param>
-        /// <returns>An asynchronously operation.</returns>
-        public async Awaitable OpenScreenAsync<T>(bool undoable = true) where T : AbstractMenuScreen
+        /// <typeparam name="T">The screen type to open.</typeparam>
+        /// <param name="undoable"><inheritdoc cref="OpenScreenAsync(string, bool, bool)" path="/param[@name='undoable']"/></param>
+        /// <param name="fadeScreen"><inheritdoc cref="OpenScreenAsync(string, bool, bool)" path="/param[@name='fadeScreen']"/></param>
+        /// <returns><inheritdoc cref="OpenScreenAsync(string, bool)"/></returns>
+        public async Awaitable OpenScreenAsync<T>(bool undoable = true, bool fadeScreen = true) where T : AbstractMenuScreen
         {
             var type = typeof(T);
             var hasScreen = Screens.TryGetValue(type, out AbstractMenuScreen screen);
-            if (hasScreen) await OpenScreenAsync(screen, undoable);
+            if (hasScreen) await OpenScreenAsync(screen, undoable, fadeScreen);
             else Debug.LogError($"Screen {type} is not available.");
         }
 
@@ -157,9 +159,10 @@ namespace ActionCode.UISystem
         /// Opens the given screen asynchronously.
         /// </summary>
         /// <param name="screen">The screen to open.</param>
-        /// <param name="undoable">Whether this screen can be closed using the back button.</param>
-        /// <returns>An asynchronously operation.</returns>
-        public async Awaitable OpenScreenAsync(AbstractMenuScreen screen, bool undoable = true)
+        /// <param name="undoable"><inheritdoc cref="OpenScreenAsync(string, bool, bool)" path="/param[@name='undoable']"/></param>
+        /// <param name="fadeScreen"><inheritdoc cref="OpenScreenAsync(string, bool, bool)" path="/param[@name='fadeScreen']"/></param>
+        /// <returns><inheritdoc cref="OpenScreenAsync(string, bool)"/></returns>
+        public async Awaitable OpenScreenAsync(AbstractMenuScreen screen, bool undoable = true, bool fadeScreen = true)
         {
             SetSendNavigationEvents(false);
 
@@ -171,7 +174,7 @@ namespace ActionCode.UISystem
             var applyTransition = CurrentScreen && CurrentScreen.IsEnabled;
             if (applyTransition)
             {
-                if (Fader && screen.applyFadeOut) await Fader.FadeOutAsync();
+                if (Fader && fadeScreen) await Fader.FadeOutAsync();
                 DeactivateAllScreens();
             }
 
@@ -183,13 +186,13 @@ namespace ActionCode.UISystem
 
             if (screen == null) return;
 
-            if (Fader && screen.applyFadeIn) await Fader.FadeInAsync();
-
             CurrentScreen = screen;
             CurrentScreen.Activate();
             CurrentScreen.SetVisibility(true);
 
             await InitializeCurrentScreenAsync();
+
+            if (Fader && fadeScreen) await Fader.FadeInAsync();
 
             SetSendNavigationEvents(true);
             OnScreenOpened?.Invoke(CurrentScreen);
@@ -294,7 +297,7 @@ namespace ActionCode.UISystem
             }
         }
 
-        private async void TryActivateFirstScreen()
+        private async void TryOpenFirstScreen()
         {
             if (firstScreen == null) return;
 
