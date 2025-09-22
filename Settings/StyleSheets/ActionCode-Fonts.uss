@@ -1,0 +1,4 @@
+:root {
+    /* Declaring Variables */
+    --notosans-font: url("project://database/Packages/com.actioncode.ui-system/Fonts/UITK/NotoSans-Regular.asset?fileID=11400000&guid=a6c803eed8d300c488028d32df533d80&type=2#NotoSans-Regular");
+}

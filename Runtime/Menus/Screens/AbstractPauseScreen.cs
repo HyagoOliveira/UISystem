@@ -54,7 +54,7 @@ namespace ActionCode.UISystem
             MainMenu.clicked -= HandleMainMenuClicked;
             Quit.clicked -= HandleQuitClicked;
 
-            Root.UnregisterCallback<NavigationCancelEvent>(HandleNavigationCancelEvent);
+            Root?.UnregisterCallback<NavigationCancelEvent>(HandleNavigationCancelEvent);
         }
 
         protected abstract void ContinueGame();
