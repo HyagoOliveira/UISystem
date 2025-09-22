@@ -126,6 +126,8 @@ namespace ActionCode.UISystem
         /// </summary>
         public static async void QuitGameAfterCloseAnimation()
         {
+            Time.timeScale = 1f;
+
             var time = Dialogue.GetCloseAnimationTime() + 0.1f;
             await AwaitableUtility.WaitForSecondsRealtimeAsync(time);
 
