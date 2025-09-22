@@ -1,15 +1,15 @@
-using System;
 using UnityEngine;
 using UnityEngine.UIElements;
+using ActionCode.AwaitableSystem;
 
 namespace ActionCode.UISystem
 {
     /// <summary>
-    /// Base class for a Pause Menu Screen.
-    /// Use it with a <see cref="AbstractPauseMenu"/> implementation.
+    /// Abstract class for a Pause Menu Screen, with buttons: Continue, Main Menu and Quit.
+    /// You can further extend.
     /// </summary>
     [DisallowMultipleComponent]
-    public class PauseScreen : AbstractMenuScreen
+    public abstract class AbstractPauseScreen : AbstractMenuScreen
     {
         [Header("Button Names")]
         [SerializeField] private string continueButtonName = "Continue";
@@ -19,10 +19,6 @@ namespace ActionCode.UISystem
         public Button Continue { get; private set; }
         public Button MainMenu { get; private set; }
         public Button Quit { get; private set; }
-
-        public event Action OnContinueClicked;
-        public event Action OnMainMenuClicked;
-        public event Action OnQuitClicked;
 
         public override async Awaitable FocusAsync()
         {
@@ -46,6 +42,8 @@ namespace ActionCode.UISystem
             Continue.clicked += HandleContinueClicked;
             MainMenu.clicked += HandleMainMenuClicked;
             Quit.clicked += HandleQuitClicked;
+
+            Root.RegisterCallback<NavigationCancelEvent>(HandleNavigationCancelEvent);
         }
 
         protected override void UnsubscribeEvents()
@@ -55,10 +53,29 @@ namespace ActionCode.UISystem
             Continue.clicked -= HandleContinueClicked;
             MainMenu.clicked -= HandleMainMenuClicked;
             Quit.clicked -= HandleQuitClicked;
+
+            Root.UnregisterCallback<NavigationCancelEvent>(HandleNavigationCancelEvent);
         }
 
-        private void HandleContinueClicked() => OnContinueClicked?.Invoke();
-        private void HandleMainMenuClicked() => OnMainMenuClicked?.Invoke();
-        private void HandleQuitClicked() => OnQuitClicked?.Invoke();
+        protected abstract void ContinueGame();
+        protected abstract void GoToMainMenu();
+
+        protected virtual void HandleContinueClicked() => ContinueGame();
+        protected virtual void HandleMainMenuClicked() => Popups.ShowQuitLevelDialogue(GoToMainMenu);
+        protected virtual void HandleQuitClicked() => Popups.ShowQuitGameDialogue();
+        protected virtual void HandleNavigationCancelEvent(NavigationCancelEvent _) => ContinueGameAfterSelectAnimation();
+
+        private async void ContinueGameAfterSelectAnimation()
+        {
+            var shouldSelectContinueButton = !Continue.IsFocused();
+            if (shouldSelectContinueButton)
+            {
+                MenuController.SetSendNavigationEvents(false);
+                Continue.Focus();
+                await AwaitableUtility.WaitForSecondsRealtimeAsync(0.2f);
+            }
+
+            ContinueGame();
+        }
     }
 }

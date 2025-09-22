@@ -84,6 +84,20 @@ namespace ActionCode.UISystem
         }
 
         /// <summary>
+        /// Shows the Quit Level Dialogue Popup using localization if available.
+        /// Executes the given Confirmation action when confirmed.
+        /// </summary>
+        /// <param name="onConfirm">The action to execute when the Dialogue is confirmed.</param>
+        public static void ShowQuitLevelDialogue(System.Action onConfirm)
+        {
+            Dialogue.Show(
+                message: new LocalizedString("Popups", "are_you_sure_level", "Are you sure? All unsaved progress will be lost."),
+                title: new LocalizedString("Popups", "quit_title_level", "Quitting the Level"),
+                onConfirm
+            );
+        }
+
+        /// <summary>
         /// Quits the Game, even while in Editor mode.
         /// <para>Shows a Quit Browser Confirmation Popup if in Web GL.</para>
         /// </summary>
