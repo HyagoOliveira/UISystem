@@ -1,6 +1,7 @@
-using ActionCode.ScreenFadeSystem;
 using UnityEngine;
 using UnityEngine.UIElements;
+using ActionCode.AwaitableSystem;
+using ActionCode.ScreenFadeSystem;
 
 namespace ActionCode.UISystem
 {
@@ -119,12 +120,14 @@ namespace ActionCode.UISystem
             else Application.Quit();
         }
 
-        private static async void QuitGameAfterCloseAnimation()
+        /// <summary>
+        /// Quits the Game, even while in Editor mode, after the current Dialogue Close Animation.
+        /// <para>Shows a Quit Browser Confirmation Popup if in Web GL.</para>
+        /// </summary>
+        public static async void QuitGameAfterCloseAnimation()
         {
-            Time.timeScale = 1f;
-
             var time = Dialogue.GetCloseAnimationTime() + 0.1f;
-            await Awaitable.WaitForSecondsAsync(time);
+            await AwaitableUtility.WaitForSecondsRealtimeAsync(time);
 
             var hasAvailableFader = ScreenFadeFactory.TryGetFirst(out AbstractScreenFader fader);
             if (hasAvailableFader) await fader.FadeOutAsync();

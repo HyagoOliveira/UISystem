@@ -62,7 +62,7 @@ namespace ActionCode.UISystem
 
         protected virtual void HandleContinueClicked() => ContinueGame();
         protected virtual void HandleMainMenuClicked() => Popups.ShowQuitLevelDialogue(GoToMainMenu);
-        protected virtual void HandleQuitClicked() => Popups.ShowQuitGameDialogue();
+        protected virtual void HandleQuitClicked() => Popups.ShowQuitLevelDialogue(Popups.QuitGameAfterCloseAnimation);
         protected virtual void HandleNavigationCancelEvent(NavigationCancelEvent _) => ContinueGameAfterSelectAnimation();
 
         private async void ContinueGameAfterSelectAnimation()
