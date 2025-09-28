@@ -40,9 +40,9 @@ namespace ActionCode.UISystem
         public ListView List { get; private set; }
 
         /// <summary>
-        /// The ScrollView content container from the List.
+        /// The ScrollView from the List.
         /// </summary>
-        public VisualElement ScrollContainer { get; private set; }
+        public ScrollView Scroll { get; private set; }
 
         /// <summary>
         /// The selected item from the list data source.
@@ -68,6 +68,11 @@ namespace ActionCode.UISystem
         /// The optional Menu Controller this List belongs to.
         /// </summary>
         public MenuController Menu { get; private set; }
+
+        /// <summary>
+        /// The last selected index.
+        /// </summary>
+        public int LasSelectedIndex { get; private set; } = -1;
 
         private void Awake()
         {
@@ -108,7 +113,7 @@ namespace ActionCode.UISystem
             base.FindReferences();
 
             List = Find<ListView>(listName);
-            ScrollContainer = List.Q<VisualElement>("unity-content-container");
+            Scroll = List.Q<ScrollView>();
         }
 
         protected override void SubscribeEvents()
@@ -120,7 +125,7 @@ namespace ActionCode.UISystem
             List.itemsChosen += HandleItemsChosen; // Necessary to invoke Gamepad submit event
             List.selectionChanged += HandleSelectionChanged;
 
-            ScrollContainer.RegisterCallback<NavigationCancelEvent>(HandleNavigationCancelEvent);
+            Scroll.contentContainer.RegisterCallback<NavigationCancelEvent>(HandleNavigationCancelEvent);
         }
 
         protected override void UnsubscribeEvents()
@@ -132,7 +137,7 @@ namespace ActionCode.UISystem
             List.itemsChosen -= HandleItemsChosen;
             List.selectionChanged -= HandleSelectionChanged;
 
-            ScrollContainer.UnregisterCallback<NavigationCancelEvent>(HandleNavigationCancelEvent);
+            Scroll.contentContainer.UnregisterCallback<NavigationCancelEvent>(HandleNavigationCancelEvent);
         }
 
         private VisualElement HandleItemMaked() => new Label();
@@ -156,9 +161,13 @@ namespace ActionCode.UISystem
         private void HandleSelectionChanged(IEnumerable _) => SelectItem();
         private void HandleItemsChosen(IEnumerable<object> _) => ConfirmItem();
 
-        private void HandleNavigationCancelEvent(NavigationCancelEvent _)
+        private void HandleNavigationCancelEvent(NavigationCancelEvent evt)
         {
-            if (Menu) Menu.OnCancel();
+            if (Menu == null) return;
+
+            evt.StopPropagation();
+            MenuController.SetSendNavigationEvents(false);
+            Menu.OnCancel();
         }
 
         private void SelectItem()
@@ -168,10 +177,14 @@ namespace ActionCode.UISystem
             {
                 // Prevents list from losing focus.
                 // (NavigationMoveEvent does not work on ListView)
-                List.SelectFirst();
+                List.Select(LasSelectedIndex);
                 return;
             }
 
+            var wasSame = LasSelectedIndex == List.selectedIndex;
+            if (wasSame) return;
+
+            LasSelectedIndex = List.selectedIndex;
             PlaySelectionSound();
             OnItemSelected?.Invoke(item);
         }
