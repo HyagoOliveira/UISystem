@@ -5,7 +5,7 @@ using ActionCode.AwaitableSystem;
 namespace ActionCode.UISystem
 {
     /// <summary>
-    /// Abstract class for a Pause Menu Screen, with buttons: Continue, Main Menu and Quit.
+    /// Abstract controller for a Pause Menu Screen, with buttons: Continue, Main Menu and Quit.
     /// You can further extend.
     /// </summary>
     [DisallowMultipleComponent]
@@ -20,11 +20,7 @@ namespace ActionCode.UISystem
         public Button MainMenu { get; private set; }
         public Button Quit { get; private set; }
 
-        public override async Awaitable FocusAsync()
-        {
-            await base.FocusAsync();
-            Continue.Focus();
-        }
+        public override void Focus() => Continue.Focus();
 
         protected override void FindReferences()
         {

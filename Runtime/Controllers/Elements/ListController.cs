@@ -15,8 +15,6 @@ namespace ActionCode.UISystem
     {
         [Tooltip("The Global Menu Data.")]
         public MenuData data;
-        [Tooltip("The AudioSource component.")]
-        public AudioSource audioSource;
 
         [Space]
         [Tooltip("The ListView name inside the UI Document.")]
@@ -42,31 +40,51 @@ namespace ActionCode.UISystem
         public ListView List { get; private set; }
 
         /// <summary>
+        /// The ScrollView content container from the List.
+        /// </summary>
+        public VisualElement ScrollContainer { get; private set; }
+
+        /// <summary>
         /// The selected item from the list data source.
         /// </summary>
         public object SelectedItem => List.selectedItem;
 
         /// <summary>
-        /// Function called when setting the item name.
+        /// Function called when setting the item element name, used as its id.
         /// </summary>
         public Func<object, string> GetItemName { get; set; }
 
         /// <summary>
-        /// Function called when settings the item text.
+        /// Function called when settings the item display text.
         /// </summary>
-        public Func<object, string> GetItemText { get; set; }
+        public Func<object, int, string> GetItemText { get; set; }
 
-        protected override void Reset()
+        /// <summary>
+        /// The AudioSource used to play the sounds.
+        /// </summary>
+        public AudioSource Audio { get; private set; }
+
+        /// <summary>
+        /// The optional Menu Controller this List belongs to.
+        /// </summary>
+        public MenuController Menu { get; private set; }
+
+        private void Awake()
         {
-            base.Reset();
-            audioSource = GetComponentInParent<AudioSource>();
+            Audio = GetComponentInParent<AudioSource>();
+            Menu = GetComponentInParent<MenuController>();
         }
 
-        public override async Awaitable FocusAsync()
-        {
-            await base.FocusAsync();
-            List?.Focus();
-        }
+        /// <summary>
+        /// Whether the List has any item.
+        /// </summary>
+        /// <returns>Always a boolean.</returns>
+        public bool HasItems() => List?.itemsSource?.Count > 0;
+
+        /// <summary>
+        /// Focus the ListView.
+        /// </summary>
+        public override void Focus() => List.Focus();
 
         /// <summary>
         /// Set the ListView source and the selected index.
@@ -88,7 +106,9 @@ namespace ActionCode.UISystem
         protected override void FindReferences()
         {
             base.FindReferences();
+
             List = Find<ListView>(listName);
+            ScrollContainer = List.Q<VisualElement>("unity-content-container");
         }
 
         protected override void SubscribeEvents()
@@ -99,6 +119,8 @@ namespace ActionCode.UISystem
             List.bindItem += HandleItemBinded;
             List.itemsChosen += HandleItemsChosen; // Necessary to invoke Gamepad submit event
             List.selectionChanged += HandleSelectionChanged;
+
+            ScrollContainer.RegisterCallback<NavigationCancelEvent>(HandleNavigationCancelEvent);
         }
 
         protected override void UnsubscribeEvents()
@@ -109,6 +131,8 @@ namespace ActionCode.UISystem
             List.bindItem -= HandleItemBinded;
             List.itemsChosen -= HandleItemsChosen;
             List.selectionChanged -= HandleSelectionChanged;
+
+            ScrollContainer.UnregisterCallback<NavigationCancelEvent>(HandleNavigationCancelEvent);
         }
 
         private VisualElement HandleItemMaked() => new Label();
@@ -121,7 +145,8 @@ namespace ActionCode.UISystem
             if (itemStyle) label.styleSheets.Add(itemStyle);
 
             label.name = GetItemName?.Invoke(item);
-            label.text = GetItemText?.Invoke(item);
+            label.text = GetItemText?.Invoke(item, index);
+            label.focusable = false;
 
             label.RegisterCallback<ClickEvent>(HandleItemClicked);
             label.RegisterCallback<PointerEnterEvent>(_ => List.SetSelection(index));
@@ -130,6 +155,11 @@ namespace ActionCode.UISystem
         private void HandleItemClicked(ClickEvent _) => ConfirmItem();
         private void HandleSelectionChanged(IEnumerable _) => SelectItem();
         private void HandleItemsChosen(IEnumerable<object> _) => ConfirmItem();
+
+        private void HandleNavigationCancelEvent(NavigationCancelEvent _)
+        {
+            if (Menu) Menu.OnCancel();
+        }
 
         private void SelectItem()
         {
@@ -155,7 +185,7 @@ namespace ActionCode.UISystem
             OnItemConfirmed?.Invoke(item);
         }
 
-        private void PlayConfirmSound() => audioSource.PlayOneShot(data.submit);
-        private void PlaySelectionSound() => audioSource.PlayOneShot(data.selection);
+        private void PlayConfirmSound() => Audio.PlayOneShot(data.submit);
+        private void PlaySelectionSound() => Audio.PlayOneShot(data.selection);
     }
 }

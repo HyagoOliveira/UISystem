@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace ActionCode.UISystem
 {
     /// <summary>
@@ -18,5 +20,11 @@ namespace ActionCode.UISystem
         /// </summary>
         /// <param name="menu">The menu this screen belongs to.</param>
         public virtual void Initialize(MenuController menu) => Menu = menu;
+
+        /// <summary>
+        /// Loads any content needed for this screen.
+        /// </summary>
+        /// <returns>An asynchronous operation.</returns>
+        public virtual async Awaitable LoadAnyContent() => await Awaitable.NextFrameAsync();
     }
 }

@@ -77,9 +77,8 @@ namespace ActionCode.UISystem
             InputAction = input.FindAction(inputAction.GetPath());
         }
 
-        public override async Awaitable FocusAsync()
+        public override void Focus()
         {
-            await base.FocusAsync();
             TabView.Focus();
             if (firstTab) firstTab.Focus();
         }

@@ -47,6 +47,21 @@ namespace ActionCode.UISystem
 #endif
         }
 
+        /// <summary>
+        /// Return the localized text or the fallback if not found.
+        /// </summary>
+        /// <returns>Always a string.</returns>
+        public readonly string GetLocalizedText()
+        {
+#if UNITY_LOCALIZATION
+            var database = UnityEngine.Localization.Settings.LocalizationSettings.StringDatabase;
+            var table = database.GetTableEntry(tableId, entryId);
+            return table.Entry != null ? table.Entry.GetLocalizedString() : fallback;
+#else
+            return string.Empty;
+#endif
+        }
+
         public override readonly string ToString() => $"{tableId}/{entryId} ({fallback})";
     }
 }

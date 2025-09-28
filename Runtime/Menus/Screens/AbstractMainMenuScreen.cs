@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 namespace ActionCode.UISystem
 {
     /// <summary>
-    /// Controller for a UI Toolkit Main Menu Screen, with the main 
+    /// Abstract controller for a UI Toolkit Main Menu Screen, with the main 
     /// options like Continue, Start Game, Load Game, Options and Quit.
     /// <para>
     /// You can extend this class and implement custom behaviors.
@@ -32,11 +32,18 @@ namespace ActionCode.UISystem
         public Button Options { get; private set; }
         public Button Quit { get; private set; }
 
-        public override async Awaitable FocusAsync()
+        private bool isContinueAvailable;
+
+        public override void Focus()
         {
-            await base.FocusAsync();
-            await FocusFirstButton();
+            var button = isContinueAvailable ? Continue : NewGame;
+
+            button.Focus();
+            Continue.SetEnabled(isContinueAvailable);
         }
+
+        public override async Awaitable LoadAnyContent() =>
+            isContinueAvailable = await IsContinueAvailable();
 
         protected override void FindReferences()
         {
@@ -78,14 +85,5 @@ namespace ActionCode.UISystem
         protected virtual void HandleLoadClicked() => _ = Menu.OpenScreenAsync(loadGameScreenName, undoable: true);
         protected virtual void HandleOptionsClicked() => _ = Menu.OpenScreenAsync(optionsScreenName, undoable: true);
         protected virtual void HandleQuitClicked() => Popups.ShowQuitGameDialogue();
-
-        protected virtual async Awaitable FocusFirstButton()
-        {
-            var isContinueAvailable = await IsContinueAvailable();
-            var button = isContinueAvailable ? Continue : NewGame;
-
-            button.Focus();
-            Continue.SetEnabled(isContinueAvailable);
-        }
     }
 }

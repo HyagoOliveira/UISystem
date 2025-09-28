@@ -275,7 +275,7 @@ namespace ActionCode.UISystem
             ButtonClickPlayer.Dispose();
         }
 
-        private void OnCancel()
+        public void OnCancel()
         {
             if (!TryOpenLastScreen(out AbstractMenuScreen screen)) return;
 
@@ -310,8 +310,8 @@ namespace ActionCode.UISystem
         {
             CurrentScreen.Root.RegisterCallback<NavigationCancelEvent>(HandleNavigationCancelEvent);
 
-            await Awaitable.NextFrameAsync();
-            await CurrentScreen.FocusAsync();
+            await CurrentScreen.LoadAnyContent();
+            CurrentScreen.Focus();
 
             InitializeElements();
         }
@@ -340,7 +340,7 @@ namespace ActionCode.UISystem
 
             CurrentScreen.SetEnabled(true);
 
-            await CurrentScreen.FocusAsync();
+            CurrentScreen.Focus();
             await InitializeCurrentScreenAsync();
         }
     }
