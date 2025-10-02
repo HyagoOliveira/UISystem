@@ -15,20 +15,18 @@ namespace ActionCode.UISystem
     {
         [Header("Button Names")]
         [SerializeField] protected string continueButtonName = "Continue";
-        [SerializeField] protected string newGameButtonName = "NewGame";
-        [SerializeField] protected string loadButtonName = "LoadGame";
+        [SerializeField] protected string startGameButtonName = "StartGame";
         [SerializeField] protected string optionsButtonName = "Options";
         [SerializeField] protected string quitButtonName = "Quit";
 
         [Header("Screen Names")]
-        [SerializeField, Tooltip("The Load Game Screen name to open when clicking the Load Game button.")]
-        protected string loadGameScreenName = "LoadGameScreen";
+        [SerializeField, Tooltip("The Start Game Screen name to open when clicking the Start Game button.")]
+        protected string startGameScreenName = "StartGameScreen";
         [SerializeField, Tooltip("The Options Screen name to open when clicking the Options button.")]
         protected string optionsScreenName = "OptionsScreen";
 
         public Button Continue { get; private set; }
-        public Button NewGame { get; private set; }
-        public Button LoadGame { get; private set; }
+        public Button StartGame { get; private set; }
         public Button Options { get; private set; }
         public Button Quit { get; private set; }
 
@@ -36,8 +34,7 @@ namespace ActionCode.UISystem
 
         public override void Focus()
         {
-            var button = isContinueAvailable ? Continue : NewGame;
-
+            var button = isContinueAvailable ? Continue : StartGame;
             button.Focus();
             Continue.SetEnabled(isContinueAvailable);
         }
@@ -50,8 +47,7 @@ namespace ActionCode.UISystem
             base.FindReferences();
 
             Continue = Root.Q<Button>(continueButtonName);
-            NewGame = Root.Q<Button>(newGameButtonName);
-            LoadGame = Root.Q<Button>(loadButtonName);
+            StartGame = Root.Q<Button>(startGameButtonName);
             Options = Root.Q<Button>(optionsButtonName);
             Quit = Root.Q<Button>(quitButtonName);
         }
@@ -61,8 +57,7 @@ namespace ActionCode.UISystem
             base.SubscribeEvents();
 
             Continue.clicked += HandleContinueClicked;
-            NewGame.clicked += HandleNewGameClicked;
-            LoadGame.clicked += HandleLoadClicked;
+            StartGame.clicked += HandleStartGameClicked;
             Options.clicked += HandleOptionsClicked;
             Quit.clicked += HandleQuitClicked;
         }
@@ -72,17 +67,15 @@ namespace ActionCode.UISystem
             base.UnsubscribeEvents();
 
             Continue.clicked -= HandleContinueClicked;
-            NewGame.clicked -= HandleNewGameClicked;
-            LoadGame.clicked -= HandleLoadClicked;
+            StartGame.clicked -= HandleStartGameClicked;
             Options.clicked -= HandleOptionsClicked;
             Quit.clicked -= HandleQuitClicked;
         }
 
-        protected abstract Awaitable<bool> IsContinueAvailable();
         protected abstract void HandleContinueClicked();
-        protected abstract void HandleNewGameClicked();
+        protected abstract Awaitable<bool> IsContinueAvailable();
 
-        protected virtual void HandleLoadClicked() => _ = Menu.OpenScreenAsync(loadGameScreenName, undoable: true);
+        protected virtual void HandleStartGameClicked() => _ = Menu.OpenScreenAsync(startGameScreenName, undoable: true);
         protected virtual void HandleOptionsClicked() => _ = Menu.OpenScreenAsync(optionsScreenName, undoable: true);
         protected virtual void HandleQuitClicked() => Popups.ShowQuitGameDialogue();
     }
