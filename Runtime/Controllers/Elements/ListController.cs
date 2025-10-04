@@ -72,7 +72,7 @@ namespace ActionCode.UISystem
         /// <summary>
         /// The last selected index.
         /// </summary>
-        public int LasSelectedIndex { get; private set; } = -1;
+        public int LastSelectedIndex { get; private set; } = -1;
 
         private void Awake()
         {
@@ -177,14 +177,14 @@ namespace ActionCode.UISystem
             {
                 // Prevents list from losing focus.
                 // (NavigationMoveEvent does not work on ListView)
-                List.Select(LasSelectedIndex);
+                List.Select(LastSelectedIndex);
                 return;
             }
 
-            var wasSame = LasSelectedIndex == List.selectedIndex;
+            var wasSame = LastSelectedIndex == List.selectedIndex;
             if (wasSame) return;
 
-            LasSelectedIndex = List.selectedIndex;
+            LastSelectedIndex = List.selectedIndex;
             PlaySelectionSound();
             OnItemSelected?.Invoke(item);
         }
