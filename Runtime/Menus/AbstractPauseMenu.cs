@@ -45,7 +45,7 @@ namespace ActionCode.UISystem
         protected virtual void SubscribeEvents() { }
         protected virtual void UnsubscribeEvents() { }
 
-        protected void PlayOpenSound() => Menu.AudioSource.PlayOneShot(open);
-        protected void PlayCloseSound() => Menu.AudioSource.PlayOneShot(close);
+        protected void PlayOpenSound() => Menu.Audio.PlayOneShot(open);
+        protected void PlayCloseSound() => Menu.Audio.PlayOneShot(close);
     }
 }

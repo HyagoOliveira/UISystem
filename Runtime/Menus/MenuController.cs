@@ -48,7 +48,8 @@ namespace ActionCode.UISystem
         /// </summary>
         public event Action<AbstractMenuScreen> OnScreenCanceled;
 
-        public AudioSource AudioSource => audioSource;
+        public MenuData Data => ButtonClickPlayer.Data;
+        public AudioSource Audio => audioSource;
         public ElementHighlighter Highlighter => highlighter;
         public ElementFocusAudioPlayer FocusPlayer => focusPlayer;
         public ButtonClickAudioPlayer ButtonClickPlayer => buttonClickPlayer;

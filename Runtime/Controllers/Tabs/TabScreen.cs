@@ -105,7 +105,7 @@ namespace ActionCode.UISystem
 
         public void MoveRight() => Move(1);
         public void MoveLeft() => Move(-1);
-        public void PlaySelectionSound() => Menu.AudioSource.PlayOneShot(data.selectTab);
+        public void PlaySelectionSound() => Menu.Audio.PlayOneShot(data.selectTab);
 
         protected override void FindReferences()
         {
