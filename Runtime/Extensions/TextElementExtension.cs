@@ -22,11 +22,78 @@ namespace ActionCode.UISystem
 #endif
         }
 
+        /// <summary>
+        /// Updates the localization binding using the given LocalizedString.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="localization">Localized String struct with optional fallback text.</param>
+        /// <returns></returns>
         public static async Awaitable UpdateLocalization(this TextElement text, LocalizedString localization)
         {
             var isValid = await localization.HasLocalization();
             if (isValid) text.UpdateLocalization(localization.tableId, localization.entryId);
             else text.text = localization.fallback;
         }
+
+        /// <summary>
+        /// Updates the dynamic localization using the given variable name and value.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="variableName">The dynamic variable name inside the Localization Binding.</param>
+        /// <param name="value">The dynamic variable value inside the Localization Binding.</param>
+        public static void UpdateDynamicLocalization(this TextElement text, string variableName, string value)
+        {
+#if UNITY_LOCALIZATION
+            var localization = text.GetBinding("text") as UnityEngine.Localization.LocalizedString;
+            var variable = localization[variableName] as UnityEngine.Localization.SmartFormat.PersistentVariables.StringVariable;
+            variable.Value = value;
+#endif
+        }
+
+        /// <summary>
+        /// <inheritdoc cref="UpdateDynamicLocalization(TextElement, string, string)"/>
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="variableName"><inheritdoc cref="UpdateDynamicLocalization(TextElement, string, string)" path="/param[@name='variableName']"/></param>
+        /// <param name="value"><inheritdoc cref="UpdateDynamicLocalization(TextElement, string, string)" path="/param[@name='value']"/></param>
+        public static void UpdateDynamicLocalization(this TextElement text, string variableName, int value)
+        {
+#if UNITY_LOCALIZATION
+            var localization = text.GetBinding("text") as UnityEngine.Localization.LocalizedString;
+            var variable = localization[variableName] as UnityEngine.Localization.SmartFormat.PersistentVariables.IntVariable;
+            variable.Value = value;
+#endif
+        }
+
+        /// <summary>
+        /// <inheritdoc cref="UpdateDynamicLocalization(TextElement, string, string)"/>
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="variableName"><inheritdoc cref="UpdateDynamicLocalization(TextElement, string, string)" path="/param[@name='variableName']"/></param>
+        /// <param name="value"><inheritdoc cref="UpdateDynamicLocalization(TextElement, string, string)" path="/param[@name='value']"/></param>
+        public static void UpdateDynamicLocalization(this TextElement text, string variableName, bool value)
+        {
+#if UNITY_LOCALIZATION
+            var localization = text.GetBinding("text") as UnityEngine.Localization.LocalizedString;
+            var variable = localization[variableName] as UnityEngine.Localization.SmartFormat.PersistentVariables.BoolVariable;
+            variable.Value = value;
+#endif
+        }
+
+        /// <summary>
+        /// <inheritdoc cref="UpdateDynamicLocalization(TextElement, string, string)"/>
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="variableName"><inheritdoc cref="UpdateDynamicLocalization(TextElement, string, string)" path="/param[@name='variableName']"/></param>
+        /// <param name="value"><inheritdoc cref="UpdateDynamicLocalization(TextElement, string, string)" path="/param[@name='value']"/></param>
+        public static void UpdateDynamicLocalization(this TextElement text, string variableName, float value)
+        {
+#if UNITY_LOCALIZATION
+            var localization = text.GetBinding("text") as UnityEngine.Localization.LocalizedString;
+            var variable = localization[variableName] as UnityEngine.Localization.SmartFormat.PersistentVariables.FloatVariable;
+            variable.Value = value;
+#endif
+        }
+
     }
 }
