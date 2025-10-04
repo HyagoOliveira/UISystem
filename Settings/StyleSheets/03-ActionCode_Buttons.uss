@@ -1,0 +1,25 @@
+:root {
+    /* Declaring a variable */
+    --button-selected-color: rgb(248, 160, 0);
+}
+
+.unity-button {
+    border-width: 2px;
+    border-color: black;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    -unity-text-outline-width: 2px;
+    -unity-text-outline-color: black;
+}
+
+.unity-button:active {
+    background-color: rgb(255, 222, 0);
+}
+
+.unity-button:focus {
+    background-color: var(--button-selected-color); /* Using a variable */
+}
+
+.unity-button:hover:focus { /* When button is hovered and focused at same time. */
+    background-color: var(--button-selected-color);
+}

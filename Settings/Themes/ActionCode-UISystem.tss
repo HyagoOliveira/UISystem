@@ -1,6 +1,9 @@
 @import url("unity-theme://default");
 
-@import url("/Packages/com.actioncode.ui-system/Settings/StyleSheets/ActionCode-Fonts.uss");
-@import url("/Packages/com.actioncode.ui-system/Settings/StyleSheets/ActionCode-Global.uss");
+@import url("/Packages/com.actioncode.ui-system/Settings/StyleSheets/00-ActionCode_Fonts.uss");
+@import url("/Packages/com.actioncode.ui-system/Settings/StyleSheets/01-ActionCode_Fields.uss");
+@import url("/Packages/com.actioncode.ui-system/Settings/StyleSheets/02-ActionCode_Texts.uss");
+@import url("/Packages/com.actioncode.ui-system/Settings/StyleSheets/03-ActionCode_Buttons.uss");
+
 
 

@@ -1,0 +1,45 @@
+:root {
+    /* Declaring a variable */
+    --text-size: 52px;
+}
+
+.unity-text-element {
+    color: white;
+    font-size: var(--text-size);
+    -unity-font-style: bold;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: black;
+    -unity-font-definition: var(--notosans-font);
+}
+
+.unity-text-element--inner-input-field-component {
+    color: black;
+    font-size: 26px;
+    -unity-text-outline-width: 0;
+}
+
+.text-no-outline {
+    -unity-text-outline-width: 0;
+}
+
+.text-normal {
+    -unity-font-style: normal;
+}
+
+.text-center {
+    -unity-text-align: middle-center;
+}
+
+.text-right {
+    -unity-text-align: middle-right;
+}
+
+.navigation-label {
+    -unity-text-align: middle-right;
+    padding-top: 20px; 
+    padding-bottom: 20px;
+}
+
+.sprite-label {    
+    -unity-text-align: middle-center;
+}
