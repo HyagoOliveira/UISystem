@@ -46,5 +46,29 @@ namespace ActionCode.UISystem
         /// <returns>True of false, whether the element is currently focused.</returns>
         public static bool IsFocused(this VisualElement element) =>
             element.panel?.focusController?.focusedElement == element;
+
+        /// <summary>
+        /// In Unity's UI Toolkit, a disabled button cannot gain focus.
+        /// To achieve a similar effect, Style Class manipulation is necessary.
+        /// </summary>
+        /// <param name="button"></param>
+        /// <param name="isFocused">Whether the button should be focused.</param>
+        public static void FakeDisabledFocus(this Button button, bool isFocused)
+        {
+            // Class .unity-button:focus:disabled does not work
+            const string unityButtonClass = "unity-button";
+            const string buttonDisabledFocus = "button-disabled-focus";
+
+            button.EnableInClassList(unityButtonClass, !isFocused);
+            if (isFocused) button.AddToClassList(buttonDisabledFocus);
+            else button.RemoveFromClassList(buttonDisabledFocus);
+        }
+
+        /// <summary>
+        /// Gets the given element background color.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns>A Color.</returns>
+        public static Color GetBackgroundColor(this VisualElement element) => element.resolvedStyle.backgroundColor;
     }
 }

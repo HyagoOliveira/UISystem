@@ -95,5 +95,26 @@ namespace ActionCode.UISystem
 #endif
         }
 
+        /// <summary>
+        /// <inheritdoc cref="UpdateDynamicLocalization(TextElement, string, string)"/>
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="variableName"><inheritdoc cref="UpdateDynamicLocalization(TextElement, string, string)" path="/param[@name='variableName']"/></param>
+        /// <param name="value"><inheritdoc cref="UpdateDynamicLocalization(TextElement, string, string)" path="/param[@name='value']"/></param>
+        /// <param name="format">The Date Time format. Default is abbreviated date (d).</param>
+        public static void UpdateDynamicLocalization(this TextElement text, string variableName, System.DateTime value, string format = "d")
+        {
+#if UNITY_LOCALIZATION
+            var localization = text.GetBinding("text") as UnityEngine.Localization.LocalizedString;
+            var variable = localization[variableName] as UnityEngine.Localization.SmartFormat.PersistentVariables.StringVariable;
+
+            localization.StringChanged += _ =>
+            {
+                var code = UnityEngine.Localization.Settings.LocalizationSettings.SelectedLocale.Identifier.Code;
+                var info = new System.Globalization.CultureInfo(code);
+                variable.Value = value.ToString(format, info);
+            };
+#endif
+        }
     }
 }
