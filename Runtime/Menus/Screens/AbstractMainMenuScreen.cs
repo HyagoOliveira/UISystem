@@ -39,7 +39,7 @@ namespace ActionCode.UISystem
             Continue.SetEnabled(isContinueAvailable);
         }
 
-        public override async Awaitable LoadAnyContent() =>
+        public override async Awaitable LoadAnyContentAsync() =>
             isContinueAvailable = await IsContinueAvailable();
 
         protected override void FindReferences()

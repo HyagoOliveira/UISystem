@@ -25,6 +25,6 @@ namespace ActionCode.UISystem
         /// Loads any content needed for this screen.
         /// </summary>
         /// <returns>An asynchronous operation.</returns>
-        public virtual async Awaitable LoadAnyContent() => await Awaitable.NextFrameAsync();
+        public virtual async Awaitable LoadAnyContentAsync() => await Awaitable.NextFrameAsync();
     }
 }

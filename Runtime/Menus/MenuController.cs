@@ -121,6 +121,19 @@ namespace ActionCode.UISystem
         public bool HasScreen<T>() where T : AbstractMenuScreen => Screens.ContainsKey(typeof(T));
 
         /// <summary>
+        /// Tries to get the given screen if available.
+        /// </summary>
+        /// <typeparam name="T">The generic screen type.</typeparam>
+        /// <param name="screen">The screen. Null if not available.</param>
+        /// <returns>Whether the screen was found.</returns>
+        public bool TryGetScreen<T>(out T screen) where T : AbstractMenuScreen
+        {
+            var hasScreen = HasScreen<T>();
+            screen = hasScreen ? Screens[typeof(T)] as T : null;
+            return hasScreen;
+        }
+
+        /// <summary>
         /// Opens the <see cref="FirstScreen"/> if available."/>
         /// </summary>
         public void OpenFirstScreen() => _ = OpenScreenAsync(firstScreen, undoable: false, fadeScreen: false);
@@ -311,7 +324,7 @@ namespace ActionCode.UISystem
         {
             CurrentScreen.Root.RegisterCallback<NavigationCancelEvent>(HandleNavigationCancelEvent);
 
-            await CurrentScreen.LoadAnyContent();
+            await CurrentScreen.LoadAnyContentAsync();
             CurrentScreen.Focus();
 
             InitializeElements();

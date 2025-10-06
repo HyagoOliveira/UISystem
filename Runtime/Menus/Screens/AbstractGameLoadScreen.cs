@@ -49,7 +49,7 @@ namespace ActionCode.UISystem
             else UnavailableDataContainer.Focus();
         }
 
-        public override async Awaitable LoadAnyContent() => await LoadDataAsync();
+        public override async Awaitable LoadAnyContentAsync() => await LoadDataAsync();
 
         protected abstract void SelectData(object item);
         protected abstract void ConfirmDataLoad(object item);

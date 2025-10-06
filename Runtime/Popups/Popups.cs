@@ -92,7 +92,7 @@ namespace ActionCode.UISystem
         public static void ShowQuitLevelDialogue(System.Action onConfirm)
         {
             Dialogue.Show(
-                message: new LocalizedString("Popups", "are_you_sure_level", "Are you sure? All unsaved progress will be lost."),
+                message: new LocalizedString("Popups", "are_you_sure_level", "Are you sure?\nAll unsaved progress will be lost."),
                 title: new LocalizedString("Popups", "quit_title_level", "Quitting the Level"),
                 onConfirm
             );
