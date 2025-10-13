@@ -53,6 +53,19 @@ namespace ActionCode.UISystem
         /// </summary>
         public static ConfirmationPopup Confirmation => Instance.confirmation;
 
+        /// <summary>
+        /// Whether the application is quitting.
+        /// </summary>
+        public static bool IsQuitting { get; private set; }
+
+        /// <summary>
+        /// Whether a Scene loading process is happening.
+        /// </summary>
+        public static bool IsLoadingScene { get; set; }
+
+        /// <summary>
+        /// The global instance of this Popups controller.
+        /// </summary>
         private static Popups Instance { get; set; }
 
         private void Reset()
@@ -70,6 +83,12 @@ namespace ActionCode.UISystem
             DisposeElements();
             Instance = null;
         }
+
+        /// <summary>
+        /// Whether the game can have navigation (not quitting or loading a scene).
+        /// </summary>
+        /// <returns></returns>
+        public static bool CanHaveNavigation() => !IsQuitting && !IsLoadingScene;
 
         /// <summary>
         /// Shows the Quit Game Dialogue Popup using localization if available.
@@ -126,6 +145,7 @@ namespace ActionCode.UISystem
         /// </summary>
         public static async void QuitGameAfterCloseAnimation()
         {
+            IsQuitting = true;
             Time.timeScale = 1f;
 
             var time = Dialogue.GetCloseAnimationTime() + 0.1f;

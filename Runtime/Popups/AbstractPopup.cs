@@ -237,7 +237,7 @@ namespace ActionCode.UISystem
             if (closeAnimation) await closeAnimation.PlayAsync();
             Deactivate();
 
-            MenuController.SetSendNavigationEvents(true);
+            MenuController.SetSendNavigationEvents(Popups.CanHaveNavigation());
             OnAnyFinishClose?.Invoke(this);
         }
     }
