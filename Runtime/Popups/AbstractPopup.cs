@@ -183,13 +183,13 @@ namespace ActionCode.UISystem
         protected virtual void OnStartClose() { }
         protected virtual void DestroyEvents() => SetActions(null, null);
 
-        private void SetTexts(string title, string message)
+        protected void SetTexts(string title, string message)
         {
             Title.text = title;
             Message.text = message;
         }
 
-        private void SetTexts(
+        protected void SetTexts(
             string titleTableId, string titleId,
             string messageTableId, string messageId)
         {
@@ -197,19 +197,19 @@ namespace ActionCode.UISystem
             Message.UpdateLocalization(messageTableId, messageId);
         }
 
-        private async void SetTexts(LocalizedString title, LocalizedString message)
+        protected async void SetTexts(LocalizedString title, LocalizedString message)
         {
             await Title.UpdateLocalization(title);
             await Message.UpdateLocalization(message);
         }
 
-        private void SetActions(Action onConfirm, Action onCancel)
+        protected void SetActions(Action onConfirm, Action onCancel)
         {
             OnCanceled = onCancel;
             OnConfirmed = onConfirm;
         }
 
-        private async void ShowAsync(Action onConfirm, Action onCancel)
+        protected async void ShowAsync(Action onConfirm, Action onCancel)
         {
             OnAnyStartShow?.Invoke(this);
             MenuController.SetSendNavigationEvents(false);
