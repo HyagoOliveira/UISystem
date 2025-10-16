@@ -54,19 +54,12 @@ namespace ActionCode.UISystem
         public static event Action<AbstractPopup> OnAnyFinishClose;
 
         /// <summary>
-        /// Event fired when canceling this popup.
-        /// </summary>
-        public event Action OnCanceled;
-
-        /// <summary>
-        /// Event fired when confirming this popup.
-        /// </summary>
-        public event Action OnConfirmed;
-
-        /// <summary>
         /// The default sorting order for all popups.
         /// </summary>
         public const float SORTING_ORDER = 10F;
+
+        private event Action OnCanceled;
+        private event Action OnConfirmed;
 
         protected override void Reset()
         {
