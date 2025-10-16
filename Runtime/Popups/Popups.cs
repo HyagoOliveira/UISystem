@@ -42,12 +42,12 @@ namespace ActionCode.UISystem
         /// <summary>
         /// The global Dialogue Popup.
         /// </summary>
-        public static DialoguePopup Dialogue => Instance.GetPopup<DialoguePopup>();
+        public static DialoguePopup Dialogue => GetPopup<DialoguePopup>();
 
         /// <summary>
         /// The global Confirmation Popup.
         /// </summary>
-        public static ConfirmationPopup Confirmation => Instance.GetPopup<ConfirmationPopup>();
+        public static ConfirmationPopup Confirmation => GetPopup<ConfirmationPopup>();
 
         /// <summary>
         /// Whether the application is quitting.
@@ -59,9 +59,6 @@ namespace ActionCode.UISystem
         /// </summary>
         public static bool IsLoadingScene { get; set; }
 
-        /// <summary>
-        /// The global instance of this Popups controller.
-        /// </summary>
         private static Popups Instance { get; set; }
 
         private readonly Dictionary<Type, AbstractPopup> popups = new();
@@ -88,7 +85,7 @@ namespace ActionCode.UISystem
         /// </summary>
         /// <typeparam name="T">The type of popup.</typeparam>
         /// <returns>The popup instance if its a children.</returns>
-        public T GetPopup<T>() where T : AbstractPopup => popups[typeof(T)] as T;
+        public static T GetPopup<T>() where T : AbstractPopup => Instance.popups[typeof(T)] as T;
 
         /// <summary>
         /// Tries to get a child popup.
@@ -96,7 +93,8 @@ namespace ActionCode.UISystem
         /// <typeparam name="T">The type of popup.</typeparam>
         /// <param name="popup">The popup instance if its a children</param>
         /// <returns>Whether the popup was found.</returns>
-        public bool TryGetPopup<T>(out AbstractPopup popup) where T : AbstractPopup => popups.TryGetValue(typeof(T), out popup);
+        public static bool TryGetPopup<T>(out AbstractPopup popup) where T : AbstractPopup =>
+            Instance.popups.TryGetValue(typeof(T), out popup);
 
         /// <summary>
         /// Whether the game can have navigation (not quitting or loading a scene).
