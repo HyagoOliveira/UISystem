@@ -159,8 +159,6 @@ namespace ActionCode.UISystem
         public float GetShowAnimationTime() => showAnimation ? showAnimation.GetDuration() : 0.1f;
         public float GetCloseAnimationTime() => closeAnimation ? closeAnimation.GetDuration() : 0.1f;
 
-        protected abstract void FocusButton();
-
         protected override void FindReferences()
         {
             base.FindReferences();
@@ -219,7 +217,7 @@ namespace ActionCode.UISystem
             if (showAnimation) await showAnimation.PlayAsync();
 
             SetActions(onConfirm, onCancel);
-            FocusButton();
+            Focus();
 
             MenuController.SetSendNavigationEvents(true);
             OnAnyFinishShow?.Invoke(this);

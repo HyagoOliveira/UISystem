@@ -19,6 +19,8 @@ namespace ActionCode.UISystem
         public Button CancelButton { get; private set; }
         public Button ConfirmButton { get; private set; }
 
+        public override void Focus() => ConfirmButton.Focus();
+
         protected override void FindReferences()
         {
             base.FindReferences();
@@ -26,8 +28,6 @@ namespace ActionCode.UISystem
             CancelButton = Root.Find<Button>(cancelButtonName);
             ConfirmButton = Root.Find<Button>(confirmButtonName);
         }
-
-        protected override void FocusButton() => ConfirmButton.Focus();
 
         protected override void SubscribeEvents()
         {
