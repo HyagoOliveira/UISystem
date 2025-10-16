@@ -24,6 +24,14 @@ namespace ActionCode.UISystem
         }
 
         /// <summary>
+        /// Whether the element is displayed in the layout.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns>True if the element is displayed in the layout.</returns>
+        public static bool IsDisplayEnabled(this VisualElement element) =>
+            element.style.display == DisplayStyle.Flex;
+
+        /// <summary>
         /// Sets whether the element should be displayed in the layout.
         /// </summary>
         /// <param name="element"></param>

@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Changed
+- VisualElement Function Extensions
 - Disable UI Navigation when quitting the game or loading a new Scene
 
 ## [0.3.0] - 2025-10-06
