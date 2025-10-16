@@ -122,6 +122,10 @@ Use it to show important confirmation messages to the player.
 
 >Note: You can close the any Popup by using the its own Cancel button or the Navigation Cancel from the Keyboard (usually the Esc button) or Gamepad (usually the East button).
 
+### Using other Popups
+
+To show your own Popups, use the function `Popups.GetPopup<YourPopupType>()`. Don't forget to add the Popup prefab as a child of your Popups prefab.
+
 ## Localization
 
 You can show localized texts by using the [LocalizedString](/Runtime/Localization/LocalizedString.cs) struct.
