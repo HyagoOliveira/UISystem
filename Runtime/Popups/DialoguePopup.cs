@@ -19,8 +19,10 @@ namespace ActionCode.UISystem
         public Button CancelButton { get; private set; }
         public Button ConfirmButton { get; private set; }
 
-        protected override void FindButtons()
+        protected override void FindReferences()
         {
+            base.FindReferences();
+
             CancelButton = Root.Find<Button>(cancelButtonName);
             ConfirmButton = Root.Find<Button>(confirmButtonName);
         }

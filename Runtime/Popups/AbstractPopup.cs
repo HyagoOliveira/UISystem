@@ -1,11 +1,12 @@
 using System;
 using UnityEngine;
 using UnityEngine.UIElements;
-#if UNITY_LOCALIZATION
-#endif
 
 namespace ActionCode.UISystem
 {
+    /// <summary>
+    /// Abstract controller for a UI Toolkit Popup document.
+    /// </summary>
     public abstract class AbstractPopup : AbstractController
     {
         [Header("Animations")]
@@ -53,12 +54,12 @@ namespace ActionCode.UISystem
         public static event Action<AbstractPopup> OnAnyFinishClose;
 
         /// <summary>
-        /// Event fired when canceling the popup.
+        /// Event fired when canceling this popup.
         /// </summary>
         public event Action OnCanceled;
 
         /// <summary>
-        /// Event fired when confirming the popup.
+        /// Event fired when confirming this popup.
         /// </summary>
         public event Action OnConfirmed;
 
@@ -159,7 +160,6 @@ namespace ActionCode.UISystem
         public float GetCloseAnimationTime() => closeAnimation ? closeAnimation.GetDuration() : 0.1f;
 
         protected abstract void FocusButton();
-        protected abstract void FindButtons();
 
         protected override void FindReferences()
         {
@@ -167,8 +167,6 @@ namespace ActionCode.UISystem
 
             Title = Root.Find<Label>(titleName);
             Message = Root.Find<Label>(messageName);
-
-            FindButtons();
         }
 
         protected virtual void Confirm()

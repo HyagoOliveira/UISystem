@@ -15,7 +15,12 @@ namespace ActionCode.UISystem
 
         public Button ConfirmButton { get; private set; }
 
-        protected override void FindButtons() => ConfirmButton = Root.Find<Button>(confirmButtonName);
+        protected override void FindReferences()
+        {
+            base.FindReferences();
+            ConfirmButton = Root.Find<Button>(confirmButtonName);
+        }
+
         protected override void FocusButton() => ConfirmButton.Focus();
 
         protected override void SubscribeEvents()
