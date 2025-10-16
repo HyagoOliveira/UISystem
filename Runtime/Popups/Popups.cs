@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using ActionCode.AwaitableSystem;
@@ -29,12 +31,6 @@ namespace ActionCode.UISystem
         [SerializeField, Tooltip("The local Button Click Player for all Popups.")]
         private ButtonClickAudioPlayer buttonClickPlayer;
 
-        [Header("Popups")]
-        [SerializeField, Tooltip("The local Dialogue Popup.")]
-        private DialoguePopup dialogue;
-        [SerializeField, Tooltip("The local Confirmation Popup.")]
-        private ConfirmationPopup confirmation;
-
         public MenuData Data => data;
         public AudioSource Audio => source;
         public ElementHighlighter Highlighter => highlighter;
@@ -46,12 +42,12 @@ namespace ActionCode.UISystem
         /// <summary>
         /// The global Dialogue Popup.
         /// </summary>
-        public static DialoguePopup Dialogue => Instance.dialogue;
+        public static DialoguePopup Dialogue => Instance.GetPopup<DialoguePopup>();
 
         /// <summary>
         /// The global Confirmation Popup.
         /// </summary>
-        public static ConfirmationPopup Confirmation => Instance.confirmation;
+        public static ConfirmationPopup Confirmation => Instance.GetPopup<ConfirmationPopup>();
 
         /// <summary>
         /// Whether the application is quitting.
@@ -68,13 +64,16 @@ namespace ActionCode.UISystem
         /// </summary>
         private static Popups Instance { get; set; }
 
-        private void Reset()
+        private readonly Dictionary<Type, AbstractPopup> popups = new();
+
+        private void Reset() => FindComponents();
+
+        private void Awake()
         {
-            FindComponents();
+            Instance = this;
             FindPopups();
         }
 
-        private void Awake() => Instance = this;
         private void OnEnable() => SubscriveEvents();
         private void OnDisable() => UnsubscribeEvents();
 
@@ -83,6 +82,21 @@ namespace ActionCode.UISystem
             DisposeElements();
             Instance = null;
         }
+
+        /// <summary>
+        /// Gets a child popup. No safe check is done.
+        /// </summary>
+        /// <typeparam name="T">The type of popup.</typeparam>
+        /// <returns>The popup instance if its a children.</returns>
+        public T GetPopup<T>() where T : AbstractPopup => popups[typeof(T)] as T;
+
+        /// <summary>
+        /// Tries to get a child popup.
+        /// </summary>
+        /// <typeparam name="T">The type of popup.</typeparam>
+        /// <param name="popup">The popup instance if its a children</param>
+        /// <returns>Whether the popup was found.</returns>
+        public bool TryGetPopup<T>(out AbstractPopup popup) where T : AbstractPopup => popups.TryGetValue(typeof(T), out popup);
 
         /// <summary>
         /// Whether the game can have navigation (not quitting or loading a scene).
@@ -157,7 +171,17 @@ namespace ActionCode.UISystem
             QuitGame();
         }
 
-        private void FindPopups() => dialogue = GetComponentInChildren<DialoguePopup>(includeInactive: true);
+        private void FindPopups()
+        {
+            popups.Clear();
+            var childPopups = GetComponentsInChildren<AbstractPopup>(includeInactive: true);
+
+            foreach (var popup in childPopups)
+            {
+                var type = popup.GetType();
+                popups.Add(type, popup);
+            }
+        }
 
         private void FindComponents()
         {
