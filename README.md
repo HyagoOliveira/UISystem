@@ -153,6 +153,26 @@ public static void ShowWebGLQuitConfirmation()
 }
 ```
 
+## Menus
+
+A Menu is a Finite State Machine containing several Screens, keeping the data about the Current and Last Screen.
+Only one Screen can be activated at time, navigating between then. From an activated Screen, you can go back to the last one using the Cancel input (back button).
+
+Use the [MenuController](/Runtime/Menus/MenuController.cs) component and others to increase the menu creation process.
+
+Bellow are some common examples:
+
+### Main Menu
+
+![Main Menu](/Docs~/MainMenu.png)
+![Any Button Screen](/Docs~/AnyButtonScreen.png)
+![Main Menu Screen](/Docs~/MainMenuScreen.png)
+
+### Pause Menu
+
+![Pause Menu](/Docs~/PauseMenu.png)
+![Pause Menu Screen](/Docs~/PauseMenuScreen.png)
+
 ## Installation
 
 ### Using the Package Registry Server

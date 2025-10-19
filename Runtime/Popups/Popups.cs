@@ -153,7 +153,7 @@ namespace ActionCode.UISystem
 
         /// <summary>
         /// Quits the Game, even while in Editor mode, after the current Dialogue Close Animation.
-        /// <para>Shows a Quit Browser Confirmation Popup if in Web GL.</para>
+        /// <para>Shows a Quit Browser Confirmation Popup if in WebGL.</para>
         /// </summary>
         public static async void QuitGameAfterCloseAnimation()
         {
