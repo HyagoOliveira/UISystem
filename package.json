@@ -1,7 +1,7 @@
 {
   "name": "com.actioncode.ui-system",
   "displayName": "ActionCode-UI System",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "unity": "6000.1",
   "description": "Extension for Unity UI Toolkit System.",
   "keywords": [
@@ -11,8 +11,8 @@
   "dependencies": {
     "com.actioncode.awaitable-system": "1.1.0",
     "com.actioncode.input-system": "1.3.0",
-    "com.actioncode.serialized-dictionary": "1.2.0",
     "com.actioncode.screen-fade-system": "1.0.0",
+    "com.actioncode.serialized-dictionary": "1.2.0",
     "com.unity.inputsystem": "1.14.2",
     "com.unity.ugui": "2.0.0",
     "com.unity.modules.uielements": "1.0.0"

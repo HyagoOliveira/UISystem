@@ -2,14 +2,14 @@
 
 * This package is an extension for Unity UI Toolkit System.
 * Unity minimum version: **6000.1**
-* Current version: **0.3.0**
+* Current version: **0.4.0**
 * License: **MIT**
 * Dependencies:
-	- Unity.Input System : [1.14.2](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.14/changelog/CHANGELOG.html)
 	- ActionCode.Awaitable System : [1.1.0](https://github.com/HyagoOliveira/AwaitableSystem/tree/1.1.0)
 	- ActionCode.Input System : [1.3.0](https://github.com/HyagoOliveira/InputSystem/tree/1.3.0)
     - ActionCode.Screen Fade System : [1.0.0](https://github.com/HyagoOliveira/ScreenFadeSystem/tree/1.0.0)
 	- ActionCode.Serialized Dictionary : [1.2.0](https://github.com/HyagoOliveira/SerializedDictionary/tree/1.2.0)
+	- Unity.Input System : [1.14.2](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.14/changelog/CHANGELOG.html)
 	- com.unity.ugui: [2.0.0](https://docs.unity3d.com/Packages/com.unity.ugui@2.0/changelog/CHANGELOG.html)
 	- com.unity.modules.uielements: [1.0.0](https://docs.unity3d.com/6000.2/Documentation/ScriptReference/UnityEngine.UIElementsModule.html)
 
