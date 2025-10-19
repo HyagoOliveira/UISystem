@@ -54,12 +54,19 @@ namespace ActionCode.UISystem
         }
 
         protected abstract void ContinueGame();
-        protected abstract void GoToMainMenu();
+        protected abstract Awaitable GoToMainMenuAsync();
 
         protected virtual void HandleContinueClicked() => ContinueGame();
         protected virtual void HandleMainMenuClicked() => Popups.ShowQuitLevelDialogue(GoToMainMenu);
         protected virtual void HandleQuitClicked() => Popups.ShowQuitLevelDialogue(Popups.QuitGameAfterCloseAnimation);
         protected virtual void HandleNavigationCancelEvent(NavigationCancelEvent _) => ContinueGameAfterSelectAnimation();
+
+        private async void GoToMainMenu()
+        {
+            Popups.IsLoadingScene = true;
+            await GoToMainMenuAsync();
+            Popups.IsLoadingScene = false;
+        }
 
         private async void ContinueGameAfterSelectAnimation()
         {

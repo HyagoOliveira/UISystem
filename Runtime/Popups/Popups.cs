@@ -120,7 +120,7 @@ namespace ActionCode.UISystem
         /// Executes the given Confirmation action when confirmed.
         /// </summary>
         /// <param name="onConfirm">The action to execute when the Dialogue is confirmed.</param>
-        public static void ShowQuitLevelDialogue(System.Action onConfirm)
+        public static void ShowQuitLevelDialogue(Action onConfirm)
         {
             Dialogue.Show(
                 message: new LocalizedString("Popups", "are_you_sure_level", "Are you sure?\nAll unsaved progress will be lost."),
