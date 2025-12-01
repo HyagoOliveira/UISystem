@@ -71,6 +71,12 @@ namespace ActionCode.UISystem
         /// </summary>
         public event Action<AbstractTab> OnTabChanged;
 
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            Focus();
+        }
+
         public override void Initialize(MenuController menu)
         {
             base.Initialize(menu);
