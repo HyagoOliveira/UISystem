@@ -113,6 +113,7 @@ namespace ActionCode.UISystem
 
             TabView = Find<TabView>(tabViewName);
             InitializeTabs();
+            InputAction.Enable();
         }
 
         protected override void SubscribeEvents()
