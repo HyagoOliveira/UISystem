@@ -2,7 +2,7 @@
 
 * This package is an extension for Unity UI Toolkit System.
 * Unity minimum version: **6000.1**
-* Current version: **0.4.0**
+* Current version: **0.5.0**
 * License: **MIT**
 * Dependencies:
 	- ActionCode.Awaitable System : [1.1.0](https://github.com/HyagoOliveira/AwaitableSystem/tree/1.1.0)

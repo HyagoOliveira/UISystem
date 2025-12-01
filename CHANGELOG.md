@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.5.0] - 2025-12-01
+### Fixed
+- Tab issues
+
 ## [0.4.0] - 2025-10-19
 ### Changed
 - VisualElement Function Extensions
@@ -38,7 +42,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - gitignore
 - Initial commit
 
-[Unreleased]: https://github.com/HyagoOliveira/UISystem/compare/0.4.0...main
+[Unreleased]: https://github.com/HyagoOliveira/UISystem/compare/0.5.0...main
+[0.5.0]: https://github.com/HyagoOliveira/UISystem/tree/0.5.0/
 [0.4.0]: https://github.com/HyagoOliveira/UISystem/tree/0.4.0/
 [0.3.0]: https://github.com/HyagoOliveira/UISystem/tree/0.3.0/
 [0.2.0]: https://github.com/HyagoOliveira/UISystem/tree/0.2.0/
