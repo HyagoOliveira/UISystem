@@ -1,22 +1,21 @@
 {
-  "name": "com.actioncode.[packagename]",
-  "displayName": "ActionCode-[PackageName]",
+  "name": "com.actioncode.ui-system",
+  "displayName": "ActionCode-UI System",
   "version": "0.1.0",
   "unity": "6000.1",
-  "description": "This package contains [...].",
+  "description": "This package contains code for Unity UI (uGUI), the GameObject-based UI System.",
   "keywords": [
-    "",
-    ""
+    "uGUI"
   ],
   "dependencies": {},
   "license": "MIT",
-  "homepage": "https://github.com/HyagoOliveira/[PACKAGE]#readme",
+  "homepage": "https://github.com/HyagoOliveira/UISystem#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/HyagoOliveira/[PACKAGE].git"
+    "url": "https://github.com/HyagoOliveira/UISystem.git"
   },
-  "documentationUrl": "https://github.com/HyagoOliveira/[PACKAGE]#readme",
-  "changelogUrl": "https://github.com/HyagoOliveira/[PACKAGE]/blob/main/CHANGELOG.md",
+  "documentationUrl": "https://github.com/HyagoOliveira/UISystem#readme",
+  "changelogUrl": "https://github.com/HyagoOliveira/UISystem/blob/main/CHANGELOG.md",
   "author": {
     "name": "Hyago Oliveira",
     "email": "hyagogow@gmail.com"
