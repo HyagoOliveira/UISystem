@@ -12,13 +12,19 @@ namespace ActionCode.UISystem
     {
         public event Action OnSelected;
 
-        public void OnPointerEnter(PointerEventData _) => HandleSelection();
-
-        private void HandleSelection()
+        // Triggered when Mouse hovers it
+        public void OnPointerEnter(PointerEventData _)
         {
             var eventSystem = EventSystem.current;
-            if (eventSystem) eventSystem.SetSelectedGameObject(gameObject);
-            OnSelected?.Invoke();
+            var canSelectGO = eventSystem && eventSystem.currentSelectedGameObject != gameObject;
+            if (canSelectGO) eventSystem.SetSelectedGameObject(gameObject);
+
+            // OnSelect will be triggered by EventSystem when SetSelectedGameObject is called
         }
+
+        // Triggered when Gamepad/Keyboard navigates or Mouse sets selection
+        public void OnSelect(BaseEventData _) => HandleSelection();
+
+        private void HandleSelection() => OnSelected?.Invoke();
     }
 }

@@ -13,8 +13,10 @@ namespace ActionCode.UISystem
     {
         public event Action OnSubmitted;
 
+        // Triggered when Gamepad/Keyboard submits or Mouse clicks it
         public void OnSubmit(BaseEventData _) => HandleSubmition();
 
+        // Triggered when Mouse clicks it
         public void OnPointerClick(PointerEventData evt)
         {
             var canSubmit = evt.button == PointerEventData.InputButton.Left;

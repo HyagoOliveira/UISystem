@@ -75,8 +75,8 @@ namespace ActionCode.UISystem
         public Dictionary<string, Screen> Screens { get; private set; }
         #endregion
 
-        private ISelectable[] selectables;
-        private ISubmitable[] submitables;
+        private ISelectable[] selectables = Array.Empty<ISelectable>();
+        private ISubmitable[] submitables = Array.Empty<ISubmitable>();
         private readonly Stack<Screen> undoHistory = new();
 
         private void Reset()
@@ -96,7 +96,11 @@ namespace ActionCode.UISystem
             EventSystem.current.SetSelectedGameObject(instance);
         }
 
-        public void PlayAudio(AudioClip clip) => Audio.PlayOneShot(clip);
+        public void PlayAudio(AudioClip clip)
+        {
+            Audio.Stop();
+            Audio.PlayOneShot(clip);
+        }
 
         #region Open Screen
         /// <summary>
@@ -156,8 +160,9 @@ namespace ActionCode.UISystem
             CurrentScreen.Open();
             //TODO await CurrentScreen FadeInAsync
             await Awaitable.WaitForSecondsAsync(0.1f);
-            SubscribeScreenElements();
 
+            FindScreenElements();
+            SubscribeScreenElements();
 
             OnScreenOpened?.Invoke(CurrentScreen);
             await SetSelectedGameObjectAsync(CurrentScreen.firstInput);
@@ -207,7 +212,13 @@ namespace ActionCode.UISystem
         }
         #endregion
 
-        #region Subscriptions/Unsubscriptions
+        #region Subscriptions / Unsubscriptions
+        private void FindScreenElements()
+        {
+            selectables = CurrentScreen.GetComponentsInChildren<ISelectable>(includeInactive: true);
+            submitables = CurrentScreen.GetComponentsInChildren<ISubmitable>(includeInactive: true);
+        }
+
         private void SubscribeScreenElements()
         {
             foreach (var selectable in selectables)
@@ -237,6 +248,5 @@ namespace ActionCode.UISystem
         private void HandleSelectableSelected() => PlayAudio(data.selection);
         private void HandleSubmitableSubmited() => PlayAudio(data.submition);
         #endregion
-
     }
 }
