@@ -1,6 +1,6 @@
 # UI System
 
-* Extension for Unity UI (uGUI) System.
+* Extension for Unity Graphic User Interface (uGUI) System.
 * Unity minimum version: **6000.1**
 * Current version: **0.1.0**
 * License: **MIT**
