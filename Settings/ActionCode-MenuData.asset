@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d89f4f4632a86f4fa95aaa8e17e7365, type: 3}
   m_Name: ActionCode-MenuData
   m_EditorClassIdentifier: ActionCode.UISystem::ActionCode.UISystem.MenuData
-  screenSelection: {fileID: 8300000, guid: fe6e06e66837ec2478cea264aff3bff3, type: 3}
-  screenSubmit: {fileID: 8300000, guid: fdf5a0729dca1014ab4b359df95c5a03, type: 3}
-  screenCancel: {fileID: 8300000, guid: a6da9fda00707c441a7703a343e13a48, type: 3}
-  screenError: {fileID: 8300000, guid: 9b78b4604d1a11b439310cbae1d5b375, type: 3}
+  selection: {fileID: 8300000, guid: fe6e06e66837ec2478cea264aff3bff3, type: 3}
+  submition: {fileID: 8300000, guid: fdf5a0729dca1014ab4b359df95c5a03, type: 3}
+  cancelation: {fileID: 8300000, guid: a6da9fda00707c441a7703a343e13a48, type: 3}
+  error: {fileID: 8300000, guid: 9b78b4604d1a11b439310cbae1d5b375, type: 3}
   tabSelecttion: {fileID: 8300000, guid: b72896bc561f9774c9037113c031b360, type: 3}
   modalOpen: {fileID: 8300000, guid: d855058f3b689c843a0c0838db9a0a40, type: 3}
   modalClose: {fileID: 8300000, guid: 600a89c0ade20a24fa40b89948a9fb2c, type: 3}
