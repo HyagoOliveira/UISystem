@@ -10,11 +10,13 @@ namespace ActionCode.UISystem
     {
         [Header("Screen")]
         [Tooltip("The audio played when a element inside a Screen is selected.")]
-        public AudioClip selection;
+        public AudioClip screenSelection;
         [Tooltip("The audio played when a element inside a Screen is submitted.")]
-        public AudioClip submit;
+        public AudioClip screenSubmit;
         [Tooltip("The audio played when a Screen is canceled.")]
-        public AudioClip cancel;
+        public AudioClip screenCancel;
+        [Tooltip("The audio played for a Screen error.")]
+        public AudioClip screenError;
 
         [Header("Tabs")]
         [Tooltip("The audio played when a Tab is selected.")]
