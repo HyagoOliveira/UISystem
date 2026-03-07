@@ -21,6 +21,11 @@ namespace ActionCode.UISystem
         protected virtual void OnEnable() => SubscribeEvents();
         protected virtual void OnDisable() => UnsubscribeEvents();
 
+        public bool IsOpenned() => gameObject.activeSelf;
+        public bool IsClosed() => !IsOpenned();
+
+        public string GetIdentifier() => GetType().Name;
+
         public virtual void Open() => gameObject.SetActive(true);
         public virtual void Close() => gameObject.SetActive(false);
 
