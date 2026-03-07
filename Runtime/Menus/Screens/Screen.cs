@@ -9,8 +9,12 @@ namespace ActionCode.UISystem
     /// UI Screens are used to display different parts of a Menu, 
     /// as a sub-menu Screen, a Tab Screen or other specific menu section.
     /// </remarks>
-	public abstract class AbstractScreen : MonoBehaviour
+    [DisallowMultipleComponent]
+    public class Screen : MonoBehaviour
     {
+        [Tooltip("[Optional] The first input to be selected when this screen is opened.")]
+        public GameObject firstInput;
+
         /// <summary>
         /// The current Menu for this screen.
         /// </summary>
@@ -24,7 +28,7 @@ namespace ActionCode.UISystem
         public bool IsOpenned() => gameObject.activeSelf;
         public bool IsClosed() => !IsOpenned();
 
-        public string GetIdentifier() => GetType().Name;
+        public string GetIdentifier() => gameObject.name;
 
         public virtual void Open() => gameObject.SetActive(true);
         public virtual void Close() => gameObject.SetActive(false);

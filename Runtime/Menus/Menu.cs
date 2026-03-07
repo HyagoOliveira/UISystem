@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace ActionCode.UISystem
 {
@@ -33,23 +34,23 @@ namespace ActionCode.UISystem
 
         [Space]
         [Tooltip("[Optional] The first screen to activated when start. Leave it empty if you wish to do it manually.")]
-        public AbstractScreen firstScreen;
+        public Screen firstScreen;
 
         #region Events
         /// <summary>
         /// Event fired when the given screen is opened.
         /// </summary>
-        public event Action<AbstractScreen> OnScreenOpened;
+        public event Action<Screen> OnScreenOpened;
 
         /// <summary>
         /// Event fired when the given screen is closed.
         /// </summary>
-        public event Action<AbstractScreen> OnScreenClosed;
+        public event Action<Screen> OnScreenClosed;
 
         /// <summary>
         /// Event fired when the given screen is canceled: the back button is pressed.
         /// </summary>
-        public event Action<AbstractScreen> OnScreenCanceled;
+        public event Action<Screen> OnScreenCanceled;
         #endregion
 
         #region Properties
@@ -61,32 +62,43 @@ namespace ActionCode.UISystem
         /// <summary>
         /// The last activated screen. It can be null if no screen has been navigated yet.
         /// </summary>
-        public AbstractScreen LastScreen { get; private set; }
+        public Screen LastScreen { get; private set; }
 
         /// <summary>
         /// The current activated screen. It can be null if no screen has been opened yet.
         /// </summary>
-        public AbstractScreen CurrentScreen { get; private set; }
+        public Screen CurrentScreen { get; private set; }
 
         /// <summary>
         /// All screens available in this menu, indexed by their identifiers.
         /// </summary>
-        public Dictionary<string, AbstractScreen> Screens { get; private set; }
+        public Dictionary<string, Screen> Screens { get; private set; }
         #endregion
 
-        private readonly Stack<AbstractScreen> undoHistory = new();
+        private ISelectable[] selectables;
+        private ISubmitable[] submitables;
+        private readonly Stack<Screen> undoHistory = new();
 
         private void Reset()
         {
             audioSource = GetComponent<AudioSource>();
             canvasGroup = GetComponent<CanvasGroup>();
-            firstScreen = GetComponentInChildren<AbstractScreen>(includeInactive: false);
+            firstScreen = GetComponentInChildren<Screen>(includeInactive: false);
         }
 
         private void Awake() => InitializeScreens();
         private void OnEnable() => TryOpenFirstScreen();
+        private void OnDisable() => UnsubscribeScreenElements();
 
-        #region Open Screens
+        public static async Awaitable SetSelectedGameObjectAsync(GameObject instance)
+        {
+            while (EventSystem.current == null) await Awaitable.NextFrameAsync();
+            EventSystem.current.SetSelectedGameObject(instance);
+        }
+
+        public void PlayAudio(AudioClip clip) => Audio.PlayOneShot(clip);
+
+        #region Open Screen
         /// <summary>
         /// Opens the <see cref="firstScreen"/> asynchronously if available.
         /// </summary>
@@ -105,7 +117,7 @@ namespace ActionCode.UISystem
         /// <param name="screen">The screen instance to open.</param>
         /// <param name="undoable">Whether this screen can be closed using the back button.</param>
         /// <returns><inheritdoc cref="OpenFirstScreenAsync"/></returns>
-        public async Awaitable OpenScreenAsync<T>(T screen, bool undoable = true) where T : AbstractScreen
+        public async Awaitable OpenScreenAsync<T>(T screen, bool undoable = true) where T : Screen
             => await OpenScreenAsync(screen.GetIdentifier(), undoable);
 
         /// <summary>
@@ -132,6 +144,8 @@ namespace ActionCode.UISystem
                 CurrentScreen.Close();
                 OnScreenClosed?.Invoke(CurrentScreen);
             }
+
+            UnsubscribeScreenElements();
             CloseOpenedScreens();
 
             if (undoable && LastScreen) undoHistory.Push(LastScreen);
@@ -140,10 +154,13 @@ namespace ActionCode.UISystem
             CurrentScreen = screen;
 
             CurrentScreen.Open();
-            OnScreenOpened?.Invoke(CurrentScreen);
-
             //TODO await CurrentScreen FadeInAsync
             await Awaitable.WaitForSecondsAsync(0.1f);
+            SubscribeScreenElements();
+
+
+            OnScreenOpened?.Invoke(CurrentScreen);
+            await SetSelectedGameObjectAsync(CurrentScreen.firstInput);
 
             canvasGroup.blocksRaycasts = true;
         }
@@ -170,7 +187,7 @@ namespace ActionCode.UISystem
         #region Initialization
         private void InitializeScreens()
         {
-            var screens = GetComponentsInChildren<AbstractScreen>(includeInactive: true);
+            var screens = GetComponentsInChildren<Screen>(includeInactive: true);
             Screens = new(screens.Length);
 
             foreach (var screen in screens)
@@ -189,5 +206,37 @@ namespace ActionCode.UISystem
             await OpenFirstScreenAsync();
         }
         #endregion
+
+        #region Subscriptions/Unsubscriptions
+        private void SubscribeScreenElements()
+        {
+            foreach (var selectable in selectables)
+            {
+                selectable.OnSelected += HandleSelectableSelected;
+            }
+
+            foreach (var submitable in submitables)
+            {
+                submitable.OnSubmitted += HandleSubmitableSubmited;
+            }
+        }
+
+        private void UnsubscribeScreenElements()
+        {
+            foreach (var selectable in selectables)
+            {
+                selectable.OnSelected -= HandleSelectableSelected;
+            }
+
+            foreach (var submitable in submitables)
+            {
+                submitable.OnSubmitted -= HandleSubmitableSubmited;
+            }
+        }
+
+        private void HandleSelectableSelected() => PlayAudio(data.selection);
+        private void HandleSubmitableSubmited() => PlayAudio(data.submition);
+        #endregion
+
     }
 }
