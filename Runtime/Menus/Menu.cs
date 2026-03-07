@@ -143,8 +143,7 @@ namespace ActionCode.UISystem
 
             if (CurrentScreen)
             {
-                //TODO await CurrentScreen FadeOutAsync
-                await Awaitable.WaitForSecondsAsync(0.1f);
+                await Awaitable.WaitForSecondsAsync(0.1f); //TODO await CurrentScreen FadeOutAsync
                 CurrentScreen.Close();
                 OnScreenClosed?.Invoke(CurrentScreen);
             }
@@ -158,14 +157,12 @@ namespace ActionCode.UISystem
             CurrentScreen = screen;
 
             CurrentScreen.Open();
-            //TODO await CurrentScreen FadeInAsync
-            await Awaitable.WaitForSecondsAsync(0.1f);
-
-            FindScreenElements();
-            SubscribeScreenElements();
-
-            OnScreenOpened?.Invoke(CurrentScreen);
+            await Awaitable.WaitForSecondsAsync(0.1f); //TODO await CurrentScreen FadeInAsync
+            // Selecting first, binding after to avoid triggering events on selection
             await SetSelectedGameObjectAsync(CurrentScreen.firstInput);
+
+            BindScreenElements();
+            OnScreenOpened?.Invoke(CurrentScreen);
 
             canvasGroup.blocksRaycasts = true;
         }
@@ -213,6 +210,12 @@ namespace ActionCode.UISystem
         #endregion
 
         #region Subscriptions / Unsubscriptions
+        private void BindScreenElements()
+        {
+            FindScreenElements();
+            SubscribeScreenElements();
+        }
+
         private void FindScreenElements()
         {
             selectables = CurrentScreen.GetComponentsInChildren<ISelectable>(includeInactive: true);
