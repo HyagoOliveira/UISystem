@@ -7,7 +7,9 @@
   "keywords": [
     "uGUI"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "com.unity.ugui": "2.0.0"
+  },
   "license": "MIT",
   "homepage": "https://github.com/HyagoOliveira/UISystem#readme",
   "repository": {
