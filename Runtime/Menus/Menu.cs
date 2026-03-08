@@ -101,17 +101,8 @@ namespace ActionCode.UISystem
             InitializeScreens();
         }
 
-        protected virtual void OnEnable()
-        {
-            SubscribeEvents();
-            TryOpenFirstScreen();
-        }
-
-        protected virtual void OnDisable()
-        {
-            Dispose();
-            UnsubscribeEvents();
-        }
+        protected virtual void OnEnable() => TryOpenFirstScreen();
+        protected virtual void OnDisable() => Dispose();
 
         #region Open Screen
         /// <summary>
@@ -128,10 +119,11 @@ namespace ActionCode.UISystem
         /// <summary>
         /// Opens the given screen instance asynchronously. 
         /// </summary>
+        /// <typeparam name="T">The screen type to open.</typeparam>
         /// <param name="screen">The screen instance to open.</param>
         /// <param name="undoable">Whether this screen can be closed using the back button.</param>
         /// <returns><inheritdoc cref="OpenFirstScreenAsync"/></returns>
-        public async Awaitable OpenScreenAsync(Screen screen, bool undoable = false)
+        public async Awaitable OpenScreenAsync<T>(T screen, bool undoable = false) where T : Screen
             => await OpenScreenAsync(screen.GetIdentifier(), undoable);
 
         /// <summary>
@@ -274,9 +266,6 @@ namespace ActionCode.UISystem
             await Awaitable.NextFrameAsync();
             await OpenFirstScreenAsync();
         }
-
-        protected virtual void SubscribeEvents() { }
-        protected virtual void UnsubscribeEvents() { }
 
         public virtual void Dispose()
         {

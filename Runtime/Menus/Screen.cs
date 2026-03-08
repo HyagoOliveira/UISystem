@@ -12,7 +12,7 @@ namespace ActionCode.UISystem
     /// submitted or canceled, playing the corresponding audio from the <see cref="MenuData"/>
     /// </remarks>
     [DisallowMultipleComponent]
-    public sealed class Screen : MonoBehaviour
+    public class Screen : MonoBehaviour
     {
         [Tooltip("[Optional] The first input to be selected when this Screen is opened.")]
         public GameObject firstInput;
@@ -28,14 +28,20 @@ namespace ActionCode.UISystem
         private ISubmitable[] submitables;
         private ICancelable[] cancelables;
 
-        internal void Initialize(Menu menu)
+        public virtual void Initialize(Menu menu)
         {
             Menu = menu;
             fades.Initialize();
             ClearElements();
         }
 
-        private void OnDisable() => UnsubscribeScreenElements();
+        protected virtual void OnEnable() => SubscribeEvents();
+
+        protected virtual void OnDisable()
+        {
+            UnsubscribeEvents();
+            UnsubscribeScreenElements();
+        }
 
         public bool IsOpenned() => gameObject.activeSelf;
         public bool IsClosed() => !IsOpenned();
@@ -57,8 +63,11 @@ namespace ActionCode.UISystem
         /// <param name="identifier"><inheritdoc cref="Menu.OpenScreenAsync(string, bool)" path="/param[@name='identifier']"/></param>
         public void OpenCloseableScreen(string identifier) => _ = Menu.OpenScreenAsync(identifier, undoable: true);
 
-        public void Open() => gameObject.SetActive(true);
-        public void Close() => gameObject.SetActive(false);
+        public virtual void Open() => gameObject.SetActive(true);
+        public virtual void Close() => gameObject.SetActive(false);
+
+        protected virtual void SubscribeEvents() { }
+        protected virtual void UnsubscribeEvents() { }
 
         #region Elements
         internal void BindElements()
@@ -123,9 +132,9 @@ namespace ActionCode.UISystem
             }
         }
 
-        private void HandleAnyUISelected() => Menu.PlaySelectionAudio();
-        private void HandleAnyUISubmited() => Menu.PlaySubmitionAudio();
-        private void HandleAnyUICanceled() => Menu.CancelScreen(this);
+        protected virtual void HandleAnyUISelected() => Menu.PlaySelectionAudio();
+        protected virtual void HandleAnyUISubmited() => Menu.PlaySubmitionAudio();
+        protected virtual void HandleAnyUICanceled() => Menu.CancelScreen(this);
         #endregion
     }
 }
