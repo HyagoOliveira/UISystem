@@ -8,20 +8,20 @@ namespace ActionCode.UISystem
     /// <summary>
     /// Controller for a Generic Game Menu.
     /// <para>
-    /// Create your own menu component and reference this component to navigate 
-    /// through the Screens using the <see cref="OpenScreenAsync(string, bool)"/> function.
+    /// Create your own menu and reference this component or implement a new menu class inheriting from here.
+    /// Navigate through the Screens using the <see cref="OpenScreenAsync(string, bool)"/> function.
     /// </para>
     /// </summary>
     /// <remarks>
     /// A Menu is a Finite State Machine containing several Screens, keeping track the Current and Last one.<br/>
-    /// Only one Screen can be activated at time<br/>
+    /// Only one Screen can be activated at time.
     /// From an opened Screen, you can go back to the last one using the Cancel input (back button).
     /// </remarks>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(-1)]
     [RequireComponent(typeof(AudioSource))]
     [RequireComponent(typeof(CanvasGroup))]
-    public sealed class Menu : MonoBehaviour, IDisposable
+    public class Menu : MonoBehaviour, IDisposable
     {
         [SerializeField, Tooltip("The local Audio Source.")]
         private AudioSource audioSource;
@@ -88,27 +88,21 @@ namespace ActionCode.UISystem
 
         private readonly Stack<Screen> undoHistory = new();
 
-        private void Reset()
+        protected virtual void Reset()
         {
             audioSource = GetComponent<AudioSource>();
             canvasGroup = GetComponent<CanvasGroup>();
             firstScreen = GetComponentInChildren<Screen>(includeInactive: false);
         }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             fades.Initialize();
             InitializeScreens();
         }
 
-        private void OnEnable() => TryOpenFirstScreen();
-        private void OnDisable() => Dispose();
-
-        public static async Awaitable SetSelectedGameObjectAsync(GameObject instance)
-        {
-            while (EventSystem.current == null) await Awaitable.NextFrameAsync();
-            EventSystem.current.SetSelectedGameObject(instance);
-        }
+        protected virtual void OnEnable() => TryOpenFirstScreen();
+        protected virtual void OnDisable() => Dispose();
 
         #region Open Screen
         /// <summary>
@@ -171,8 +165,11 @@ namespace ActionCode.UISystem
             await fades.TryPlayFadeInAnimation();
             await CurrentScreen.fades.TryPlayFadeInAnimation();
 
+            // EventSystem may not be loaded yet
+            await WaitUntilEventSystemIsReadyAsync();
+
             // Selecting first, binding latter to avoid triggering events
-            await SetSelectedGameObjectAsync(CurrentScreen.firstInput);
+            TrySetSelectedGameObject(CurrentScreen.firstInput);
 
             CurrentScreen.BindElements();
             OnScreenOpened?.Invoke(CurrentScreen);
@@ -215,8 +212,36 @@ namespace ActionCode.UISystem
         }
         #endregion
 
+        #region Event System
+        /// <summary>
+        /// Tries to set the current selected GameObject in the Event System if Event System is available.
+        /// </summary>
+        /// <param name="instance">The GameObject instance to set.</param>
+        public static void TrySetSelectedGameObject(GameObject instance)
+        {
+            if (EventSystem.current) EventSystem.current.SetSelectedGameObject(instance);
+        }
+
+        /// <summary>
+        /// Waits until Event System is available or timeout is reached.
+        /// Useful when opening a Screen in the first frame since Event System may not be loaded yet.
+        /// </summary>
+        /// <returns>An asynchronous operation.</returns>
+        public static async Awaitable WaitUntilEventSystemIsReadyAsync()
+        {
+            const float timeout = 5f;
+
+            var currentTime = 0f;
+            while (EventSystem.current == null || currentTime < timeout)
+            {
+                await Awaitable.NextFrameAsync();
+                currentTime += Time.deltaTime;
+            }
+        }
+        #endregion
+
         #region Initialization
-        private void InitializeScreens()
+        protected virtual void InitializeScreens()
         {
             var screens = GetComponentsInChildren<Screen>(includeInactive: true);
             Screens = new(screens.Length);
@@ -228,7 +253,7 @@ namespace ActionCode.UISystem
             }
         }
 
-        private async void TryOpenFirstScreen()
+        protected virtual async void TryOpenFirstScreen()
         {
             if (firstScreen == null) return;
 
@@ -237,7 +262,7 @@ namespace ActionCode.UISystem
             await OpenFirstScreenAsync();
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             Screens.Clear();
             undoHistory.Clear();
