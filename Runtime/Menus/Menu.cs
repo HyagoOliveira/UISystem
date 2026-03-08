@@ -237,11 +237,10 @@ namespace ActionCode.UISystem
             const float timeout = 5f;
 
             var currentTime = 0f;
-            while (EventSystem.current == null)
+            while (EventSystem.current == null || currentTime > timeout)
             {
                 await Awaitable.NextFrameAsync();
                 currentTime += Time.deltaTime;
-                if (currentTime > timeout) break;
             }
         }
         #endregion
