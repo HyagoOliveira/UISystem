@@ -21,7 +21,7 @@ namespace ActionCode.UISystem
     [DefaultExecutionOrder(-1)]
     [RequireComponent(typeof(AudioSource))]
     [RequireComponent(typeof(CanvasGroup))]
-    public sealed class Menu : MonoBehaviour
+    public sealed class Menu : MonoBehaviour, IDisposable
     {
         [SerializeField, Tooltip("The local Audio Source.")]
         private AudioSource audioSource;
@@ -35,6 +35,8 @@ namespace ActionCode.UISystem
         [Space]
         [Tooltip("[Optional] The first screen to activated when start. Leave it empty if you wish to do it manually.")]
         public Screen firstScreen;
+        [Tooltip("[Optional] The fade in/out animations to play when any Screen is opened/closed.")]
+        public FadeAnimation fades;
 
         #region Events
         /// <summary>
@@ -93,26 +95,20 @@ namespace ActionCode.UISystem
             firstScreen = GetComponentInChildren<Screen>(includeInactive: false);
         }
 
-        private void Awake() => InitializeScreens();
+        private void Awake()
+        {
+            fades.Initialize();
+            InitializeScreens();
+        }
+
         private void OnEnable() => TryOpenFirstScreen();
+        private void OnDisable() => Dispose();
 
         public static async Awaitable SetSelectedGameObjectAsync(GameObject instance)
         {
             while (EventSystem.current == null) await Awaitable.NextFrameAsync();
             EventSystem.current.SetSelectedGameObject(instance);
         }
-
-        #region Play Audio
-        public void PlaySelectionAudio() => PlayAudio(data.selection);
-        public void PlaySubmitionAudio() => PlayAudio(data.submition);
-        public void PlayCancelationAudio() => PlayAudio(data.cancelation);
-
-        public void PlayAudio(AudioClip clip)
-        {
-            Audio.Stop();
-            Audio.PlayOneShot(clip);
-        }
-        #endregion
 
         #region Open Screen
         /// <summary>
@@ -155,7 +151,8 @@ namespace ActionCode.UISystem
 
             if (CurrentScreen)
             {
-                await Awaitable.WaitForSecondsAsync(0.1f); //TODO await CurrentScreen FadeOutAsync
+                await CurrentScreen.fades.TryPlayFadeOutAnimation();
+                await fades.TryPlayFadeOutAnimation();
 
                 CurrentScreen.Close();
                 CurrentScreen.UnbindElements();
@@ -171,8 +168,10 @@ namespace ActionCode.UISystem
             CurrentScreen = screen;
 
             CurrentScreen.Open();
-            await Awaitable.WaitForSecondsAsync(0.1f); //TODO await CurrentScreen FadeInAsync
-            // Selecting first, binding after to avoid triggering events on selection
+            await fades.TryPlayFadeInAnimation();
+            await CurrentScreen.fades.TryPlayFadeInAnimation();
+
+            // Selecting first, binding latter to avoid triggering events
             await SetSelectedGameObjectAsync(CurrentScreen.firstInput);
 
             CurrentScreen.BindElements();
@@ -204,6 +203,18 @@ namespace ActionCode.UISystem
         }
         #endregion
 
+        #region Play Audio
+        public void PlaySelectionAudio() => PlayAudio(data.selection);
+        public void PlaySubmitionAudio() => PlayAudio(data.submition);
+        public void PlayCancelationAudio() => PlayAudio(data.cancelation);
+
+        public void PlayAudio(AudioClip clip)
+        {
+            Audio.Stop();
+            Audio.PlayOneShot(clip);
+        }
+        #endregion
+
         #region Initialization
         private void InitializeScreens()
         {
@@ -224,6 +235,14 @@ namespace ActionCode.UISystem
             // Await one frame to let the First Screen components initialize
             await Awaitable.NextFrameAsync();
             await OpenFirstScreenAsync();
+        }
+
+        public void Dispose()
+        {
+            Screens.Clear();
+            undoHistory.Clear();
+            LastScreen = null;
+            CurrentScreen = null;
         }
         #endregion
     }

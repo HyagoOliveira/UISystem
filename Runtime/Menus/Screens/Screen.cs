@@ -14,8 +14,10 @@ namespace ActionCode.UISystem
     [DisallowMultipleComponent]
     public class Screen : MonoBehaviour
     {
-        [Tooltip("[Optional] The first input to be selected when this screen is opened.")]
+        [Tooltip("[Optional] The first input to be selected when this Screen is opened.")]
         public GameObject firstInput;
+        [Tooltip("[Optional] The fade in/out animations to play when this Screen is opened/closed.")]
+        public FadeAnimation fades;
 
         /// <summary>
         /// The current Menu for this screen.
@@ -29,6 +31,7 @@ namespace ActionCode.UISystem
         public virtual void Initialize(Menu menu)
         {
             Menu = menu;
+            fades.Initialize();
             ClearElements();
         }
 
