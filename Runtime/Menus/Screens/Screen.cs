@@ -134,7 +134,7 @@ namespace ActionCode.UISystem
 
         protected virtual void HandleAnyUISelected() => Menu.PlaySelectionAudio();
         protected virtual void HandleAnyUISubmited() => Menu.PlaySubmitionAudio();
-        protected virtual void HandleAnyUICanceled() => _ = Menu.TryOpenLastScreen();
+        protected virtual void HandleAnyUICanceled() => Menu.CancelScreen(this);
         #endregion
     }
 }

@@ -9,12 +9,12 @@ namespace ActionCode.UISystem
     /// Controller for a Generic Game Menu.
     /// <para>
     /// Create your own menu and reference this component or implement a new menu class inheriting from here.
-    /// Navigate through the Screens using the <see cref="OpenScreenAsync(string, bool)"/> function.
+    /// Navigate through the Screens using the OpenScreenAsync functions.
     /// </para>
     /// </summary>
     /// <remarks>
-    /// A Menu is a Finite State Machine containing several Screens, keeping track the Current and Last one.<br/>
-    /// Only one Screen can be activated at time.
+    /// A Menu is a Finite State Machine containing several Screens, tracking the Current and Last one.<br/>
+    /// Only one Screen can be activated at time. 
     /// From an opened Screen, you can go back to the last one using the Cancel input (back button).
     /// </remarks>
     [DisallowMultipleComponent]
@@ -50,7 +50,7 @@ namespace ActionCode.UISystem
         public event Action<Screen> OnScreenClosed;
 
         /// <summary>
-        /// Event fired when the given screen is canceled: the back button is pressed.
+        /// Event fired when the given screen is canceled, normally pressing the back button.
         /// </summary>
         public event Action<Screen> OnScreenCanceled;
         #endregion
@@ -180,15 +180,20 @@ namespace ActionCode.UISystem
         /// <summary>
         /// Tries to open asynchronously the last screen using the undo history.
         /// </summary>
-        /// <returns><inheritdoc cref="OpenFirstScreenAsync"/></returns>
-        public async Awaitable TryOpenLastScreen()
+        /// <returns>Weather the last screen was opened.</returns>
+        public bool TryOpenLastScreen()
         {
             var hasUndoableScreen = undoHistory.TryPop(out var screen);
-            if (hasUndoableScreen)
-            {
-                PlayCancelationAudio();
-                await OpenScreenAsync(screen, undoable: false);
-            }
+            if (hasUndoableScreen) _ = OpenScreenAsync(screen, undoable: false);
+            return hasUndoableScreen;
+        }
+
+        public virtual void CancelScreen(Screen screen)
+        {
+            var wasLasScreenOpened = TryOpenLastScreen();
+            if (wasLasScreenOpened) PlayCancelationAudio();
+
+            OnScreenCanceled?.Invoke(screen);
         }
 
         private void CloseOpenedScreens()
@@ -232,10 +237,11 @@ namespace ActionCode.UISystem
             const float timeout = 5f;
 
             var currentTime = 0f;
-            while (EventSystem.current == null || currentTime < timeout)
+            while (EventSystem.current == null)
             {
                 await Awaitable.NextFrameAsync();
                 currentTime += Time.deltaTime;
+                if (currentTime > timeout) break;
             }
         }
         #endregion
