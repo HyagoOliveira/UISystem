@@ -29,8 +29,8 @@ namespace ActionCode.UISystem
         private CanvasGroup canvasGroup;
 
         [Space]
-        [Tooltip("The Global Data for this Menu.")]
-        public MenuData data;
+        [SerializeField, Tooltip("The Global Data for this Menu.")]
+        private MenuData data;
 
         [Space]
         [Tooltip("[Optional] The first screen to activated when start. Leave it empty if you wish to do it manually.")]
@@ -55,6 +55,15 @@ namespace ActionCode.UISystem
 
         #region Properties
         /// <summary>
+        /// The Global Data for this Menu.
+        /// </summary>
+        public MenuData Data
+        {
+            get => data;
+            set => data = value;
+        }
+
+        /// <summary>
         /// The local Audio Source for this menu.
         /// </summary>
         public AudioSource Audio => audioSource;
@@ -75,8 +84,6 @@ namespace ActionCode.UISystem
         public Dictionary<string, Screen> Screens { get; private set; }
         #endregion
 
-        private ISelectable[] selectables = Array.Empty<ISelectable>();
-        private ISubmitable[] submitables = Array.Empty<ISubmitable>();
         private readonly Stack<Screen> undoHistory = new();
 
         private void Reset()
@@ -88,13 +95,16 @@ namespace ActionCode.UISystem
 
         private void Awake() => InitializeScreens();
         private void OnEnable() => TryOpenFirstScreen();
-        private void OnDisable() => UnsubscribeScreenElements();
 
         public static async Awaitable SetSelectedGameObjectAsync(GameObject instance)
         {
             while (EventSystem.current == null) await Awaitable.NextFrameAsync();
             EventSystem.current.SetSelectedGameObject(instance);
         }
+
+        public void PlaySelectionAudio() => PlayAudio(data.selection);
+        public void PlaySubmitionAudio() => PlayAudio(data.submition);
+        public void PlayCancelationAudio() => PlayAudio(data.cancelation);
 
         public void PlayAudio(AudioClip clip)
         {
@@ -144,11 +154,13 @@ namespace ActionCode.UISystem
             if (CurrentScreen)
             {
                 await Awaitable.WaitForSecondsAsync(0.1f); //TODO await CurrentScreen FadeOutAsync
+
                 CurrentScreen.Close();
+                CurrentScreen.UnbindElements();
+
                 OnScreenClosed?.Invoke(CurrentScreen);
             }
 
-            UnsubscribeScreenElements();
             CloseOpenedScreens();
 
             if (undoable && LastScreen) undoHistory.Push(LastScreen);
@@ -161,7 +173,7 @@ namespace ActionCode.UISystem
             // Selecting first, binding after to avoid triggering events on selection
             await SetSelectedGameObjectAsync(CurrentScreen.firstInput);
 
-            BindScreenElements();
+            CurrentScreen.BindElements();
             OnScreenOpened?.Invoke(CurrentScreen);
 
             canvasGroup.blocksRaycasts = true;
@@ -207,49 +219,6 @@ namespace ActionCode.UISystem
             await Awaitable.NextFrameAsync();
             await OpenFirstScreenAsync();
         }
-        #endregion
-
-        #region Subscriptions / Unsubscriptions
-        private void BindScreenElements()
-        {
-            FindScreenElements();
-            SubscribeScreenElements();
-        }
-
-        private void FindScreenElements()
-        {
-            selectables = CurrentScreen.GetComponentsInChildren<ISelectable>(includeInactive: true);
-            submitables = CurrentScreen.GetComponentsInChildren<ISubmitable>(includeInactive: true);
-        }
-
-        private void SubscribeScreenElements()
-        {
-            foreach (var selectable in selectables)
-            {
-                selectable.OnSelected += HandleSelectableSelected;
-            }
-
-            foreach (var submitable in submitables)
-            {
-                submitable.OnSubmitted += HandleSubmitableSubmited;
-            }
-        }
-
-        private void UnsubscribeScreenElements()
-        {
-            foreach (var selectable in selectables)
-            {
-                selectable.OnSelected -= HandleSelectableSelected;
-            }
-
-            foreach (var submitable in submitables)
-            {
-                submitable.OnSubmitted -= HandleSubmitableSubmited;
-            }
-        }
-
-        private void HandleSelectableSelected() => PlayAudio(data.selection);
-        private void HandleSubmitableSubmited() => PlayAudio(data.submition);
         #endregion
     }
 }
