@@ -45,6 +45,12 @@ namespace ActionCode.UISystem
 
         public string GetIdentifier() => gameObject.name;
 
+        /// <summary>
+        /// Opens the screen using the given identifier.
+        /// </summary>
+        /// <param name="identifier"><inheritdoc cref="Menu.OpenScreenAsync(string, bool)" path="/param[@name='identifier']"/></param>
+        public void OpenScreen(string identifier) => _ = Menu.OpenScreenAsync(identifier);
+
         public virtual void Open() => gameObject.SetActive(true);
         public virtual void Close() => gameObject.SetActive(false);
 

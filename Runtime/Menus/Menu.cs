@@ -131,7 +131,7 @@ namespace ActionCode.UISystem
         /// <param name="screen">The screen instance to open.</param>
         /// <param name="undoable">Whether this screen can be closed using the back button.</param>
         /// <returns><inheritdoc cref="OpenFirstScreenAsync"/></returns>
-        public async Awaitable OpenScreenAsync<T>(T screen, bool undoable = true) where T : Screen
+        public async Awaitable OpenScreenAsync<T>(T screen, bool undoable = false) where T : Screen
             => await OpenScreenAsync(screen.GetIdentifier(), undoable);
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace ActionCode.UISystem
         /// <param name="identifier">The screen identifier.</param>
         /// <param name="undoable"><inheritdoc cref="OpenScreenAsync{T}(T, bool)" path="/param[@name='undoable']"/> </param>
         /// <returns><inheritdoc cref="OpenFirstScreenAsync"/></returns>
-        public async Awaitable OpenScreenAsync(string identifier, bool undoable = true)
+        public async Awaitable OpenScreenAsync(string identifier, bool undoable = false)
         {
             var hasScreen = Screens.TryGetValue(identifier, out var screen);
             if (!hasScreen)
