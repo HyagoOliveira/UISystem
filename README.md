@@ -6,6 +6,7 @@
 * License: **MIT**
 * Dependencies:
 	- com.unity.ugui: [2.0.0](https://docs.unity3d.com/Packages/com.unity.ugui@2.0/changelog/CHANGELOG.html)
+	- com.kyrylokuzyk.primetween: [1.3.51](https://github.com/HyagoOliveira/PrimeTween/releases/tag/1.3.5)
 
 ## Summary
 
