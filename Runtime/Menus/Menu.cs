@@ -102,6 +102,7 @@ namespace ActionCode.UISystem
             EventSystem.current.SetSelectedGameObject(instance);
         }
 
+        #region Play Audio
         public void PlaySelectionAudio() => PlayAudio(data.selection);
         public void PlaySubmitionAudio() => PlayAudio(data.submition);
         public void PlayCancelationAudio() => PlayAudio(data.cancelation);
@@ -111,6 +112,7 @@ namespace ActionCode.UISystem
             Audio.Stop();
             Audio.PlayOneShot(clip);
         }
+        #endregion
 
         #region Open Screen
         /// <summary>
@@ -159,11 +161,11 @@ namespace ActionCode.UISystem
                 CurrentScreen.UnbindElements();
 
                 OnScreenClosed?.Invoke(CurrentScreen);
+
+                if (undoable) undoHistory.Push(CurrentScreen);
             }
 
             CloseOpenedScreens();
-
-            if (undoable && LastScreen) undoHistory.Push(LastScreen);
 
             LastScreen = CurrentScreen;
             CurrentScreen = screen;
@@ -186,7 +188,11 @@ namespace ActionCode.UISystem
         public async Awaitable TryOpenLastScreen()
         {
             var hasUndoableScreen = undoHistory.TryPop(out var screen);
-            if (hasUndoableScreen) await OpenScreenAsync(screen, undoable: false);
+            if (hasUndoableScreen)
+            {
+                PlayCancelationAudio();
+                await OpenScreenAsync(screen, undoable: false);
+            }
         }
 
         private void CloseOpenedScreens()

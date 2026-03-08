@@ -49,7 +49,16 @@ namespace ActionCode.UISystem
         /// Opens the screen using the given identifier.
         /// </summary>
         /// <param name="identifier"><inheritdoc cref="Menu.OpenScreenAsync(string, bool)" path="/param[@name='identifier']"/></param>
-        public void OpenScreen(string identifier) => _ = Menu.OpenScreenAsync(identifier);
+        public void OpenScreen(string identifier) => _ = Menu.OpenScreenAsync(identifier, undoable: false);
+
+        /// <summary>
+        /// Opens a closeable screen using the given identifier.
+        /// </summary>
+        /// <remarks>
+        /// Press the cancel button to go back to the last screen.
+        /// </remarks>
+        /// <param name="identifier"><inheritdoc cref="Menu.OpenScreenAsync(string, bool)" path="/param[@name='identifier']"/></param>
+        public void OpenCloseableScreen(string identifier) => _ = Menu.OpenScreenAsync(identifier, undoable: true);
 
         public virtual void Open() => gameObject.SetActive(true);
         public virtual void Close() => gameObject.SetActive(false);
@@ -120,9 +129,9 @@ namespace ActionCode.UISystem
             }
         }
 
-        private void HandleAnyUISelected() => Menu.PlaySelectionAudio();
-        private void HandleAnyUISubmited() => Menu.PlaySubmitionAudio();
-        private void HandleAnyUICanceled() => Menu.PlayCancelationAudio();
+        protected virtual void HandleAnyUISelected() => Menu.PlaySelectionAudio();
+        protected virtual void HandleAnyUISubmited() => Menu.PlaySubmitionAudio();
+        protected virtual void HandleAnyUICanceled() => _ = Menu.TryOpenLastScreen();
         #endregion
     }
 }
