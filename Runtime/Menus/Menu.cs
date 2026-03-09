@@ -141,7 +141,8 @@ namespace ActionCode.UISystem
                 return;
             }
 
-            canvasGroup.blocksRaycasts = false;
+            // Disable the entire menu input while opening Screen
+            SetInputEnable(false);
 
             if (CurrentScreen)
             {
@@ -162,6 +163,7 @@ namespace ActionCode.UISystem
             CurrentScreen = screen;
 
             CurrentScreen.Open();
+            await CurrentScreen.LoadAsync();
             await fades.TryPlayFadeInAnimation();
             await CurrentScreen.fades.TryPlayFadeInAnimation();
 
@@ -174,7 +176,8 @@ namespace ActionCode.UISystem
             CurrentScreen.BindElements();
             OnScreenOpened?.Invoke(CurrentScreen);
 
-            canvasGroup.blocksRaycasts = true;
+            // Re-enable Menu input
+            SetInputEnable(true);
         }
 
         /// <summary>
@@ -243,6 +246,12 @@ namespace ActionCode.UISystem
                 currentTime += Time.deltaTime;
             }
         }
+
+        /// <summary>
+        /// Sets this entire menu input.
+        /// </summary>
+        /// <param name="isEnabled">Whether the input is enabled.</param>
+        public void SetInputEnable(bool isEnabled) => canvasGroup.blocksRaycasts = isEnabled;
         #endregion
 
         #region Initialization

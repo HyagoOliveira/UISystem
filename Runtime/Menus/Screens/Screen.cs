@@ -66,6 +66,16 @@ namespace ActionCode.UISystem
         public virtual void Open() => gameObject.SetActive(true);
         public virtual void Close() => gameObject.SetActive(false);
 
+        /// <summary>
+        /// Loads any content from this screen asynchronously.
+        /// </summary>
+        /// <remarks>
+        /// For example, implement this function to load a 
+        /// Character model inside a Character Screen.
+        /// </remarks>
+        /// <returns>An asynchronous operation.</returns>
+        public virtual async Awaitable LoadAsync() => await Awaitable.NextFrameAsync();
+
         protected virtual void SubscribeEvents() { }
         protected virtual void UnsubscribeEvents() { }
 
