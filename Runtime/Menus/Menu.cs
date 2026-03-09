@@ -269,7 +269,7 @@ namespace ActionCode.UISystem
 
         protected virtual async void TryOpenFirstScreen()
         {
-            if (firstScreen == null) return;
+            if (firstScreen == null || firstScreen.IsOpenned()) return;
 
             // Await one frame to let the First Screen components initialize
             await Awaitable.NextFrameAsync();
