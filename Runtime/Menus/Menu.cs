@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace ActionCode.UISystem
 {
@@ -168,10 +167,10 @@ namespace ActionCode.UISystem
             await CurrentScreen.fades.TryPlayFadeInAnimation();
 
             // EventSystem may not be loaded yet
-            await WaitUntilEventSystemIsReadyAsync();
+            await EventManager.WaitUntilEventSystemIsReadyAsync();
 
             // Selecting first, binding latter to avoid triggering events
-            TrySetSelectedGameObject(CurrentScreen.firstInput);
+            EventManager.TrySetSelectedGameObject(CurrentScreen.firstInput);
 
             CurrentScreen.BindElements();
             OnScreenOpened?.Invoke(CurrentScreen);
@@ -199,6 +198,12 @@ namespace ActionCode.UISystem
             OnScreenCanceled?.Invoke(screen);
         }
 
+        /// <summary>
+        /// Sets this entire menu input.
+        /// </summary>
+        /// <param name="isEnabled">Whether the input is enabled.</param>
+        public void SetInputEnable(bool isEnabled) => canvasGroup.blocksRaycasts = isEnabled;
+
         private void CloseOpenedScreens()
         {
             foreach (var screen in Screens.Values)
@@ -218,40 +223,6 @@ namespace ActionCode.UISystem
             Audio.Stop();
             Audio.PlayOneShot(clip);
         }
-        #endregion
-
-        #region Event System
-        /// <summary>
-        /// Tries to set the current selected GameObject in the Event System if Event System is available.
-        /// </summary>
-        /// <param name="instance">The GameObject instance to set.</param>
-        public static void TrySetSelectedGameObject(GameObject instance)
-        {
-            if (EventSystem.current) EventSystem.current.SetSelectedGameObject(instance);
-        }
-
-        /// <summary>
-        /// Waits until Event System is available or timeout is reached.
-        /// Useful when opening a Screen in the first frame since Event System may not be loaded yet.
-        /// </summary>
-        /// <returns>An asynchronous operation.</returns>
-        public static async Awaitable WaitUntilEventSystemIsReadyAsync()
-        {
-            const float timeout = 5f;
-
-            var currentTime = 0f;
-            while (EventSystem.current == null || currentTime > timeout)
-            {
-                await Awaitable.NextFrameAsync();
-                currentTime += Time.deltaTime;
-            }
-        }
-
-        /// <summary>
-        /// Sets this entire menu input.
-        /// </summary>
-        /// <param name="isEnabled">Whether the input is enabled.</param>
-        public void SetInputEnable(bool isEnabled) => canvasGroup.blocksRaycasts = isEnabled;
         #endregion
 
         #region Initialization
