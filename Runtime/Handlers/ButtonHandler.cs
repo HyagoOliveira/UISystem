@@ -11,7 +11,12 @@ namespace ActionCode.UISystem
     [RequireComponent(typeof(SelectionHandler))]
     public sealed class ButtonHandler : MonoBehaviour, ISubmitable
     {
+        [field: SerializeField, Tooltip("The local SelectionHandler component. Use it to receive selection callbacks.")]
+        public SelectionHandler Selection { get; private set; }
+
         public event Action OnSubmitted;
+
+        private void Reset() => Selection = GetComponent<SelectionHandler>();
 
         // Triggered when Gamepad/Keyboard submits or Mouse clicks it
         public void OnSubmit(BaseEventData _) => HandleSubmition();
