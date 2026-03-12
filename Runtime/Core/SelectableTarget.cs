@@ -28,6 +28,8 @@ namespace ActionCode.UISystem
 
         public bool HasTarget() => target != null;
 
+        public void UpdateColors() => SetColors(target.color);
+
         public void SetColors(Color baseColor)
         {
             normalColor = baseColor;

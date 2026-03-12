@@ -34,6 +34,7 @@ namespace ActionCode.UISystem
             base.Reset();
             transition = Transition.None;
             SetupBackgroundTarget();
+            SetupLabelTarget();
         }
 
         // Triggered when Mouse hovers over it
@@ -77,11 +78,17 @@ namespace ActionCode.UISystem
             if (!background.HasTarget()) return;
 
             background.target.raycastTarget = true;
-            background.SetColors(background.target.color);
+            background.UpdateColors();
         }
 
         protected virtual void SetupLabelTarget()
         {
+            label.target = GetComponentInChildren<TMPro.TMP_Text>();
+            if (!label.HasTarget()) return;
+
+            label.target.color = Color.white;
+            label.target.raycastTarget = false;
+            label.SetColors(Color.black * 0.8f);
         }
 
         // Cannot create this function inside SelectableTarget since SelectionState is a protected enum
