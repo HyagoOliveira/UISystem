@@ -24,8 +24,8 @@ namespace ActionCode.UISystem
         /// </summary>
         public Menu Menu { get; private set; }
 
+        private IClickable[] clickables;
         private ISelectable[] selectables;
-        private ISubmitable[] submitables;
         private ICancelable[] cancelables;
 
         public virtual void Initialize(Menu menu)
@@ -95,14 +95,14 @@ namespace ActionCode.UISystem
         private void FindElements()
         {
             selectables = GetComponentsInChildren<ISelectable>(includeInactive: true);
-            submitables = GetComponentsInChildren<ISubmitable>(includeInactive: true);
+            clickables = GetComponentsInChildren<IClickable>(includeInactive: true);
             cancelables = GetComponentsInChildren<ICancelable>(includeInactive: true);
         }
 
         private void ClearElements()
         {
             selectables = Array.Empty<ISelectable>();
-            submitables = Array.Empty<ISubmitable>();
+            clickables = Array.Empty<IClickable>();
             cancelables = Array.Empty<ICancelable>();
         }
 
@@ -113,9 +113,9 @@ namespace ActionCode.UISystem
                 selectable.OnSelected += HandleAnyUISelected;
             }
 
-            foreach (var submitable in submitables)
+            foreach (var submitable in clickables)
             {
-                submitable.OnSubmitted += HandleAnyUISubmited;
+                submitable.OnClicked += HandleAnyUISubmited;
             }
 
             foreach (var cancelable in cancelables)
@@ -131,9 +131,9 @@ namespace ActionCode.UISystem
                 selectable.OnSelected -= HandleAnyUISelected;
             }
 
-            foreach (var submitable in submitables)
+            foreach (var submitable in clickables)
             {
-                submitable.OnSubmitted -= HandleAnyUISubmited;
+                submitable.OnClicked -= HandleAnyUISubmited;
             }
 
             foreach (var cancelable in cancelables)

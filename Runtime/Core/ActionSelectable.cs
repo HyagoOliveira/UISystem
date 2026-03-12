@@ -80,6 +80,10 @@ namespace ActionCode.UISystem
             background.SetColors(background.target.color);
         }
 
+        protected virtual void SetupLabelTarget()
+        {
+        }
+
         // Cannot create this function inside SelectableTarget since SelectionState is a protected enum
         private static Color GetColor(SelectableTarget target, SelectionState state) => state switch
         {

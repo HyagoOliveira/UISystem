@@ -9,12 +9,12 @@ namespace ActionCode.UISystem
     /// </summary>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(SelectionHandler))]
-    public sealed class ButtonHandler : MonoBehaviour, ISubmitable
+    public sealed class ButtonHandler : MonoBehaviour, IClickable
     {
         [field: SerializeField, Tooltip("The local SelectionHandler component. Use it to receive selection callbacks.")]
         public SelectionHandler Selection { get; private set; }
 
-        public event Action OnSubmitted;
+        public event Action OnClicked;
 
         private void Reset() => Selection = GetComponent<SelectionHandler>();
 
@@ -28,6 +28,6 @@ namespace ActionCode.UISystem
             if (canSubmit) HandleSubmition();
         }
 
-        private void HandleSubmition() => OnSubmitted?.Invoke();
+        private void HandleSubmition() => OnClicked?.Invoke();
     }
 }
