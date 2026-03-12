@@ -28,8 +28,5 @@ namespace ActionCode.UISystem
         [Tooltip("The audio played when a Modal is closed.")]
         public AudioClip modalClose;
 
-        // https://flatuicolors.com/
-        //[Header("Color Palette")]
-
     }
 }

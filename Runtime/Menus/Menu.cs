@@ -18,18 +18,14 @@ namespace ActionCode.UISystem
     /// </remarks>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(-1)]
-    [RequireComponent(typeof(AudioSource))]
     [RequireComponent(typeof(CanvasGroup))]
+    [RequireComponent(typeof(AudioHandler))]
     public class Menu : MonoBehaviour, IDisposable, ICancelable
     {
-        [SerializeField, Tooltip("The local Audio Source.")]
-        private AudioSource audioSource;
-        [SerializeField, Tooltip("The local Canvas Group.")]
+        [SerializeField, Tooltip("The local Canvas Group component.")]
         private CanvasGroup canvasGroup;
-
-        [Space]
-        [SerializeField, Tooltip("The Global Data for this Menu.")]
-        private MenuData data;
+        [SerializeField, Tooltip("The local UI Audio Handler.")]
+        private AudioHandler audioHandler;
 
         [Space]
         [Tooltip("[Optional] The first screen to activated when start. Leave it empty if you wish to do it manually.")]
@@ -56,18 +52,9 @@ namespace ActionCode.UISystem
 
         #region Properties
         /// <summary>
-        /// The Global Data for this Menu.
+        /// The local UI Audio Handler.
         /// </summary>
-        public MenuData Data
-        {
-            get => data;
-            set => data = value;
-        }
-
-        /// <summary>
-        /// The local Audio Source for this menu.
-        /// </summary>
-        public AudioSource Audio => audioSource;
+        public AudioHandler Audio => audioHandler;
 
         /// <summary>
         /// The last activated screen. It can be null if no screen has been navigated yet.
@@ -89,8 +76,8 @@ namespace ActionCode.UISystem
 
         protected virtual void Reset()
         {
-            audioSource = GetComponent<AudioSource>();
             canvasGroup = GetComponent<CanvasGroup>();
+            audioHandler = GetComponent<AudioHandler>();
             firstScreen = GetComponentInChildren<Screen>(includeInactive: false);
         }
 
@@ -142,6 +129,7 @@ namespace ActionCode.UISystem
 
             // Disable the entire menu input while opening Screen
             SetInputEnable(false);
+            Audio.UnbindElements();
 
             if (CurrentScreen)
             {
@@ -149,8 +137,6 @@ namespace ActionCode.UISystem
                 await fades.TryPlayFadeOutAnimation();
 
                 CurrentScreen.Close();
-                CurrentScreen.UnbindElements();
-
                 OnScreenClosed?.Invoke(CurrentScreen);
 
                 if (undoable) undoHistory.Push(CurrentScreen);
@@ -169,10 +155,10 @@ namespace ActionCode.UISystem
             // EventSystem may not be loaded yet
             await EventManager.WaitUntilEventSystemIsReadyAsync();
 
-            // Selecting first, binding latter to avoid triggering events
+            // Selecting first, binding audio latter to avoid triggering events
             EventManager.TrySetSelectedGameObject(CurrentScreen.firstInput);
 
-            CurrentScreen.BindElements();
+            Audio.BindElements(CurrentScreen.transform);
             OnScreenOpened?.Invoke(CurrentScreen);
 
             // Re-enable Menu input
@@ -202,18 +188,6 @@ namespace ActionCode.UISystem
             {
                 if (screen.IsOpenned()) screen.Close();
             }
-        }
-        #endregion
-
-        #region Play Audio
-        public void PlaySelectionAudio() => PlayAudio(data.selection);
-        public void PlaySubmitionAudio() => PlayAudio(data.submition);
-        public void PlayCancelationAudio() => PlayAudio(data.cancelation);
-
-        public void PlayAudio(AudioClip clip)
-        {
-            Audio.Stop();
-            Audio.PlayOneShot(clip);
         }
         #endregion
 
@@ -251,7 +225,9 @@ namespace ActionCode.UISystem
         public void OnCancel(UnityEngine.EventSystems.BaseEventData _)
         {
             var wasLastScreenOpened = TryOpenLastScreen();
-            if (wasLastScreenOpened) PlayCancelationAudio();
+            if (wasLastScreenOpened) Audio.PlayCancelation();
+
+            OnCanceled?.Invoke();
         }
     }
 }

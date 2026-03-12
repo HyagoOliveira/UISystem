@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace ActionCode.UISystem
@@ -24,23 +23,14 @@ namespace ActionCode.UISystem
         /// </summary>
         public Menu Menu { get; private set; }
 
-        private IClickable[] clickables;
-        private ISelectable[] selectables;
-
         public virtual void Initialize(Menu menu)
         {
             Menu = menu;
             fades.Initialize();
-            ClearElements();
         }
 
         protected virtual void OnEnable() => SubscribeEvents();
-
-        protected virtual void OnDisable()
-        {
-            UnsubscribeEvents();
-            UnsubscribeScreenElements();
-        }
+        protected virtual void OnDisable() => UnsubscribeEvents();
 
         public bool IsOpenned() => gameObject.activeSelf;
         public bool IsClosed() => !IsOpenned();
@@ -77,60 +67,5 @@ namespace ActionCode.UISystem
 
         protected virtual void SubscribeEvents() { }
         protected virtual void UnsubscribeEvents() { }
-
-        #region Elements
-        internal void BindElements()
-        {
-            FindElements();
-            SubscribeElements();
-        }
-
-        internal void UnbindElements()
-        {
-            UnsubscribeScreenElements();
-            ClearElements();
-        }
-
-        private void FindElements()
-        {
-            selectables = GetComponentsInChildren<ISelectable>(includeInactive: true);
-            clickables = GetComponentsInChildren<IClickable>(includeInactive: true);
-        }
-
-        private void ClearElements()
-        {
-            selectables = Array.Empty<ISelectable>();
-            clickables = Array.Empty<IClickable>();
-        }
-
-        private void SubscribeElements()
-        {
-            foreach (var selectable in selectables)
-            {
-                selectable.OnSelected += HandleAnyUISelected;
-            }
-
-            foreach (var submitable in clickables)
-            {
-                submitable.OnClicked += HandleAnyUISubmited;
-            }
-        }
-
-        private void UnsubscribeScreenElements()
-        {
-            foreach (var selectable in selectables)
-            {
-                selectable.OnSelected -= HandleAnyUISelected;
-            }
-
-            foreach (var submitable in clickables)
-            {
-                submitable.OnClicked -= HandleAnyUISubmited;
-            }
-        }
-
-        protected virtual void HandleAnyUISelected() => Menu.PlaySelectionAudio();
-        protected virtual void HandleAnyUISubmited() => Menu.PlaySubmitionAudio();
-        #endregion
     }
 }
