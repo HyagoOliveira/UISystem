@@ -26,7 +26,6 @@ namespace ActionCode.UISystem
 
         private IClickable[] clickables;
         private ISelectable[] selectables;
-        private ICancelable[] cancelables;
 
         public virtual void Initialize(Menu menu)
         {
@@ -96,14 +95,12 @@ namespace ActionCode.UISystem
         {
             selectables = GetComponentsInChildren<ISelectable>(includeInactive: true);
             clickables = GetComponentsInChildren<IClickable>(includeInactive: true);
-            cancelables = GetComponentsInChildren<ICancelable>(includeInactive: true);
         }
 
         private void ClearElements()
         {
             selectables = Array.Empty<ISelectable>();
             clickables = Array.Empty<IClickable>();
-            cancelables = Array.Empty<ICancelable>();
         }
 
         private void SubscribeElements()
@@ -116,11 +113,6 @@ namespace ActionCode.UISystem
             foreach (var submitable in clickables)
             {
                 submitable.OnClicked += HandleAnyUISubmited;
-            }
-
-            foreach (var cancelable in cancelables)
-            {
-                cancelable.OnCanceled += HandleAnyUICanceled;
             }
         }
 
@@ -135,16 +127,10 @@ namespace ActionCode.UISystem
             {
                 submitable.OnClicked -= HandleAnyUISubmited;
             }
-
-            foreach (var cancelable in cancelables)
-            {
-                cancelable.OnCanceled += HandleAnyUICanceled;
-            }
         }
 
         protected virtual void HandleAnyUISelected() => Menu.PlaySelectionAudio();
         protected virtual void HandleAnyUISubmited() => Menu.PlaySubmitionAudio();
-        protected virtual void HandleAnyUICanceled() => Menu.CancelScreen(this);
         #endregion
     }
 }

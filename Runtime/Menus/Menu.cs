@@ -190,6 +190,7 @@ namespace ActionCode.UISystem
             return hasUndoableScreen;
         }
 
+        //TODO implement ICancelable and call CancelScreen
         public virtual void CancelScreen(Screen screen)
         {
             var wasLasScreenOpened = TryOpenLastScreen();
