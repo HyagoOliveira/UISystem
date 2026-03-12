@@ -29,8 +29,6 @@ namespace ActionCode.UISystem
         public event Action OnClicked;
         public event Action OnCanceled;
 
-        public bool IsInvalid() => !IsActive() || !IsInteractable();
-
         // Triggered when Mouse clicks on it
         public void OnPointerClick(PointerEventData evt)
         {
@@ -45,7 +43,7 @@ namespace ActionCode.UISystem
 
             // if we get set disabled during the press, 
             // don't run the coroutine.
-            if (IsInvalid()) return;
+            if (!IsAvailable()) return;
 
             DoStateTransition(SelectionState.Pressed, instant: false);
             StartCoroutine(OnFinishSubmit());
@@ -60,7 +58,7 @@ namespace ActionCode.UISystem
 
         public virtual void Press()
         {
-            if (IsInvalid()) return;
+            if (!IsAvailable()) return;
 
             onClicked?.Invoke();
             OnClicked?.Invoke();

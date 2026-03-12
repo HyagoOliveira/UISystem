@@ -37,19 +37,21 @@ namespace ActionCode.UISystem
             SetupLabelTarget();
         }
 
+        public bool IsAvailable() => IsActive() && IsInteractable();
+
         // Triggered when Mouse hovers over it
         public override void OnPointerEnter(PointerEventData eventData)
         {
             base.OnPointerEnter(eventData);
-            Select();
-            // EventSystem.SetSelectedGameObject() (inside Select()) will trigger OnSelect
+            if (IsAvailable()) Select();
+            // EventSystem.SetSelectedGameObject will trigger OnSelect
         }
 
         // Triggered when Gamepad/Keyboard navigates or Mouse sets selection
         public override void OnSelect(BaseEventData eventData)
         {
             base.OnSelect(eventData);
-            HandleSelection();
+            if (IsAvailable()) HandleSelection();
         }
 
         protected override void DoStateTransition(SelectionState state, bool instant)
