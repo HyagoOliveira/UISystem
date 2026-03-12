@@ -20,7 +20,7 @@ namespace ActionCode.UISystem
     [DefaultExecutionOrder(-1)]
     [RequireComponent(typeof(AudioSource))]
     [RequireComponent(typeof(CanvasGroup))]
-    public class Menu : MonoBehaviour, IDisposable
+    public class Menu : MonoBehaviour, IDisposable, ICancelable
     {
         [SerializeField, Tooltip("The local Audio Source.")]
         private AudioSource audioSource;
@@ -49,9 +49,9 @@ namespace ActionCode.UISystem
         public event Action<Screen> OnScreenClosed;
 
         /// <summary>
-        /// Event fired when the given screen is canceled, normally pressing the back button.
+        /// Event fired when any screen is canceled, normally pressing the back button.
         /// </summary>
-        public event Action<Screen> OnScreenCanceled;
+        public event Action OnCanceled;
         #endregion
 
         #region Properties
@@ -190,15 +190,6 @@ namespace ActionCode.UISystem
             return hasUndoableScreen;
         }
 
-        //TODO implement ICancelable and call CancelScreen
-        public virtual void CancelScreen(Screen screen)
-        {
-            var wasLasScreenOpened = TryOpenLastScreen();
-            if (wasLasScreenOpened) PlayCancelationAudio();
-
-            OnScreenCanceled?.Invoke(screen);
-        }
-
         /// <summary>
         /// Sets this entire menu input.
         /// </summary>
@@ -256,5 +247,11 @@ namespace ActionCode.UISystem
             CurrentScreen = null;
         }
         #endregion
+
+        public void OnCancel(UnityEngine.EventSystems.BaseEventData _)
+        {
+            var wasLastScreenOpened = TryOpenLastScreen();
+            if (wasLastScreenOpened) PlayCancelationAudio();
+        }
     }
 }
