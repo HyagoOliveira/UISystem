@@ -1,41 +1,40 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ActionCode.UISystem
 {
     public abstract class AbstractMainMenuOptionsScreen : Screen
     {
         [Header("Buttons")]
-        [SerializeField] protected Button continueButton;
-        [SerializeField] protected Button startButton;
-        [SerializeField] protected Button loadButton;
-        [SerializeField] protected Button settingsButton;
-        [SerializeField] protected Button exitButton;
+        [SerializeField] protected ActionButton continueButton;
+        [SerializeField] protected ActionButton startButton;
+        [SerializeField] protected ActionButton loadButton;
+        [SerializeField] protected ActionButton optionsButton;
+        [SerializeField] protected ActionButton exitButton;
 
         [Header("Screens")]
-        public string loadScreenIdentifier = "LoadScreen";
-        public string settingsScreenIdentifier = "SettingsScreen";
+        public string loadScreen = "LoadScreen";
+        public string optionsScreen = "OptionsScreen";
 
         protected override void SubscribeEvents()
         {
             base.SubscribeEvents();
 
-            continueButton.onClick.AddListener(HandleContinueButtonClicked);
-            startButton.onClick.AddListener(HandleStartButtonClicked);
-            loadButton.onClick.AddListener(HandleLoadButtonClicked);
-            settingsButton.onClick.AddListener(HandleSettingsButtonClicked);
-            exitButton.onClick.AddListener(HandleExitButtonClicked);
+            continueButton.OnClicked += HandleContinueButtonClicked;
+            startButton.OnClicked += HandleStartButtonClicked;
+            loadButton.OnClicked += HandleLoadButtonClicked;
+            optionsButton.OnClicked += HandleSettingsButtonClicked;
+            exitButton.OnClicked += HandleExitButtonClicked;
         }
 
         protected override void UnsubscribeEvents()
         {
             base.UnsubscribeEvents();
 
-            continueButton.onClick.RemoveListener(HandleContinueButtonClicked);
-            startButton.onClick.RemoveListener(HandleStartButtonClicked);
-            loadButton.onClick.RemoveListener(HandleLoadButtonClicked);
-            settingsButton.onClick.RemoveListener(HandleSettingsButtonClicked);
-            exitButton.onClick.RemoveListener(HandleExitButtonClicked);
+            continueButton.OnClicked -= HandleContinueButtonClicked;
+            startButton.OnClicked -= HandleStartButtonClicked;
+            loadButton.OnClicked -= HandleLoadButtonClicked;
+            optionsButton.OnClicked -= HandleSettingsButtonClicked;
+            exitButton.OnClicked -= HandleExitButtonClicked;
         }
 
         public override async Awaitable LoadAsync()
@@ -49,8 +48,8 @@ namespace ActionCode.UISystem
         protected abstract void HandleContinueButtonClicked();
         protected abstract void HandleStartButtonClicked();
 
-        protected virtual void HandleLoadButtonClicked() => OpenCloseableScreen(loadScreenIdentifier);
-        protected virtual void HandleSettingsButtonClicked() => OpenCloseableScreen(settingsScreenIdentifier);
+        protected virtual void HandleLoadButtonClicked() => OpenCloseableScreen(loadScreen);
+        protected virtual void HandleSettingsButtonClicked() => OpenCloseableScreen(optionsScreen);
 
         protected virtual void HandleExitButtonClicked()
         {
