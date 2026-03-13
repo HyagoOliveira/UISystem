@@ -6,7 +6,8 @@
 * License: **MIT**
 * Dependencies:
 	- com.unity.ugui: [2.0.0](https://docs.unity3d.com/Packages/com.unity.ugui@2.0/changelog/CHANGELOG.html)
-	- com.actioncode.prime-tween: [1.3.51](https://github.com/HyagoOliveira/PrimeTween/1.3.51)
+	- com.actioncode.prime-tween: [1.3.51](https://github.com/HyagoOliveira/PrimeTween/releases/tag/1.3.51)
+	- com.actioncode.input-system: [1.8.1](https://github.com/HyagoOliveira/InputSystem/releases/tag/1.8.1)
 
 ## Summary
 
