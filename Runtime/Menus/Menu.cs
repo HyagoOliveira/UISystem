@@ -30,8 +30,8 @@ namespace ActionCode.UISystem
         [Space]
         [Tooltip("[Optional] The first screen to activated when start. Leave it empty if you wish to do it manually.")]
         public Screen firstScreen;
-        [Tooltip("[Optional] The fade in/out animations to play when any Screen is opened/closed.")]
-        public FadeAnimation fades;
+        [Tooltip("[Optional] The menu global fade in/out animations to play when any Screen is opened/closed.")]
+        public FadeAnimation globalFades;
 
         #region Events
         /// <summary>
@@ -83,7 +83,7 @@ namespace ActionCode.UISystem
 
         protected virtual void Awake()
         {
-            fades.Initialize();
+            globalFades.Initialize();
             InitializeScreens();
         }
 
@@ -134,7 +134,7 @@ namespace ActionCode.UISystem
             if (CurrentScreen)
             {
                 await CurrentScreen.fades.TryPlayFadeOutAnimation();
-                await fades.TryPlayFadeOutAnimation();
+                await globalFades.TryPlayFadeOutAnimation();
 
                 CurrentScreen.Close();
                 OnScreenClosed?.Invoke(CurrentScreen);
@@ -149,7 +149,7 @@ namespace ActionCode.UISystem
 
             CurrentScreen.Open();
             await CurrentScreen.LoadAsync();
-            await fades.TryPlayFadeInAnimation();
+            await globalFades.TryPlayFadeInAnimation();
             await CurrentScreen.fades.TryPlayFadeInAnimation();
 
             // EventSystem may not be loaded yet
@@ -206,6 +206,7 @@ namespace ActionCode.UISystem
 
         protected virtual async void TryOpenFirstScreen()
         {
+            CurrentScreen = firstScreen;
             if (firstScreen == null || firstScreen.IsOpenned()) return;
 
             // Await one frame to let the First Screen components initialize

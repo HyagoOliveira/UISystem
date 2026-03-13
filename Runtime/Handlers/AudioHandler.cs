@@ -36,7 +36,11 @@ namespace ActionCode.UISystem
         private IClickable[] clickables = Array.Empty<IClickable>();
         private ISelectable[] selectables = Array.Empty<ISelectable>();
 
-        private void Reset() => audioSource = GetComponent<AudioSource>();
+        private void Reset()
+        {
+            audioSource = GetComponent<AudioSource>();
+            audioSource.spatialBlend = 0f; // 2D Audio
+        }
 
         public void PlaySelection() => Play(data.selection);
         public void PlaySubmition() => Play(data.submition);
