@@ -14,7 +14,10 @@ namespace ActionCode.UISystem
     /// <remarks>
     /// A Menu is a Finite State Machine containing several Screens, tracking the Current and Last one.<br/>
     /// Only one Screen can be activated at time. 
-    /// From an opened Screen, you can go back to the last one using the Cancel input (back button).
+    /// From an opened Screen, you can go back to the last one using the Cancel input (back button).<br/><br/>
+    /// 
+    /// Each Screen contains one or multiple elements that can be selected, submitted (clicked) or canceled. 
+    /// The local <see cref="AudioHandler"/> component will play the corresponding audio from the <see cref="MenuData"/>.
     /// </remarks>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(-1)]
@@ -133,10 +136,11 @@ namespace ActionCode.UISystem
 
             if (CurrentScreen)
             {
+                CurrentScreen.StartClose();
                 await CurrentScreen.fades.TryPlayFadeOutAnimation();
                 await globalFades.TryPlayFadeOutAnimation();
 
-                CurrentScreen.Close();
+                CurrentScreen.FinishClose();
                 OnScreenClosed?.Invoke(CurrentScreen);
 
                 if (undoable) undoHistory.Push(CurrentScreen);
@@ -147,7 +151,7 @@ namespace ActionCode.UISystem
             LastScreen = CurrentScreen;
             CurrentScreen = screen;
 
-            CurrentScreen.Open();
+            CurrentScreen.StartOpen();
             await CurrentScreen.LoadAsync();
             await globalFades.TryPlayFadeInAnimation();
             await CurrentScreen.fades.TryPlayFadeInAnimation();
@@ -163,6 +167,8 @@ namespace ActionCode.UISystem
 
             // Re-enable Menu input
             SetInputEnable(true);
+
+            CurrentScreen.FinishOpen();
         }
 
         /// <summary>
@@ -186,7 +192,7 @@ namespace ActionCode.UISystem
         {
             foreach (var screen in Screens.Values)
             {
-                if (screen.IsOpenned()) screen.Close();
+                if (screen.IsOpened()) screen.FinishClose();
             }
         }
         #endregion
@@ -206,8 +212,7 @@ namespace ActionCode.UISystem
 
         protected virtual async void TryOpenFirstScreen()
         {
-            CurrentScreen = firstScreen;
-            if (firstScreen == null || firstScreen.IsOpenned()) return;
+            if (firstScreen == null) return;
 
             // Await one frame to let the First Screen components initialize
             await Awaitable.NextFrameAsync();

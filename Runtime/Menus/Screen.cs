@@ -5,10 +5,13 @@ namespace ActionCode.UISystem
     /// <summary>
     /// Screens are used to display different parts of a Menu, as a 
     /// sub-menu Screen, a Tab Screen or other specific menu section.
+    /// Use this component as a base class an implement your own Screens.
     /// </summary>
     /// <remarks>
     /// Screens contains one or multiple elements that can be selected, 
-    /// submitted or canceled, playing the corresponding audio from the <see cref="MenuData"/>
+    /// submitted (clicked) or canceled. 
+    /// A local or parented <see cref="AudioHandler"/> component will play the corresponding 
+    /// audio from the <see cref="MenuData"/>.
     /// </remarks>
     [DisallowMultipleComponent]
     public class Screen : MonoBehaviour
@@ -23,6 +26,9 @@ namespace ActionCode.UISystem
         /// </summary>
         public Menu Menu { get; private set; }
 
+        public bool IsOpening { get; private set; }
+        public bool IsClosing { get; private set; }
+
         public virtual void Initialize(Menu menu)
         {
             Menu = menu;
@@ -32,8 +38,8 @@ namespace ActionCode.UISystem
         protected virtual void OnEnable() => SubscribeEvents();
         protected virtual void OnDisable() => UnsubscribeEvents();
 
-        public bool IsOpenned() => gameObject.activeSelf;
-        public bool IsClosed() => !IsOpenned();
+        public bool IsOpened() => gameObject.activeSelf;
+        public bool IsClosed() => !IsOpened();
 
         public string GetIdentifier() => gameObject.name;
 
@@ -52,8 +58,34 @@ namespace ActionCode.UISystem
         /// <param name="identifier"><inheritdoc cref="Menu.OpenScreenAsync(string, bool)" path="/param[@name='identifier']"/></param>
         public void OpenCloseableScreen(string identifier) => _ = Menu.OpenScreenAsync(identifier, undoable: true);
 
-        public virtual void Open() => gameObject.SetActive(true);
-        public virtual void Close() => gameObject.SetActive(false);
+        /// <summary>
+        /// Executed when stating to open this screen, before any fade in animations start to play.
+        /// </summary>
+        public virtual void StartOpen()
+        {
+            IsOpening = true;
+            gameObject.SetActive(true);
+        }
+
+        /// <summary>
+        /// Executed when finishing to open this screen, after all fade is animations are played 
+        /// and the Player has the input.
+        /// </summary>
+        public virtual void FinishOpen() => IsOpening = false;
+
+        /// <summary>
+        /// Executed when starting to close this screen, before any fade out animations start to play.
+        /// </summary>
+        public virtual void StartClose() => IsClosing = true;
+
+        /// <summary>
+        /// Executed when finishing to close this screen, after all fade out animations are played.
+        /// </summary>
+        public virtual void FinishClose()
+        {
+            IsClosing = false;
+            gameObject.SetActive(false);
+        }
 
         /// <summary>
         /// Loads any content from this screen asynchronously.
