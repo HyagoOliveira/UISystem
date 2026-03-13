@@ -29,6 +29,11 @@ namespace ActionCode.UISystem
 
         public event Action OnSelected;
 
+        /// <summary>
+        /// Event fired when this object is unselected.
+        /// </summary>
+        public event Action OnUnselected;
+
         protected override void Reset()
         {
             base.Reset();
@@ -54,6 +59,12 @@ namespace ActionCode.UISystem
             if (IsAvailable()) HandleSelection();
         }
 
+        public override void OnDeselect(BaseEventData eventData)
+        {
+            base.OnDeselect(eventData);
+            if (IsAvailable()) HandleUnselection();
+        }
+
         protected override void DoStateTransition(SelectionState state, bool instant)
         {
             if (transition != Transition.None)
@@ -73,6 +84,7 @@ namespace ActionCode.UISystem
         }
 
         protected virtual void HandleSelection() => OnSelected?.Invoke();
+        protected virtual void HandleUnselection() => OnUnselected?.Invoke();
 
         protected virtual void SetupBackgroundTarget()
         {
