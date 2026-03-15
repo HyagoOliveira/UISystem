@@ -32,7 +32,7 @@ namespace ActionCode.UISystem
 
         [Space]
         [Tooltip("[Optional] The first screen to activated when start. Leave it empty if you wish to do it manually.")]
-        public Screen firstScreen;
+        public BaseScreen firstScreen;
         [Tooltip("[Optional] The menu global fade in/out animations to play when any Screen is opened/closed.")]
         public FadeAnimation globalFades;
 
@@ -40,12 +40,12 @@ namespace ActionCode.UISystem
         /// <summary>
         /// Event fired when the given screen is opened.
         /// </summary>
-        public event Action<Screen> OnScreenOpened;
+        public event Action<BaseScreen> OnScreenOpened;
 
         /// <summary>
         /// Event fired when the given screen is closed.
         /// </summary>
-        public event Action<Screen> OnScreenClosed;
+        public event Action<BaseScreen> OnScreenClosed;
 
         /// <summary>
         /// Event fired when any screen is canceled, normally pressing the back button.
@@ -62,26 +62,26 @@ namespace ActionCode.UISystem
         /// <summary>
         /// The last activated screen. It can be null if no screen has been navigated yet.
         /// </summary>
-        public Screen LastScreen { get; private set; }
+        public BaseScreen LastScreen { get; private set; }
 
         /// <summary>
         /// The current activated screen. It can be null if no screen has been opened yet.
         /// </summary>
-        public Screen CurrentScreen { get; private set; }
+        public BaseScreen CurrentScreen { get; private set; }
 
         /// <summary>
         /// All screens available in this menu, indexed by their identifiers.
         /// </summary>
-        public Dictionary<string, Screen> Screens { get; private set; }
+        public Dictionary<string, BaseScreen> Screens { get; private set; }
         #endregion
 
-        private readonly Stack<Screen> undoHistory = new();
+        private readonly Stack<BaseScreen> undoHistory = new();
 
         protected virtual void Reset()
         {
             canvasGroup = GetComponent<CanvasGroup>();
             audioHandler = GetComponent<AudioHandler>();
-            firstScreen = GetComponentInChildren<Screen>(includeInactive: false);
+            firstScreen = GetComponentInChildren<BaseScreen>(includeInactive: false);
         }
 
         protected virtual void Awake()
@@ -112,7 +112,7 @@ namespace ActionCode.UISystem
         /// <param name="screen">The screen instance to open.</param>
         /// <param name="undoable">Whether this screen can be closed using the back button.</param>
         /// <returns><inheritdoc cref="OpenFirstScreenAsync"/></returns>
-        public async Awaitable OpenScreenAsync<T>(T screen, bool undoable = false) where T : Screen
+        public async Awaitable OpenScreenAsync<T>(T screen, bool undoable = false) where T : BaseScreen
             => await OpenScreenAsync(screen.GetIdentifier(), undoable);
 
         /// <summary>
@@ -200,7 +200,7 @@ namespace ActionCode.UISystem
         #region Initialization
         protected virtual void InitializeScreens()
         {
-            var screens = GetComponentsInChildren<Screen>(includeInactive: true);
+            var screens = GetComponentsInChildren<BaseScreen>(includeInactive: true);
             Screens = new(screens.Length);
 
             foreach (var screen in screens)

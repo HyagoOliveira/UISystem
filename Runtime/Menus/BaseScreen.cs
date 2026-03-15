@@ -5,16 +5,14 @@ namespace ActionCode.UISystem
     /// <summary>
     /// Screens are used to display different parts of a Menu, as a 
     /// sub-menu Screen, a Tab Screen or other specific menu section.
-    /// Use this component as a base class an implement your own Screens.
+    /// Use this component as a base class and implement your own Screens.
     /// </summary>
     /// <remarks>
-    /// Screens contains one or multiple elements that can be selected, 
-    /// submitted (clicked) or canceled. 
-    /// A local or parented <see cref="AudioHandler"/> component will play the corresponding 
-    /// audio from the <see cref="MenuData"/>.
+    /// Screens contains one or multiple elements that can be selected, submitted (clicked) or canceled. 
+    /// A local or parented <see cref="AudioHandler"/> component will play the corresponding audio from the <see cref="MenuData"/>.
     /// </remarks>
     [DisallowMultipleComponent]
-    public class Screen : MonoBehaviour
+    public class BaseScreen : MonoBehaviour
     {
         [Tooltip("[Optional] The first input to be selected when this Screen is opened.")]
         public GameObject firstInput;

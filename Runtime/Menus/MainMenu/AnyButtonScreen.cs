@@ -14,7 +14,7 @@ namespace ActionCode.UISystem
     /// </remarks>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(AnyButtonPressedListener))]
-    public sealed class AnyButtonScreen : Screen
+    public sealed class AnyButtonScreen : BaseScreen
     {
         [Space]
         public string nextScreen = "MainMenuOptionsScreen";

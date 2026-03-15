@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ActionCode.UISystem
 {
-    public abstract class AbstractMainMenuOptionsScreen : Screen
+    public abstract class AbstractMainMenuOptionsScreen : BaseScreen
     {
         [Header("Buttons")]
         [SerializeField] protected ActionButton continueButton;
