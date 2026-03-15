@@ -19,6 +19,12 @@ namespace ActionCode.UISystem
 
         private readonly List<GameObject> items = new();
 
+        public T Add<T>() where T : Component
+        {
+            var instance = Add();
+            return instance.GetComponent<T>();
+        }
+
         public GameObject Add() => Add(itemPrefab);
 
         public GameObject Add(GameObject prefab)
@@ -31,11 +37,15 @@ namespace ActionCode.UISystem
             return item;
         }
 
-        public void Select(int index)
+        public GameObject GetItem(int index)
         {
             var hasItem = index >= 0 && index < items.Count;
-            if (hasItem) EventManager.TrySetSelectedGameObject(items[index]);
+            if (hasItem) return items[index];
+            throw new System.ArgumentOutOfRangeException();
         }
+
+        public void Select(int index) =>
+            EventManager.TrySetSelectedGameObject(GetItem(index));
 
         public void Clear()
         {
