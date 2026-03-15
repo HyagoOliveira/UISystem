@@ -186,7 +186,11 @@ namespace ActionCode.UISystem
         /// Sets this entire menu input.
         /// </summary>
         /// <param name="isEnabled">Whether the input is enabled.</param>
-        public void SetInputEnable(bool isEnabled) => canvasGroup.blocksRaycasts = isEnabled;
+        public void SetInputEnable(bool isEnabled)
+        {
+            canvasGroup.blocksRaycasts = isEnabled;
+            EventManager.TrySendNavigationEvents(isEnabled);
+        }
 
         private void CloseOpenedScreens()
         {
