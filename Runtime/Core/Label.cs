@@ -34,13 +34,6 @@ namespace ActionCode.UISystem
 
         private void Reset() => Setup();
 
-        public void FadeColor(Color color, float duration) => target.CrossFadeColor(
-            color,
-            duration,
-            ignoreTimeScale: true,
-            useAlpha: true
-        );
-
         private void Setup()
         {
             target = GetComponent<TMP_Text>();

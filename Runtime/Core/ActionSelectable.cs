@@ -1,31 +1,31 @@
 using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace ActionCode.UISystem
 {
     /// <summary>
     /// Custom <see cref="Selectable"/> implementation with <see cref="OnSelected"/> callback and 
-    /// color fade transitions for Background and Label UI components.
+    /// color fade transitions for Background and Label components.
     /// </summary>
     /// <remarks>
     /// Use <see cref="OnSelected"/> to get notified when this object is selected.<br/>
-    /// Set the <see cref="background"/> and <see cref="label"/> components to fade 
-    /// colors when transitioning between states.
     /// </remarks>
     [DisallowMultipleComponent]
     public class ActionSelectable : Selectable, ISelectable
     {
-        [Space]
-        [Min(0f), Tooltip("The color change duration for the UI Components.")]
-        public float fadeDuration = 0.1f;
+        [field: Header("UI Components")]
+        [field: SerializeField, Tooltip("The background for this UI.")]
+        public Graphic Background { get; private set; }
+        [field: SerializeField, Tooltip("The Label component for this UI.")]
+        public Label Label { get; private set; }
 
-        [Header("UI Components")]
-        [Tooltip("The background for this UI.")]
-        public SelectableTarget background = new();
-        [Tooltip("The label for this UI.")]
-        public SelectableTarget label = new();
+        [field: Space]
+        [field: SerializeField, Min(0), Tooltip("The color change duration for the UI Components.")]
+        public float FadeDuration { get; set; } = 0.1f;
+        [field: SerializeField]
+        public SelectableColorData Colors { get; set; }
 
         public event Action OnSelected;
 
@@ -37,9 +37,11 @@ namespace ActionCode.UISystem
         protected override void Reset()
         {
             base.Reset();
+
             transition = Transition.None;
-            SetupBackgroundTarget();
-            SetupLabelTarget();
+            Label = GetComponentInChildren<Label>();
+
+            SetupBackground();
         }
 
         public bool IsAvailable() => IsActive() && IsInteractable();
@@ -75,45 +77,40 @@ namespace ActionCode.UISystem
 
             if (!IsActive()) return;
 
-            var backgroundColor = GetColor(background, state);
-            var labelColor = GetColor(label, state);
-            var fadeDuration = instant ? 0f : this.fadeDuration;
+            var fadeDuration = instant ? 0f : FadeDuration;
 
-            background.FadeTarget(backgroundColor, fadeDuration);
-            label.FadeTarget(labelColor, fadeDuration);
+            if (Label) FadeColor(Label.target, GetColor(Label.Colors, state), fadeDuration);
+            if (Background && Colors) FadeColor(Background, GetColor(Colors, state), fadeDuration);
         }
 
         protected virtual void HandleSelection() => OnSelected?.Invoke();
         protected virtual void HandleUnselection() => OnUnselected?.Invoke();
 
-        protected virtual void SetupBackgroundTarget()
+        private void SetupBackground()
         {
-            background.target = GetComponentInChildren<Graphic>();
-            if (!background.HasTarget()) return;
+            Background = GetComponentInChildren<Graphic>();
+            if (Background == null) return;
 
-            background.target.raycastTarget = true;
-            background.UpdateColors();
+            Background.color = Color.white;
+            Background.raycastTarget = true;
         }
 
-        protected virtual void SetupLabelTarget()
-        {
-            label.target = GetComponentInChildren<TMPro.TMP_Text>();
-            if (!label.HasTarget()) return;
+        public static void FadeColor(Graphic target, Color color, float duration) => target.CrossFadeColor(
+            color,
+            duration,
+            ignoreTimeScale: true,
+            useAlpha: true
+        );
 
-            label.target.color = Color.white;
-            label.target.raycastTarget = false;
-            label.SetColors(Color.black * 0.8f);
-        }
-
-        // Cannot create this function inside SelectableTarget since SelectionState is a protected enum
-        private static Color GetColor(SelectableTarget target, SelectionState state) => state switch
+        // Cannot create this function inside SelectableColorData since SelectionState is a protected enum
+        private static Color GetColor(SelectableColorData target, SelectionState state) => state switch
         {
-            SelectionState.Normal => target.normalColor,
-            SelectionState.Highlighted => target.selectedColor,
-            SelectionState.Pressed => target.pressedColor,
-            SelectionState.Selected => target.selectedColor,
-            SelectionState.Disabled => target.disabledColor,
-            _ => target.normalColor
+            SelectionState.Normal => target.Normal,
+            SelectionState.Highlighted => target.Highlighted,
+            SelectionState.Pressed => target.Pressed,
+            SelectionState.Selected => target.Selected,
+            SelectionState.Disabled => target.Disabled,
+            _ => target.Normal
         };
     }
 }
