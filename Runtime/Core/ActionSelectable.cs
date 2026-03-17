@@ -95,8 +95,13 @@ namespace ActionCode.UISystem
 
         private void CheckForTargetGraphic()
         {
-            if (targetGraphic != null) return;
-            Debug.LogWarning($"{gameObject.name} must contain any implementation of Graphic component in order to work.");
+            if (targetGraphic)
+            {
+                targetGraphic.raycastTarget = true;
+                return;
+            }
+
+            Debug.LogWarning($"{gameObject.name} must contain any implementation of a Graphic component in order to work.");
         }
 
         // Converts UnityUI.SelectionState into ActionCode.UISystem.SelectionState
