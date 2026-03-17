@@ -33,7 +33,7 @@ namespace ActionCode.UISystem
 
         public override void Transit(SelectionState state, bool _)
         {
-            if (Data) target.color = Data.GetColor(state);
+            if (data) target.color = data.GetColor(state);
         }
     }
 }
