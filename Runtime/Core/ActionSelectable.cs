@@ -20,7 +20,8 @@ namespace ActionCode.UISystem
         [field: Space]
         [field: SerializeField, Tooltip("The Label component for this UI.")]
         public Label Label { get; private set; }
-        [field: SerializeField] public AbstractTransition[] Transitions { get; set; } = new AbstractTransition[0];
+        [field: SerializeField, Tooltip("All UI transitions")]
+        public AbstractTransition[] Transitions { get; set; } = new AbstractTransition[0];
 
         public event Action OnSelected;
 
