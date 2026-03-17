@@ -23,7 +23,11 @@ namespace ActionCode.UISystem
 
         private void Reset() => transitions = GetComponentsInChildren<AbstractTransition>();
 
-        internal void Initialize(uint index) => Index = index;
+        internal void Initialize(uint index)
+        {
+            Index = index;
+            IsSelected = false;
+        }
 
         internal void Select()
         {

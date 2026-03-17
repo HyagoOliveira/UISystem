@@ -103,7 +103,7 @@ namespace ActionCode.UISystem
         /// Opens the <see cref="firstScreen"/> if available.
         /// </summary>
         /// <returns>An asynchronously operation.</returns>
-        public async Awaitable OpenFirstScreenAsync() => await OpenScreenAsync(firstScreen, undoable: false);
+        public virtual async Awaitable OpenFirstScreenAsync() => await OpenScreenAsync(firstScreen, undoable: false);
 
         /// <summary>
         /// Opens the given screen instance asynchronously. 
@@ -214,7 +214,7 @@ namespace ActionCode.UISystem
             }
         }
 
-        protected virtual async void TryOpenFirstScreen()
+        private async void TryOpenFirstScreen()
         {
             if (firstScreen == null) return;
 
