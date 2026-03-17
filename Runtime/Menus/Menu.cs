@@ -235,7 +235,7 @@ namespace ActionCode.UISystem
         public void OnCancel(UnityEngine.EventSystems.BaseEventData _)
         {
             var wasLastScreenOpened = TryOpenLastScreen();
-            if (wasLastScreenOpened) Audio.PlayCancelation();
+            if (wasLastScreenOpened) Audio.PlayCancellation();
 
             OnCanceled?.Invoke();
         }
