@@ -6,26 +6,21 @@ using UnityEngine.EventSystems;
 namespace ActionCode.UISystem
 {
     /// <summary>
-    /// Custom <see cref="Selectable"/> implementation with <see cref="OnSelected"/> callback and 
-    /// color fade transitions for Background and Label components.
+    /// Custom <see cref="Selectable"/> implementation with <see cref="OnSelected"/> callback 
+    /// and Transitions components.
     /// </summary>
     /// <remarks>
     /// Use <see cref="OnSelected"/> to get notified when this object is selected.<br/>
+    /// Add any component implementing <see cref="AbstractTransition"/> into this GameObject 
+    /// hierarchy to get notify when this Selectable state changes.
     /// </remarks>
     [DisallowMultipleComponent]
     public class ActionSelectable : Selectable, ISelectable
     {
-        [field: Header("UI Components")]
-        [field: SerializeField, Tooltip("The background for this UI.")]
-        public Graphic Background { get; private set; }
+        [field: Space]
         [field: SerializeField, Tooltip("The Label component for this UI.")]
         public Label Label { get; private set; }
-
-        [field: Space]
-        [field: SerializeField, Min(0), Tooltip("The color change duration for the UI Components.")]
-        public float FadeDuration { get; set; } = 0.1f;
-        [field: SerializeField]
-        public SelectableColorData Colors { get; set; }
+        [field: SerializeField] public AbstractTransition[] Transitions { get; set; } = new AbstractTransition[0];
 
         public event Action OnSelected;
 
@@ -40,8 +35,10 @@ namespace ActionCode.UISystem
 
             transition = Transition.None;
             Label = GetComponentInChildren<Label>();
+            targetGraphic = GetComponentInChildren<Graphic>();
+            Transitions = GetComponentsInChildren<AbstractTransition>();
 
-            SetupBackground();
+            CheckForTargetGraphic();
         }
 
         public bool IsAvailable() => IsActive() && IsInteractable();
@@ -77,23 +74,16 @@ namespace ActionCode.UISystem
 
             if (!IsActive()) return;
 
-            var fadeDuration = instant ? 0f : FadeDuration;
+            var selectionState = GetSelectionState(state);
 
-            if (Label) FadeColor(Label.target, GetColor(Label.Colors, state), fadeDuration);
-            if (Background && Colors) FadeColor(Background, GetColor(Colors, state), fadeDuration);
+            foreach (var transition in Transitions)
+            {
+                transition.Transit(selectionState, instant);
+            }
         }
 
         protected virtual void HandleSelection() => OnSelected?.Invoke();
         protected virtual void HandleUnselection() => OnUnselected?.Invoke();
-
-        private void SetupBackground()
-        {
-            Background = GetComponentInChildren<Graphic>();
-            if (Background == null) return;
-
-            Background.color = Color.white;
-            Background.raycastTarget = true;
-        }
 
         public static void FadeColor(Graphic target, Color color, float duration) => target.CrossFadeColor(
             color,
@@ -102,15 +92,22 @@ namespace ActionCode.UISystem
             useAlpha: true
         );
 
-        // Cannot create this function inside SelectableColorData since SelectionState is a protected enum
-        private static Color GetColor(SelectableColorData target, SelectionState state) => state switch
+        private void CheckForTargetGraphic()
         {
-            SelectionState.Normal => target.Normal,
-            SelectionState.Highlighted => target.Highlighted,
-            SelectionState.Pressed => target.Pressed,
-            SelectionState.Selected => target.Selected,
-            SelectionState.Disabled => target.Disabled,
-            _ => target.Normal
+            if (targetGraphic != null) return;
+            Debug.LogWarning($"{gameObject.name} must contain any implementation of Graphic component in order to work.");
+        }
+
+        // Converts UnityUI.SelectionState into ActionCode.UISystem.SelectionState
+        // since Unity's SelectionState is a protected enum
+        private static UISystem.SelectionState GetSelectionState(SelectionState state) => state switch
+        {
+            SelectionState.Normal => UISystem.SelectionState.Normal,
+            SelectionState.Highlighted => UISystem.SelectionState.Highlighted,
+            SelectionState.Pressed => UISystem.SelectionState.Pressed,
+            SelectionState.Selected => UISystem.SelectionState.Selected,
+            SelectionState.Disabled => UISystem.SelectionState.Disabled,
+            _ => UISystem.SelectionState.Normal,
         };
     }
 }

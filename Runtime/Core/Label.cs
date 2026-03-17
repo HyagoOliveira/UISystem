@@ -10,7 +10,7 @@ namespace ActionCode.UISystem
     public sealed class Label : MonoBehaviour
     {
         public TMP_Text target;
-        public SelectableColorData colors;
+        public SelectableTransitionData colors;
 
         /// <summary>
         /// The label text.
@@ -20,17 +20,6 @@ namespace ActionCode.UISystem
             get => target.text;
             set => target.text = value;
         }
-
-        /// <summary>
-        /// The label color.
-        /// </summary>
-        public Color Color
-        {
-            get => target.color;
-            set => target.color = value;
-        }
-
-        public SelectableColorData Colors => colors;
 
         private void Reset() => Setup();
 
