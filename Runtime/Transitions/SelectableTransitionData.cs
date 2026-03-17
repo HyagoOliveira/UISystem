@@ -5,8 +5,8 @@ namespace ActionCode.UISystem
     /// <summary>
     /// Color Data container for Selectable UI components.
     /// </summary>
-    [CreateAssetMenu(fileName = "SelectableColorData", menuName = "ActionCode/UI System/Selectable Color Data", order = 110)]
-    public sealed class SelectableColorData : ScriptableObject
+    [CreateAssetMenu(fileName = "SelectableTransitionData", menuName = "ActionCode/UI System/Selectable Transition Data", order = 110)]
+    public sealed class SelectableTransitionData : ScriptableObject
     {
         [field: SerializeField, Tooltip("The normal Color of an object.")]
         public Color Normal { get; set; }
