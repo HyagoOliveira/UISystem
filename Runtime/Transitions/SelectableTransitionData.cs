@@ -30,5 +30,15 @@ namespace ActionCode.UISystem
             PressedColor = baseColor;
             DisabledColor = baseColor;
         }
+
+        public Color GetColor(SelectionState state) => state switch
+        {
+            SelectionState.Normal => NormalColor,
+            SelectionState.Highlighted => HighlightedColor,
+            SelectionState.Pressed => PressedColor,
+            SelectionState.Selected => SelectedColor,
+            SelectionState.Disabled => DisabledColor,
+            _ => NormalColor
+        };
     }
 }

@@ -7,10 +7,9 @@ namespace ActionCode.UISystem
     /// Label component for Selectable UIs.
     /// </summary>
     [DisallowMultipleComponent]
-    public sealed class Label : MonoBehaviour
+    public sealed class Label : AbstractTransition
     {
         public TMP_Text target;
-        public SelectableTransitionData colors;
 
         /// <summary>
         /// The label text.
@@ -30,6 +29,11 @@ namespace ActionCode.UISystem
 
             target.color = Color.white;
             target.raycastTarget = false;
+        }
+
+        public override void Transit(SelectionState state, bool _)
+        {
+            if (Data) target.color = Data.GetColor(state);
         }
     }
 }
