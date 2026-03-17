@@ -11,9 +11,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f471e0e30fe139d45adb9d1de2f90708, type: 3}
   m_Name: ActionCode-BackgroundTransitionData
-  m_EditorClassIdentifier: ActionCode.UISystem::ActionCode.UISystem.SelectableColorData
-  <Normal>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
-  <Highlighted>k__BackingField: {r: 1, g: 0.8983011, b: 0.3443396, a: 1}
-  <Selected>k__BackingField: {r: 1, g: 0.8641396, b: 0.1273585, a: 1}
-  <Pressed>k__BackingField: {r: 1, g: 0.8468468, b: 0, a: 1.04}
-  <Disabled>k__BackingField: {r: 0.16000001, g: 0.16000001, b: 0.16000001, a: 1}
+  m_EditorClassIdentifier: ActionCode.UISystem::ActionCode.UISystem.SelectableTransitionData
+  NormalColor: {r: 0, g: 0, b: 0, a: 0}
+  HighlightedColor: {r: 1, g: 1, b: 0.28627452, a: 1}
+  SelectedColor: {r: 1, g: 1, b: 0, a: 1}
+  PressedColor: {r: 0.6603774, g: 0.6603774, b: 0, a: 1.04}
+  DisabledColor: {r: 0, g: 0, b: 0, a: 0}

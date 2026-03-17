@@ -8,26 +8,27 @@ namespace ActionCode.UISystem
     [CreateAssetMenu(fileName = "SelectableTransitionData", menuName = "ActionCode/UI System/Selectable Transition Data", order = 110)]
     public sealed class SelectableTransitionData : ScriptableObject
     {
-        [field: SerializeField, Tooltip("The normal Color of an object.")]
-        public Color Normal { get; set; }
-        [field: SerializeField, Tooltip("The Color when an object is highlighted.")]
-        public Color Highlighted { get; set; }
-        [field: SerializeField, Tooltip("The Color when an object is selected.")]
-        public Color Selected { get; set; }
-        [field: SerializeField, Tooltip("The Color when an object is pressed.")]
-        public Color Pressed { get; set; }
-        [field: SerializeField, Tooltip("The Color when an object is disabled.")]
-        public Color Disabled { get; set; }
+        [Header("Colors")]
+        [Tooltip("The normal Color of an object.")]
+        public Color NormalColor;
+        [Tooltip("The Color when an object is highlighted.")]
+        public Color HighlightedColor;
+        [Tooltip("The Color when an object is selected.")]
+        public Color SelectedColor;
+        [Tooltip("The Color when an object is pressed.")]
+        public Color PressedColor;
+        [Tooltip("The Color when an object is disabled.")]
+        public Color DisabledColor;
 
-        private void Reset() => NormalizeColors(Color.white * 0.8f);
+        private void Reset() => SetColors(Color.white);
 
-        public void NormalizeColors(Color baseColor)
+        public void SetColors(Color baseColor)
         {
-            Normal = baseColor;
-            Highlighted = baseColor * 1.1f;
-            Selected = baseColor * 1.2f;
-            Pressed = baseColor * 1.3f;
-            Disabled = baseColor * 0.2F;
+            NormalColor = baseColor;
+            HighlightedColor = baseColor;
+            SelectedColor = baseColor;
+            PressedColor = baseColor;
+            DisabledColor = baseColor;
         }
     }
 }
