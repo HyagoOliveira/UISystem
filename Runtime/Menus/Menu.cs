@@ -23,6 +23,7 @@ namespace ActionCode.UISystem
     [DefaultExecutionOrder(-1)]
     [RequireComponent(typeof(CanvasGroup))]
     [RequireComponent(typeof(AudioHandler))]
+    [RequireComponent(typeof(UnityEngine.UI.GraphicRaycaster))] // Necessary to detect mouse inputs
     public class Menu : MonoBehaviour, IDisposable, ICancelable
     {
         [SerializeField, Tooltip("The local Canvas Group component.")]
