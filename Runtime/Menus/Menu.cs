@@ -85,14 +85,21 @@ namespace ActionCode.UISystem
             firstScreen = GetComponentInChildren<BaseScreen>(includeInactive: false);
         }
 
-        protected virtual void Awake()
+        protected virtual void Awake() => globalFades.Initialize();
+
+        protected virtual void OnEnable()
         {
-            globalFades.Initialize();
             InitializeScreens();
+            TryOpenFirstScreen();
         }
 
-        protected virtual void OnEnable() => TryOpenFirstScreen();
         protected virtual void OnDisable() => Dispose();
+
+        /// <summary>
+        /// Activates or deactivates this Menu, according to the give param.
+        /// </summary>
+        /// <param name="isActivated">Whether to activate this menu.</param>
+        public void SetActive(bool isActivated) => gameObject.SetActive(isActivated);
 
         #region Open Screen
         /// <summary>
