@@ -20,14 +20,13 @@ namespace ActionCode.UISystem
     /// <inheritdoc cref="ActionSelectable"/>
     /// </remarks>
     [DisallowMultipleComponent]
-    public class ActionButton : ActionSelectable, IClickable, ICancelable
+    public class ActionButton : ActionSelectable, IClickable
     {
         [Header("Events")]
         [Tooltip("Function definition for a button click event.")]
         public UnityEvent onClicked; // to maintain compatibility to Unity.Button
 
         public event Action OnClicked;
-        public event Action OnCanceled;
 
         // Triggered when Mouse clicks on it
         public void OnPointerClick(PointerEventData evt)
@@ -49,30 +48,12 @@ namespace ActionCode.UISystem
             StartCoroutine(OnFinishSubmit());
         }
 
-        // Triggered when the cancel button (typically the Escape key or Gamepad East Button) is pressed
-        public void OnCancel(BaseEventData evt)
-        {
-            PropagateUp(evt);
-            Cancel();
-        }
-
         public virtual void Press()
         {
             if (!IsAvailable()) return;
 
             onClicked?.Invoke();
             OnClicked?.Invoke();
-        }
-
-        public virtual void Cancel() => OnCanceled?.Invoke();
-
-        // Similar to UI Toolkit Bubble-Up event propagation,
-        // notify the cancellable parent about the cancellation
-        protected virtual void PropagateUp(BaseEventData evt)
-        {
-            if (transform.parent == null) return;
-            var parentCancelable = transform.parent.GetComponentInParent<ICancelable>();
-            parentCancelable?.OnCancel(evt);
         }
 
         private System.Collections.IEnumerator OnFinishSubmit()

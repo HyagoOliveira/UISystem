@@ -15,7 +15,7 @@ namespace ActionCode.UISystem
     /// hierarchy to get notify when this Selectable state changes.
     /// </remarks>
     [DisallowMultipleComponent]
-    public class ActionSelectable : Selectable, ISelectable
+    public class ActionSelectable : Selectable, ISelectable, ICancelable
     {
         [field: Space]
         [field: SerializeField, Tooltip("The Label component for this UI.")]
@@ -24,6 +24,7 @@ namespace ActionCode.UISystem
         public AbstractTransition[] Transitions { get; set; } = new AbstractTransition[0];
 
         public event Action OnSelected;
+        public event Action OnCanceled;
 
         /// <summary>
         /// Event fired when this object is unselected.
@@ -65,6 +66,24 @@ namespace ActionCode.UISystem
             if (IsAvailable()) HandleUnselection();
         }
 
+        // Triggered when the cancel button (typically the Escape key or Gamepad East Button) is pressed
+        public void OnCancel(BaseEventData evt)
+        {
+            PropagateUp(evt);
+            Cancel();
+        }
+
+        public virtual void Cancel() => OnCanceled?.Invoke();
+
+        // Similar to UI Toolkit Bubble-Up event propagation,
+        // notify the cancellable parent about the cancellation
+        protected virtual void PropagateUp(BaseEventData evt)
+        {
+            if (transform.parent == null) return;
+            var parentCancelable = transform.parent.GetComponentInParent<ICancelable>();
+            parentCancelable?.OnCancel(evt);
+        }
+
         protected override void DoStateTransition(SelectionState state, bool instant)
         {
             if (transition != Transition.None)
@@ -85,13 +104,6 @@ namespace ActionCode.UISystem
 
         protected virtual void HandleSelection() => OnSelected?.Invoke();
         protected virtual void HandleUnselection() => OnUnselected?.Invoke();
-
-        public static void FadeColor(Graphic target, Color color, float duration) => target.CrossFadeColor(
-            color,
-            duration,
-            ignoreTimeScale: true,
-            useAlpha: true
-        );
 
         private void CheckForTargetGraphic()
         {
