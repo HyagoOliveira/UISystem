@@ -21,6 +21,16 @@ namespace ActionCode.UISystem
         }
 
         private void Reset() => Setup();
+        private void Start() => SetupTarget();
+
+        private void SetupTarget()
+        {
+            // Settings this values only in runtime to avoid
+            // Prefabs getting values changes in Editor
+            target.enableAutoSizing = true;
+            target.fontSizeMax = target.fontSize;
+            // Maybe add min/max font size into a LabelData SO
+        }
 
         private void Setup()
         {
