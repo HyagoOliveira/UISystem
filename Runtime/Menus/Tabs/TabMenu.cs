@@ -38,27 +38,22 @@ namespace ActionCode.UISystem
 
             var index = Header.GetMovedIndex(direction);
             var canMove = Header.CurrentTab.Index != index;
-            if (canMove) Select(index);
+            if (canMove) _ = OpenScreenAsync(Content.Tabs[index]);
         }
 
-        public override Awaitable OpenFirstScreenAsync()
+        public override async Awaitable OpenScreenAsync(string identifier, bool undoable = false)
         {
-            if (firstScreen && firstScreen.TryGetComponent(out TabScreen tab))
-            {
-                Header.Select(tab.Index);
-            }
-
-            return base.OpenFirstScreenAsync();
+            var isOpeningFirstTab = !IsActive;
+            await base.OpenScreenAsync(identifier, undoable);
+            var hasScreen = Screens.TryGetValue(identifier, out var screen);
+            if (hasScreen && screen is TabScreen tab) Select(tab.Index, playAudio: !isOpeningFirstTab);
         }
 
-
-        private void Select(uint index)
+        private void Select(uint index, bool playAudio = true)
         {
             Header.Select(index);
             Content.Select(index);
-            Audio.PlayTabSelection();
-
-            _ = OpenScreenAsync(Content.CurrentTab);
+            if (playAudio) Audio.PlayTabSelection();
         }
 
         private void SubscribeEvents()

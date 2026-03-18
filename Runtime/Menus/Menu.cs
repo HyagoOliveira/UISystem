@@ -56,6 +56,21 @@ namespace ActionCode.UISystem
 
         #region Properties
         /// <summary>
+        /// Whether this Menu is active.
+        /// </summary>
+        public bool IsActive => gameObject.activeInHierarchy;
+
+        /// <summary>
+        /// Whether this Menu is opening any screen.
+        /// </summary>
+        public bool IsOpening { get; private set; }
+
+        /// <summary>
+        /// Whether this Menu is fully opened with a current screen.
+        /// </summary>
+        public bool IsOpened { get; private set; }
+
+        /// <summary>
         /// The local UI Audio Handler.
         /// </summary>
         public AudioHandler Audio => audioHandler;
@@ -95,11 +110,16 @@ namespace ActionCode.UISystem
 
         protected virtual void OnDisable() => Dispose();
 
+        #region Activation
+        public void Activate() => SetActive(true);
+        public void Deactivate() => SetActive(false);
+
         /// <summary>
         /// Activates or deactivates this Menu, according to the give param.
         /// </summary>
         /// <param name="isActivated">Whether to activate this menu.</param>
         public void SetActive(bool isActivated) => gameObject.SetActive(isActivated);
+        #endregion
 
         #region Open Screen
         /// <summary>
@@ -111,7 +131,7 @@ namespace ActionCode.UISystem
         /// Opens the <see cref="firstScreen"/> if available.
         /// </summary>
         /// <returns>An asynchronously operation.</returns>
-        public virtual async Awaitable OpenFirstScreenAsync() => await OpenScreenAsync(firstScreen, undoable: false);
+        public async Awaitable OpenFirstScreenAsync() => await OpenScreenAsync(firstScreen, undoable: false);
 
         /// <summary>
         /// Opens the given screen instance asynchronously. 
@@ -127,14 +147,18 @@ namespace ActionCode.UISystem
         /// Opens the given screen asynchronously using the given screen identifier. 
         /// </summary>
         /// <param name="identifier">The screen identifier.</param>
-        /// <param name="undoable"><inheritdoc cref="OpenScreenAsync{T}(T, bool)" path="/param[@name='undoable']"/> </param>
+        /// <param name="undoable"><inheritdoc cref="OpenScreenAsync{T}(T, bool)" path="/param[@name='undoable']"/></param>
         /// <returns><inheritdoc cref="OpenFirstScreenAsync"/></returns>
-        public async Awaitable OpenScreenAsync(string identifier, bool undoable = false)
+        public virtual async Awaitable OpenScreenAsync(string identifier, bool undoable = false)
         {
+            SetOpening(true);
+            if (!IsActive) Activate();
+
             var hasScreen = Screens.TryGetValue(identifier, out var screen);
             if (!hasScreen)
             {
                 Debug.LogError($"No screen {identifier} found for menu {gameObject.name}.");
+                SetOpening(false);
                 return;
             }
 
@@ -177,6 +201,7 @@ namespace ActionCode.UISystem
             SetInputEnable(true);
 
             CurrentScreen.FinishOpen();
+            SetOpening(false);
         }
 
         /// <summary>
@@ -198,6 +223,12 @@ namespace ActionCode.UISystem
         {
             canvasGroup.blocksRaycasts = isEnabled;
             EventManager.TrySendNavigationEvents(isEnabled);
+        }
+
+        private void SetOpening(bool isOpening)
+        {
+            IsOpened = !isOpening;
+            IsOpening = isOpening;
         }
 
         private void CloseOpenedScreens()
