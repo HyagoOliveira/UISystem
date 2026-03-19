@@ -46,6 +46,8 @@ namespace ActionCode.UISystem
         public void PlaySubmition() => Play(data.submition);
         public void PlayCancellation() => Play(data.cancellation);
         public void PlayTabSelection() => Play(data.tabSelection);
+        public void PlayModalOpen() => Play(data.modalOpen);
+        public void PlayModalClose() => Play(data.modalClose);
 
         public void Play(AudioClip clip)
         {

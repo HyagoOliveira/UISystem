@@ -45,6 +45,17 @@ namespace ActionCode.UISystem
         }
 
         /// <summary>
+        /// Updates the localization from given label.
+        /// </summary>
+        /// <param name="label">The Label component.</param>
+        public async readonly void UpdateLocalization(Label label)
+        {
+            var hasLocalization = await HasLocalization();
+            if (hasLocalization) label.localization.StringReference.SetReference(tableId, entryId);
+            else label.Text = fallback;
+        }
+
+        /// <summary>
         /// Return the localized text or the fallback if not found.
         /// </summary>
         /// <returns>Always a string.</returns>
