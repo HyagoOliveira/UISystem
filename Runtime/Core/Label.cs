@@ -11,7 +11,7 @@ namespace ActionCode.UISystem
     public sealed class Label : AbstractTransition
     {
         public TMP_Text target;
-        public LocalizeSpriteEvent localization;
+        public LocalizeStringEvent localization;
 
         /// <summary>
         /// The label text.
@@ -36,7 +36,7 @@ namespace ActionCode.UISystem
 
         private void Setup()
         {
-            localization = GetComponent<LocalizeSpriteEvent>();
+            localization = GetComponent<LocalizeStringEvent>();
             target = GetComponent<TMP_Text>();
             if (target == null) return;
 
