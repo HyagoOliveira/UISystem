@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization.Components;
 
 namespace ActionCode.UISystem
 {
@@ -10,6 +11,7 @@ namespace ActionCode.UISystem
     public sealed class Label : AbstractTransition
     {
         public TMP_Text target;
+        public LocalizeSpriteEvent localization;
 
         /// <summary>
         /// The label text.
@@ -34,6 +36,7 @@ namespace ActionCode.UISystem
 
         private void Setup()
         {
+            localization = GetComponent<LocalizeSpriteEvent>();
             target = GetComponent<TMP_Text>();
             if (target == null) return;
 
