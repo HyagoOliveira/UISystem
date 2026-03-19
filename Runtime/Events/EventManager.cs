@@ -28,6 +28,9 @@ namespace ActionCode.UISystem
             if (EventSystem.current) EventSystem.current.sendNavigationEvents = sendNavigationEvents;
         }
 
+        public static GameObject GetSelectedGameObject() =>
+            EventSystem.current ? EventSystem.current.currentSelectedGameObject : null;
+
         /// <summary>
         /// Waits until Event System is available or timeout is reached.
         /// Useful when opening a Screen in the first frame since Event System may not be loaded yet.
