@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ActionCode.UISystem
 {
@@ -23,13 +24,15 @@ namespace ActionCode.UISystem
     [DefaultExecutionOrder(-1)]
     [RequireComponent(typeof(CanvasGroup))]
     [RequireComponent(typeof(AudioHandler))]
-    [RequireComponent(typeof(UnityEngine.UI.GraphicRaycaster))] // Necessary to detect mouse inputs
+    [RequireComponent(typeof(GraphicRaycaster))]
     public class Menu : MonoBehaviour, IDisposable, ICancelable
     {
         [SerializeField, Tooltip("The local Canvas Group component.")]
         private CanvasGroup canvasGroup;
         [SerializeField, Tooltip("The local UI Audio Handler.")]
         private AudioHandler audioHandler;
+        [SerializeField, Tooltip("The local Raycaster necessary to detect mouse inputs.")]
+        private GraphicRaycaster raycaster;
 
         [Space]
         [Tooltip("[Optional] The first screen to activated when start. Leave it empty if you wish to do it manually.")]
@@ -69,6 +72,15 @@ namespace ActionCode.UISystem
         /// Whether this Menu is fully opened with a current screen.
         /// </summary>
         public bool IsOpened { get; private set; }
+
+        /// <summary>
+        /// Whether this Menu Raycaster (for mouse input) is enabled. 
+        /// </summary>
+        public bool IsRaycasterEnabled
+        {
+            get => raycaster.enabled;
+            private set => raycaster.enabled = value;
+        }
 
         /// <summary>
         /// The local UI Audio Handler.
@@ -153,6 +165,7 @@ namespace ActionCode.UISystem
         {
             SetOpening(true);
             if (!IsActive) Activate();
+            IsRaycasterEnabled = true;
 
             var hasScreen = Screens.TryGetValue(identifier, out var screen);
             if (!hasScreen)
@@ -163,22 +176,10 @@ namespace ActionCode.UISystem
             }
 
             // Disable the entire menu input while opening Screen
-            SetInputEnable(false);
-            Audio.UnbindElements();
+            DisableInput();
 
-            if (CurrentScreen)
-            {
-                CurrentScreen.StartClose();
-                await CurrentScreen.fades.TryPlayFadeOutAnimation();
-                await globalFades.TryPlayFadeOutAnimation();
-
-                CurrentScreen.FinishClose();
-                OnScreenClosed?.Invoke(CurrentScreen);
-
-                if (undoable) undoHistory.Push(CurrentScreen);
-            }
-
-            CloseOpenedScreens();
+            await CloseCurrentScreenAsync(undoable);
+            CloseAnyOpenedScreens();
 
             LastScreen = CurrentScreen;
             CurrentScreen = screen;
@@ -198,7 +199,7 @@ namespace ActionCode.UISystem
             OnScreenOpened?.Invoke(CurrentScreen);
 
             // Re-enable Menu input
-            SetInputEnable(true);
+            EnableInput();
 
             CurrentScreen.FinishOpen();
             SetOpening(false);
@@ -215,11 +216,10 @@ namespace ActionCode.UISystem
             return hasUndoableScreen;
         }
 
-        /// <summary>
-        /// Sets this entire menu input.
-        /// </summary>
-        /// <param name="isEnabled">Whether the input is enabled.</param>
-        public void SetInputEnable(bool isEnabled)
+        public void EnableInput() => SetInputEnable(true);
+        public void DisableInput() => SetInputEnable(false);
+
+        private void SetInputEnable(bool isEnabled)
         {
             canvasGroup.blocksRaycasts = isEnabled;
             EventManager.TrySendNavigationEvents(isEnabled);
@@ -231,12 +231,30 @@ namespace ActionCode.UISystem
             IsOpening = isOpening;
         }
 
-        private void CloseOpenedScreens()
+        private void CloseAnyOpenedScreens()
         {
             foreach (var screen in Screens.Values)
             {
                 if (screen.IsOpened()) screen.FinishClose();
             }
+        }
+        #endregion
+
+        #region Close Screen
+        public async Awaitable CloseCurrentScreenAsync(bool undoable = false)
+        {
+            Audio.UnbindElements();
+
+            if (CurrentScreen == null) return;
+
+            CurrentScreen.StartClose();
+            await CurrentScreen.fades.TryPlayFadeOutAnimation();
+            await globalFades.TryPlayFadeOutAnimation();
+
+            CurrentScreen.FinishClose();
+            OnScreenClosed?.Invoke(CurrentScreen);
+
+            if (undoable) undoHistory.Push(CurrentScreen);
         }
         #endregion
 
@@ -251,6 +269,9 @@ namespace ActionCode.UISystem
                 screen.Initialize(this);
                 Screens.Add(screen.GetIdentifier(), screen);
             }
+
+            // It'll be enabled when opening any screen
+            IsRaycasterEnabled = false;
         }
 
         private async void TryOpenFirstScreen()
@@ -268,11 +289,13 @@ namespace ActionCode.UISystem
             undoHistory.Clear();
             LastScreen = null;
             CurrentScreen = null;
+            IsRaycasterEnabled = false;
+
             EventManager.TrySetSelectedGameObject(null);
         }
         #endregion
 
-        public void OnCancel(UnityEngine.EventSystems.BaseEventData _)
+        public virtual void OnCancel(UnityEngine.EventSystems.BaseEventData _)
         {
             var wasLastScreenOpened = TryOpenLastScreen();
             if (wasLastScreenOpened) Audio.PlayCancellation();
