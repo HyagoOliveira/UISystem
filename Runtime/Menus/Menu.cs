@@ -268,6 +268,7 @@ namespace ActionCode.UISystem
             undoHistory.Clear();
             LastScreen = null;
             CurrentScreen = null;
+            EventManager.TrySetSelectedGameObject(null);
         }
         #endregion
 

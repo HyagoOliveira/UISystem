@@ -65,6 +65,8 @@ namespace ActionCode.UISystem
             ClearElements();
         }
 
+        public float GetSubmitionTime() => data.submition.length;
+
         private void FindElements(Transform container)
         {
             clickables = container.GetComponentsInChildren<IClickable>(includeInactive: true);
