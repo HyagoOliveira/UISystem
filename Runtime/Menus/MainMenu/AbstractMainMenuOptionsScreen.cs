@@ -50,9 +50,6 @@ namespace ActionCode.UISystem
 
         protected virtual void HandleLoadButtonClicked() => OpenCloseableScreen(loadScreen);
         protected virtual void HandleSettingsButtonClicked() => OpenCloseableScreen(optionsScreen);
-
-        protected virtual void HandleExitButtonClicked()
-        {
-        }
+        protected virtual void HandleExitButtonClicked() => ModalMenu.ShowQuitGameDialogue();
     }
 }
