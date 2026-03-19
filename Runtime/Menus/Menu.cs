@@ -101,6 +101,11 @@ namespace ActionCode.UISystem
         /// All screens available in this menu, indexed by their identifiers.
         /// </summary>
         public Dictionary<string, BaseScreen> Screens { get; private set; }
+
+        /// <summary>
+        /// The last Menu opened (can be null).
+        /// </summary>
+        public static Menu LastOpenedMenu { get; private set; }
         #endregion
 
         private readonly Stack<BaseScreen> undoHistory = new();
@@ -203,6 +208,7 @@ namespace ActionCode.UISystem
 
             CurrentScreen.FinishOpen();
             SetOpening(false);
+            LastOpenedMenu = this;
         }
 
         /// <summary>
