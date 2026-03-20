@@ -189,12 +189,22 @@ namespace ActionCode.UISystem
             LastScreen = CurrentScreen;
             CurrentScreen = screen;
 
-            CurrentScreen.StartOpen();
-            await CurrentScreen.LoadAsync();
+            try
+            {
+                // CurrentScreen virtual methods can throw an exception
+                // for any component implementing the BaseScreen
+                CurrentScreen.StartOpen();
+                await CurrentScreen.LoadAsync();
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
+
             await globalFades.TryPlayFadeInAnimation();
             await CurrentScreen.fades.TryPlayFadeInAnimation();
 
-            // EventSystem may not be loaded yet
+            // EventSystem may not be totally loaded yet
             await EventManager.WaitUntilEventSystemIsReadyAsync();
 
             // Selecting first, binding audio latter to avoid triggering events
