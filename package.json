@@ -1,7 +1,7 @@
 {
   "name": "com.actioncode.ui-system",
   "displayName": "ActionCode-UI System",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "unity": "6000.1",
   "description": "This package contains code for Unity UI (uGUI), the GameObject-based UI System.",
   "keywords": [
@@ -11,7 +11,7 @@
     "com.unity.ugui": "2.0.0",
     "com.unity.localization": "1.5.11",
     "com.actioncode.prime-tween": "1.3.51",
-    "com.actioncode.input-system": "1.8.2"
+    "com.actioncode.input-system": "1.8.3"
   },
   "license": "MIT",
   "homepage": "https://github.com/HyagoOliveira/UISystem#readme",

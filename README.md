@@ -2,13 +2,8 @@
 
 * Extension for Unity Graphic User Interface (uGUI) System.
 * Unity minimum version: **6000.1**
-* Current version: **0.1.0**
+* Current version: **0.1.1**
 * License: **MIT**
-* Dependencies:
-	- com.unity.ugui: [2.0.0](https://docs.unity3d.com/Packages/com.unity.ugui@2.0/changelog/CHANGELOG.html)
-	- com.unity.localization: [1.5.11](https://docs.unity3d.com/Packages/com.unity.localization@1.5/changelog/CHANGELOG.html#1511---2026-03-18)
-	- com.actioncode.prime-tween: [1.3.51](https://github.com/HyagoOliveira/PrimeTween/releases/tag/1.3.51)
-	- com.actioncode.input-system: [1.8.2](https://github.com/HyagoOliveira/InputSystem/releases/tag/1.8.2)
 
 ## Summary
 

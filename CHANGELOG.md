@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-03-20
 ### Fixed
 - Handling errors when loading Screens
 
@@ -19,5 +20,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - gitignore
 - Initial commit
 
-[Unreleased]: https://github.com/HyagoOliveira/UISystem/compare/0.1.0...main
+[Unreleased]: https://github.com/HyagoOliveira/UISystem/compare/0.1.1...main
+[0.1.1]: https://github.com/HyagoOliveira/UISystem/tree/0.1.1/
 [0.1.0]: https://github.com/HyagoOliveira/UISystem/tree/0.1.0/
