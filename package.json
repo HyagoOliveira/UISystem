@@ -1,8 +1,8 @@
 {
   "name": "com.actioncode.ui-system",
   "displayName": "ActionCode-UI System",
-  "version": "0.1.1",
-  "unity": "6000.1",
+  "version": "0.2.0",
+  "unity": "6000.3",
   "description": "This package contains code for Unity UI (uGUI), the GameObject-based UI System.",
   "keywords": [
     "uGUI"
