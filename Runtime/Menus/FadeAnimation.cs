@@ -1,5 +1,5 @@
-using PrimeTween;
 using UnityEngine;
+using ActionCode.AnimationSystem;
 
 namespace ActionCode.UISystem
 {

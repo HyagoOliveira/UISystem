@@ -51,7 +51,7 @@ namespace ActionCode.UISystem
         public async readonly void UpdateLocalization(Label label)
         {
             var hasLocalization = await HasLocalization();
-            if (hasLocalization) label.localization.StringReference.SetReference(tableId, entryId);
+            if (hasLocalization) label.UpdateLocalization(tableId, entryId);
             else label.Text = fallback;
         }
 

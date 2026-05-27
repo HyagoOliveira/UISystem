@@ -1,6 +1,6 @@
-using PrimeTween;
 using UnityEngine;
 using ActionCode.InputSystem;
+using ActionCode.AnimationSystem;
 
 namespace ActionCode.UISystem
 {

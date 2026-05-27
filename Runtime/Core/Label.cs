@@ -10,23 +10,40 @@ namespace ActionCode.UISystem
     [DisallowMultipleComponent]
     public sealed class Label : AbstractTransition
     {
-        public TMP_Text target;
-        public LocalizeStringEvent localization;
+        [SerializeField, Tooltip("The local Text component.")]
+        private TMP_Text target;
+        [SerializeField, Tooltip("[Optional] The local Localization component.")]
+        private LocalizeStringEvent localization;
+
+        [Space]
+        [SerializeField, Tooltip("Whether to enable the local Target Auto Size.")]
+        private bool useAutoSize = true;
 
         /// <summary>
         /// The label text.
         /// </summary>
         public string Text
         {
-            get => target.text;
-            set => target.text = value;
+            get => Target.text;
+            set => Target.text = value;
+        }
+
+        /// <summary>
+        /// The local Text component.
+        /// </summary>
+        public TMP_Text Target
+        {
+            get => target;
+            set => target = value;
         }
 
         private void Reset() => Setup();
-        private void Start() => SetupTarget();
+        private void Start() => TrySetupTargetAutosize();
 
-        private void SetupTarget()
+        private void TrySetupTargetAutosize()
         {
+            if (!useAutoSize) return;
+
             // Settings this values only in runtime to avoid
             // Prefabs getting values changes in Editor
             target.enableAutoSizing = true;
@@ -36,8 +53,9 @@ namespace ActionCode.UISystem
 
         private void Setup()
         {
-            localization = GetComponent<LocalizeStringEvent>();
             target = GetComponent<TMP_Text>();
+            localization = GetComponent<LocalizeStringEvent>();
+
             if (target == null) return;
 
             target.color = Color.white;
@@ -47,6 +65,26 @@ namespace ActionCode.UISystem
         public override void Transit(SelectionState state, bool _)
         {
             if (data) target.color = data.GetColor(state);
+        }
+
+        /// <summary>
+        /// Updates the local Localization component using the given table and name key.
+        /// </summary>
+        /// <param name="table">The name of the Localized table.</param>
+        /// <param name="key">The name of the Localized entry inside table.</param>
+        public void UpdateLocalization(string table, string key) =>
+            localization.StringReference.SetReference(table, key);
+
+        public void UpdateLocalization(UnityEngine.Localization.LocalizedString reference) =>
+            localization.StringReference = reference;
+
+        /// <summary>
+        /// Clears the local Localization component, seting the label text to empty.
+        /// </summary>
+        public void ClearLocalization()
+        {
+            localization.StringReference = new UnityEngine.Localization.LocalizedString();
+            localization.OnUpdateString?.Invoke(string.Empty); // Clear the Text string
         }
     }
 }

@@ -31,17 +31,14 @@ namespace ActionCode.UISystem
         /// </summary>
         public event Action OnUnselected;
 
+#if UNITY_EDITOR
         protected override void Reset()
         {
             base.Reset();
-
-            transition = Transition.None;
-            Label = GetComponentInChildren<Label>();
-            targetGraphic = GetComponentInChildren<Graphic>();
-            Transitions = GetComponentsInChildren<AbstractTransition>();
-
+            ResetFields();
             CheckForTargetGraphic();
         }
+#endif
 
         public bool IsAvailable() => IsActive() && IsInteractable();
 
@@ -105,6 +102,14 @@ namespace ActionCode.UISystem
         protected virtual void HandleSelection() => OnSelected?.Invoke();
         protected virtual void HandleUnselection() => OnUnselected?.Invoke();
 
+        protected virtual void ResetFields()
+        {
+            transition = Transition.None;
+            Label = GetComponentInChildren<Label>();
+            targetGraphic = GetComponentInChildren<Graphic>();
+            Transitions = GetComponentsInChildren<AbstractTransition>();
+        }
+
         private void CheckForTargetGraphic()
         {
             if (targetGraphic)
@@ -116,7 +121,9 @@ namespace ActionCode.UISystem
             Debug.LogWarning($"{gameObject.name} must contain any implementation of a Graphic component in order to work.");
         }
 
-        // Converts UnityUI.SelectionState into ActionCode.UISystem.SelectionState
+        protected static bool IsRunning() => Application.isPlaying;
+
+        // Converts UnityUI.SelectionState into OneM.UISystem.SelectionState
         // since Unity's SelectionState is a protected enum
         private static UISystem.SelectionState GetSelectionState(SelectionState state) => state switch
         {
