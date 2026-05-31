@@ -10,7 +10,7 @@
   "dependencies": {
     "com.actioncode.animation-system": "0.2.0",
     "com.actioncode.input-system": "1.8.3",
-    "com.actioncode.screen-fade-system": "1.0.0",
+    "com.actioncode.screen-fade-system": "1.0.1",
     "com.unity.ugui": "2.0.0",
     "com.unity.localization": "1.5.11"
   },

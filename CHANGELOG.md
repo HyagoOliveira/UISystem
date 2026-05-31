@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+###
+- GlobalScreenFade In/Out Animation components
+
 ### Changed
 - Refact AbstractMainMenuOptionsScreen into normal class
 
