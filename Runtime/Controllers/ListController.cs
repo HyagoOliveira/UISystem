@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections.Generic;
 
 namespace ActionCode.UISystem
@@ -9,7 +8,6 @@ namespace ActionCode.UISystem
     /// Use it along side with ScrollRect.
     /// </summary>
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(ScrollRect))]
     public sealed class ListController : MonoBehaviour
     {
         [Tooltip("The item that will be instantiated inside this list.")]

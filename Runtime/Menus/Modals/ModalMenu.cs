@@ -10,6 +10,7 @@ namespace ActionCode.UISystem
     [DisallowMultipleComponent]
     public sealed class ModalMenu : Menu
     {
+        [SerializeField] private GameObject background;
         [SerializeField] private DialogueModal dialogue;
 
         public static bool HasAnyOpened { get; private set; }
@@ -103,6 +104,8 @@ namespace ActionCode.UISystem
         {
             Instance.DisableInput();
             Instance.Audio.PlayModalClose();
+            Instance.background.SetActive(false);
+
             await Instance.CloseCurrentScreenAsync();
             HasAnyOpened = false;
 
@@ -163,7 +166,9 @@ namespace ActionCode.UISystem
         )
         {
             var modal = Instance.dialogue;
+            var background = Instance.background;
 
+            background.SetActive(true);
             modal.Show(message, title, onConfirm, onCancel);
             modal.SetCancelButtonVisibility(showCancelButton);
 
