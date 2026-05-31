@@ -126,6 +126,7 @@ namespace ActionCode.UISystem
         {
             //IsQuitting = true;
             await CloseAsync();
+            await GlobalScreenFadeOutAnimation.TryFadeOutAsync();
             QuitGame();
         }
 

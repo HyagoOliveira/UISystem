@@ -10,7 +10,9 @@ namespace ActionCode.UISystem
     [DisallowMultipleComponent]
     public sealed class GlobalScreenFadeOutAnimation : AbstractAnimation
     {
-        protected override async Awaitable PlayAsync(CancellationToken token)
+        protected override async Awaitable PlayAsync(CancellationToken _) => await TryFadeOutAsync();
+
+        public static async Awaitable TryFadeOutAsync()
         {
             var fader = GlobalScreenFadeInAnimation.GetGlobalFader();
             if (fader) await fader.FadeOutAsync();
