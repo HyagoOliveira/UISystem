@@ -57,6 +57,12 @@ namespace ActionCode.UISystem
         public void OpenCloseableScreen(string identifier) => _ = Menu.OpenScreenAsync(identifier, undoable: true);
 
         /// <summary>
+        /// <inheritdoc cref="Menu.OpenMenu(string)"/>
+        /// </summary>
+        /// <param name="identifier"><inheritdoc cref="Menu.OpenMenu(string)" path="/param[@name='identifier']"/></param>
+        public void OpenMenu(string identifier) => _ = Menu.OpenMenu(identifier);
+
+        /// <summary>
         /// Executed when stating to open this screen, before any fade in animations start to play.
         /// </summary>
         public virtual void StartOpen()

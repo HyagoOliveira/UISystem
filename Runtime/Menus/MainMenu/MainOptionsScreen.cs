@@ -5,14 +5,14 @@ namespace ActionCode.UISystem
     [DisallowMultipleComponent]
     public sealed class MainOptionsScreen : BaseScreen
     {
+        [Space]
+        public string startScreen = "LoadScreen";
+        public string optionsMenu = "OptionsMenu";
+
         [Header("Buttons")]
         [SerializeField] private ActionButton startButton;
         [SerializeField] private ActionButton optionsButton;
         [SerializeField] private ActionButton exitButton;
-
-        [Header("Screens")]
-        public string startScreen = "LoadScreen";
-        public string optionsScreen = "OptionsScreen";
 
         protected override void SubscribeEvents()
         {
@@ -33,7 +33,7 @@ namespace ActionCode.UISystem
         }
 
         private void HandleStartButtonClicked() => OpenCloseableScreen(startScreen);
-        private void HandleOptionsButtonClicked() => OpenCloseableScreen(optionsScreen);
+        private void HandleOptionsButtonClicked() => OpenMenu(optionsMenu);
         private void HandleExitButtonClicked() => ModalMenu.ShowQuitGameDialogue();
     }
 }

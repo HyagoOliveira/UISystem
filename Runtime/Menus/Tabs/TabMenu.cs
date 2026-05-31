@@ -24,36 +24,41 @@ namespace ActionCode.UISystem
             UnsubscribeEvents();
         }
 
-        public void MoveLeft() => Move(-1);
-        public void MoveRight() => Move(1);
+        public void MoveLeft() => MoveToDirection(-1);
+        public void MoveRight() => MoveToDirection(1);
 
         /// <summary>
         /// Moves to the given direction.
         /// Warps to the other side if <see cref="TabHeader.isWarpAllowed"/> is enabled.
         /// </summary>
         /// <param name="direction">The direction to warp. Positive to right, negative to left.</param>
-        public void Move(int direction)
+        public void MoveToDirection(int direction)
         {
             if (direction == 0) return;
 
             var index = Header.GetMovedIndex(direction);
-            var canMove = Header.CurrentTab.Index != index;
-            if (canMove) _ = OpenScreenAsync(Content.Tabs[index]);
+            Move(index);
         }
 
-        public override async Awaitable OpenScreenAsync(string identifier, bool undoable = false)
+        public void Move(uint index)
         {
-            var isOpeningFirstTab = !IsActive;
-            await base.OpenScreenAsync(identifier, undoable);
-            var hasScreen = Screens.TryGetValue(identifier, out var screen);
-            if (hasScreen && screen is TabScreen tab) Select(tab.Index, playAudio: !isOpeningFirstTab);
+            var canMove = !IsOpening && Header.CurrentTab.Index != index;
+            if (!canMove) return;
+
+            Audio.PlayTabSelection();
+            _ = OpenScreenAsync(Content.Tabs[index]);
         }
 
-        private void Select(uint index, bool playAudio = true)
+        protected override void StartOpenCurrentScreen()
+        {
+            base.StartOpenCurrentScreen();
+            if (CurrentScreen is TabScreen tab) Select(tab.Index);
+        }
+
+        private void Select(uint index)
         {
             Header.Select(index);
             Content.Select(index);
-            if (playAudio) Audio.PlayTabSelection();
         }
 
         private void SubscribeEvents()
@@ -70,6 +75,6 @@ namespace ActionCode.UISystem
             Header.rightSwitchListener.OnActionPerformed.RemoveListener(MoveRight);
         }
 
-        private void HandleTabSwitched(uint index) => Select(index);
+        private void HandleTabSwitched(uint index) => Move(index);
     }
 }

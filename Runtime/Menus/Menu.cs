@@ -167,7 +167,7 @@ namespace ActionCode.UISystem
         /// <param name="identifier">The screen identifier.</param>
         /// <param name="undoable"><inheritdoc cref="OpenScreenAsync{T}(T, bool)" path="/param[@name='undoable']"/></param>
         /// <returns><inheritdoc cref="OpenFirstScreenAsync"/></returns>
-        public virtual async Awaitable OpenScreenAsync(string identifier, bool undoable = false)
+        public async Awaitable OpenScreenAsync(string identifier, bool undoable = false)
         {
             SetOpening(true);
             if (!IsActive) Activate();
@@ -189,6 +189,7 @@ namespace ActionCode.UISystem
 
             LastScreen = CurrentScreen;
             CurrentScreen = screen;
+            StartOpenCurrentScreen();
 
             try
             {
@@ -222,6 +223,8 @@ namespace ActionCode.UISystem
             LastOpenedMenu = this;
         }
 
+        protected virtual void StartOpenCurrentScreen() { }
+
         /// <summary>
         /// Tries to open asynchronously the last screen using the undo history.
         /// </summary>
@@ -231,6 +234,18 @@ namespace ActionCode.UISystem
             var hasUndoableScreen = undoHistory.TryPop(out var screen);
             if (hasUndoableScreen) _ = OpenScreenAsync(screen, undoable: false);
             return hasUndoableScreen;
+        }
+
+        /// <summary>
+        /// Opens the given menu, closing the current one.
+        /// </summary>
+        /// <param name="identifier">The menu identifier.</param>
+        /// <returns><inheritdoc cref="OpenScreenAsync{T}(T, bool)" path="/param[@name='undoable']"/></returns>
+        public virtual async Awaitable OpenMenu(string identifier)
+        {
+            await Close();
+            var menu = FindMenu(identifier);
+            if (menu) menu.Activate();
         }
 
         public void EnableInput() => SetInputEnable(true);
@@ -272,6 +287,26 @@ namespace ActionCode.UISystem
             OnScreenClosed?.Invoke(CurrentScreen);
 
             if (undoable) undoHistory.Push(CurrentScreen);
+        }
+
+        /// <summary>
+        /// Closes this menu.
+        /// </summary>
+        /// <returns><inheritdoc cref="OpenFirstScreenAsync"/></returns>
+        public virtual async Awaitable Close()
+        {
+            SetOpening(true);
+            IsRaycasterEnabled = true;
+
+            DisableInput();
+            await CloseCurrentScreenAsync();
+            CloseAnyOpenedScreens();
+
+            LastScreen = CurrentScreen;
+            CurrentScreen = null;
+
+            SetOpening(false);
+            SetActive(false);
         }
         #endregion
 
@@ -318,6 +353,24 @@ namespace ActionCode.UISystem
             if (wasLastScreenOpened) Audio.PlayCancellation();
 
             OnCanceled?.Invoke();
+        }
+
+        public static Menu FindMenu(string name)
+        {
+            var menus = FindObjectsByType<Menu>(
+                findObjectsInactive: FindObjectsInactive.Include,
+                sortMode: FindObjectsSortMode.None
+            );
+
+            foreach (var menu in menus)
+            {
+                if (menu.name.Equals(name))
+                {
+                    return menu;
+                }
+            }
+
+            return null;
         }
     }
 }
