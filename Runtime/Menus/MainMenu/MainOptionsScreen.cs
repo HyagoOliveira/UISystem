@@ -33,7 +33,7 @@ namespace ActionCode.UISystem
         }
 
         private void HandleStartButtonClicked() => OpenCloseableScreen(startScreen);
-        private void HandleOptionsButtonClicked() => OpenMenu(optionsMenu);
+        private void HandleOptionsButtonClicked() => Menu.OpenMenu(optionsMenu);
         private void HandleExitButtonClicked() => ModalMenu.ShowQuitGameDialogue();
     }
 }

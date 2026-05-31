@@ -83,6 +83,11 @@ namespace ActionCode.UISystem
         }
 
         /// <summary>
+        /// The menu identifier name.
+        /// </summary>
+        public string Identifier => gameObject.name;
+
+        /// <summary>
         /// The local UI Audio Handler.
         /// </summary>
         public AudioHandler Audio => audioHandler;
@@ -237,15 +242,29 @@ namespace ActionCode.UISystem
         }
 
         /// <summary>
-        /// Opens the given menu, closing the current one.
+        /// Opens the given menu, closing this current one.
         /// </summary>
         /// <param name="identifier">The menu identifier.</param>
-        /// <returns><inheritdoc cref="OpenScreenAsync{T}(T, bool)" path="/param[@name='undoable']"/></returns>
-        public virtual async Awaitable OpenMenu(string identifier)
+        public void OpenMenu(string identifier) => OpenMenu(identifier, string.Empty);
+
+        /// <summary>
+        /// <inheritdoc cref="OpenMenu(string)"/>
+        /// </summary>
+        /// <param name="identifier">The menu identifier.</param>
+        /// <param name="screenIdentifier">The screen inside the menu to open.</param>
+        public virtual async void OpenMenu(string identifier, string screenIdentifier)
         {
             await Close();
+
             var menu = FindMenu(identifier);
-            if (menu) menu.Activate();
+            var hasInvalidScreen = string.IsNullOrEmpty(screenIdentifier);
+
+            if (hasInvalidScreen) menu.Activate();
+            else
+            {
+                menu.firstScreen = null;
+                _ = menu.OpenScreenAsync(screenIdentifier);
+            }
         }
 
         public void EnableInput() => SetInputEnable(true);
@@ -354,6 +373,8 @@ namespace ActionCode.UISystem
 
             OnCanceled?.Invoke();
         }
+
+        public override string ToString() => Identifier;
 
         public static Menu FindMenu(string name)
         {
