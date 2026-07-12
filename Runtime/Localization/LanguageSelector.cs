@@ -19,7 +19,7 @@ namespace ActionCode.UISystem
         [Tooltip("Event fired when the localization is selected.")]
         public UnityEvent OnLanguageConfirmed;
 
-        private readonly List<LanguageButtonHandler> buttons = new();
+        private readonly List<LanguageButton> buttons = new();
 
         private void Reset()
         {
@@ -52,7 +52,7 @@ namespace ActionCode.UISystem
             foreach (var locale in locales)
             {
                 var item = languages.Add();
-                var button = item.GetComponent<LanguageButtonHandler>();
+                var button = item.GetComponent<LanguageButton>();
 
                 button.SetLocale(locale);
 
@@ -71,16 +71,16 @@ namespace ActionCode.UISystem
             group.alpha = isEnabled ? 1f : 0f;
         }
 
-        private void BindButton(LanguageButtonHandler button)
+        private void BindButton(LanguageButton button)
         {
-            button.OnConfirmed += HandleLanguageConfirmed;
-            button.OnSelected += HandleLanguageSelected;
+            button.OnLocaleConfirmed += HandleLanguageConfirmed;
+            button.OnLocaleSelected += HandleLanguageSelected;
         }
 
-        private void UnbindButton(LanguageButtonHandler button)
+        private void UnbindButton(LanguageButton button)
         {
-            button.OnConfirmed -= HandleLanguageConfirmed;
-            button.OnSelected -= HandleLanguageSelected;
+            button.OnLocaleConfirmed -= HandleLanguageConfirmed;
+            button.OnLocaleSelected -= HandleLanguageSelected;
         }
 
         private void HandleLanguageConfirmed(Locale locale)
