@@ -6,8 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-###
+### Added
 - GlobalScreenFade In/Out Animation components
+- Localization scripts
+- ActionSlotButton component
 
 ### Changed
 - Refact AbstractMainMenuOptionsScreen into normal class

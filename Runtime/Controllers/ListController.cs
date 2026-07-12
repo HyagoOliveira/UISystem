@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace ActionCode.UISystem
 {
@@ -23,12 +23,25 @@ namespace ActionCode.UISystem
             return instance.GetComponent<T>();
         }
 
+        public T[] Add<T>(int count) where T : Component
+        {
+            var instances = new T[count];
+            for (var i = 0; i < instances.Length; i++)
+            {
+                instances[i] = Add<T>();
+            }
+
+            return instances;
+        }
+
         public GameObject Add() => Add(itemPrefab);
 
         public GameObject Add(GameObject prefab)
         {
             var item = Instantiate(prefab);
             item.transform.SetParent(itemContainer, worldPositionStays: false);
+
+            item.name = $"{prefab.name}_{items.Count:D2}";
 
             items.Add(item);
 

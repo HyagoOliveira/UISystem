@@ -16,8 +16,8 @@ namespace ActionCode.UISystem
         private LocalizeStringEvent localization;
 
         [Space]
-        [SerializeField, Tooltip("Whether to enable the local Target Auto Size.")]
-        private bool useAutoSize = true;
+        [Tooltip("Whether to enable the local Target Auto Size.")]
+        public bool useAutoSize = true;
 
         /// <summary>
         /// The label text.
@@ -36,6 +36,8 @@ namespace ActionCode.UISystem
             get => target;
             set => target = value;
         }
+
+        public LocalizeStringEvent Localization => localization;
 
         private void Reset() => Setup();
         private void Start() => TrySetupTargetAutosize();
@@ -67,24 +69,26 @@ namespace ActionCode.UISystem
             if (data) target.color = data.GetColor(state);
         }
 
+        #region LOCALIZATION
         /// <summary>
         /// Updates the local Localization component using the given table and name key.
         /// </summary>
         /// <param name="table">The name of the Localized table.</param>
         /// <param name="key">The name of the Localized entry inside table.</param>
         public void UpdateLocalization(string table, string key) =>
-            localization.StringReference.SetReference(table, key);
+            Localization.StringReference.SetReference(table, key);
 
         public void UpdateLocalization(UnityEngine.Localization.LocalizedString reference) =>
-            localization.StringReference = reference;
+            Localization.StringReference = reference;
 
         /// <summary>
         /// Clears the local Localization component, seting the label text to empty.
         /// </summary>
         public void ClearLocalization()
         {
-            localization.StringReference = new UnityEngine.Localization.LocalizedString();
-            localization.OnUpdateString?.Invoke(string.Empty); // Clear the Text string
+            Localization.StringReference = new UnityEngine.Localization.LocalizedString();
+            Localization.OnUpdateString?.Invoke(string.Empty); // Clear the Text string
         }
+        #endregion
     }
 }

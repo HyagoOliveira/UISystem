@@ -48,10 +48,13 @@ namespace ActionCode.UISystem
             StartCoroutine(OnFinishSubmit());
         }
 
-        public virtual void Press()
+        public void Press()
         {
-            if (!IsAvailable()) return;
+            if (IsAvailable()) HandleClicked();
+        }
 
+        protected virtual void HandleClicked()
+        {
             onClicked?.Invoke();
             OnClicked?.Invoke();
         }
