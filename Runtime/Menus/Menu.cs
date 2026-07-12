@@ -379,8 +379,7 @@ namespace ActionCode.UISystem
         public static Menu FindMenu(string name)
         {
             var menus = FindObjectsByType<Menu>(
-                findObjectsInactive: FindObjectsInactive.Include,
-                sortMode: FindObjectsSortMode.None
+                findObjectsInactive: FindObjectsInactive.Include
             );
 
             foreach (var menu in menus)
