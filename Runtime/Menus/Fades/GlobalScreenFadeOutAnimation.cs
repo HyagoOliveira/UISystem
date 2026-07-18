@@ -1,6 +1,6 @@
-using UnityEngine;
-using System.Threading;
 using ActionCode.AnimationSystem;
+using System.Threading;
+using UnityEngine;
 
 namespace ActionCode.UISystem
 {
@@ -10,7 +10,7 @@ namespace ActionCode.UISystem
     [DisallowMultipleComponent]
     public sealed class GlobalScreenFadeOutAnimation : AbstractAnimation
     {
-        protected override async Awaitable PlayAsync(CancellationToken _) => await TryFadeOutAsync();
+        protected override async Awaitable UpdateAnimationAsync(CancellationToken _) => await TryFadeOutAsync();
 
         public static async Awaitable TryFadeOutAsync()
         {
