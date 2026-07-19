@@ -4,6 +4,14 @@ using UnityEngine;
 
 namespace ActionCode.UISystem
 {
+    /// <summary>
+    /// Abstract button used to hold a generic data. 
+    /// You can subscribe to a Clicked and Selected events.
+    /// </summary>
+    /// <remarks>
+    /// Implement this class when creating slot buttons to Load game, show characters information etc.
+    /// </remarks>
+    /// <typeparam name="T"></typeparam>
     [DisallowMultipleComponent]
     public abstract class AbstractActionDataButton<T> : ActionButton where T : class
     {
@@ -12,6 +20,7 @@ namespace ActionCode.UISystem
         public event Action<T> OnDataClicked;
         public event Action<T> OnDataSelected;
 
+        public bool HasData() => Data != null;
         public void SetData(T data) => Data = data;
 
         /// <summary>
