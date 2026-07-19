@@ -200,8 +200,8 @@ namespace ActionCode.UISystem
             {
                 // CurrentScreen virtual methods can throw an exception
                 // for any component implementing the BaseScreen
-                CurrentScreen.StartOpen();
                 await CurrentScreen.LoadAsync();
+                CurrentScreen.StartOpen();
             }
             catch (Exception e)
             {
