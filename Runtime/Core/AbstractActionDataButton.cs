@@ -1,4 +1,3 @@
-using ActionCode.LocalizationSystem;
 using System;
 using UnityEngine;
 
@@ -23,17 +22,11 @@ namespace ActionCode.UISystem
         public bool HasData() => Data != null;
         public void SetData(T data) => Data = data;
 
-        /// <summary>
-        /// <inheritdoc cref="LocalizedStringExtension.UpdateDynamicLocalization(UnityEngine.Localization.LocalizedString, string, string)"/>
-        /// </summary>
-        /// <param name="variableName">
-        /// <inheritdoc cref="LocalizedStringExtension.UpdateDynamicLocalization(UnityEngine.Localization.LocalizedString, string, string)" path="/param[@name='variableName']"/>
-        /// </param>
-        /// <param name="value">
-        /// <inheritdoc cref="LocalizedStringExtension.UpdateDynamicLocalization(UnityEngine.Localization.LocalizedString, string, string)" path="/param[@name='value']"/>
-        /// </param>
-        public void UpdateDynamicLocalization(string variableName, string value) =>
-            Label.Localization.StringReference.UpdateDynamicLocalization(variableName, value);
+        public override string ToString()
+        {
+            var data = HasData() ? Data.ToString() : "No Data";
+            return $"{gameObject.name} ({data})";
+        }
 
         protected override void HandleClicked()
         {

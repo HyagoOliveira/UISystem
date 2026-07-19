@@ -1,4 +1,3 @@
-using ActionCode.LocalizationSystem;
 using System;
 using UnityEngine;
 
@@ -17,12 +16,7 @@ namespace ActionCode.UISystem
         public event Action<uint> OnSlotSelected;
 
         public void SetSlot(uint slot) => Slot = slot;
-
-        public void SetSlotAndLocalization(uint slot, string localizationIndexName)
-        {
-            SetSlot(slot);
-            Label.Localization.StringReference.UpdateDynamicLocalization(localizationIndexName, Slot + 1);
-        }
+        public override string ToString() => $"{gameObject.name} ({Slot})";
 
         protected override void HandleClicked()
         {

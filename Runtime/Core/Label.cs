@@ -38,6 +38,7 @@ namespace ActionCode.UISystem
         }
 
         public LocalizeStringEvent Localization => localization;
+        public UnityEngine.Localization.LocalizedString LocalizedString => Localization.StringReference;
 
         private void Reset() => Setup();
         private void Start() => TrySetupTargetAutosize();
