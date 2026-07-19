@@ -15,12 +15,20 @@ namespace ActionCode.UISystem
     public abstract class AbstractActionDataButton<T> : ActionButton where T : class
     {
         public T Data { get; private set; }
+        public int Slot { get; private set; }
 
-        public event Action<T> OnDataClicked;
-        public event Action<T> OnDataSelected;
+        public event Action<T, int> OnDataClicked;
+        public event Action<T, int> OnDataSelected;
 
         public bool HasData() => Data != null;
         public void SetData(T data) => Data = data;
+        public void SetSlot(int slot) => Slot = slot;
+
+        public virtual void SetDataAndSlot(T data, int slot)
+        {
+            SetData(data);
+            SetSlot(slot);
+        }
 
         public override string ToString()
         {
@@ -31,13 +39,13 @@ namespace ActionCode.UISystem
         protected override void HandleClicked()
         {
             base.HandleClicked();
-            OnDataClicked?.Invoke(Data);
+            OnDataClicked?.Invoke(Data, Slot);
         }
 
         protected override void HandleSelection()
         {
             base.HandleSelection();
-            OnDataSelected?.Invoke(Data);
+            OnDataSelected?.Invoke(Data, Slot);
         }
     }
 }
