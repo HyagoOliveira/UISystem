@@ -12,7 +12,7 @@
     "com.actioncode.input-system": "1.8.3",
     "com.actioncode.screen-fade-system": "1.0.1",
     "com.unity.ugui": "2.0.0",
-    "com.unity.localization": "1.5.11"
+    "com.unity.localization": "1.5.12"
   },
   "license": "MIT",
   "homepage": "https://github.com/HyagoOliveira/UISystem#readme",
