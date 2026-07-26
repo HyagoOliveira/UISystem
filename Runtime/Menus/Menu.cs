@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -79,7 +80,16 @@ namespace ActionCode.UISystem
         public bool IsRaycasterEnabled
         {
             get => raycaster.enabled;
-            private set => raycaster.enabled = value;
+            set => raycaster.enabled = value;
+        }
+
+        /// <summary>
+        /// Whether this Menu Canvas Group is enabled. 
+        /// </summary>
+        public bool Interactable
+        {
+            get => canvasGroup.interactable;
+            set => canvasGroup.interactable = value;
         }
 
         /// <summary>
@@ -113,6 +123,7 @@ namespace ActionCode.UISystem
         public static Menu LastOpenedMenu { get; private set; }
         #endregion
 
+        private GameObject lastSelectedGO;
         private readonly Stack<BaseScreen> undoHistory = new();
 
         protected virtual void Reset()
@@ -142,6 +153,24 @@ namespace ActionCode.UISystem
         /// </summary>
         /// <param name="isActivated">Whether to activate this menu.</param>
         public void SetActive(bool isActivated) => gameObject.SetActive(isActivated);
+
+        /// <summary>
+        /// Pauses the Menu by disabling interactivity.
+        /// </summary>
+        public void Pause()
+        {
+            Interactable = false;
+            lastSelectedGO = EventManager.GetSelectedGameObject();
+        }
+
+        /// <summary>
+        /// Resumes the Menu by enabling interactivity and select the previous selected input.
+        /// </summary>
+        public void Resume()
+        {
+            Interactable = true;
+            if (lastSelectedGO) EventManager.TrySetSelectedGameObject(lastSelectedGO);
+        }
         #endregion
 
         #region Open Screen
@@ -391,6 +420,12 @@ namespace ActionCode.UISystem
             }
 
             return null;
+        }
+
+        public static Menu GetFirstOpenedMenu()
+        {
+            var menus = FindObjectsByType<Menu>(FindObjectsInactive.Exclude);
+            return menus.FirstOrDefault(menu => menu.IsOpened);
         }
     }
 }
