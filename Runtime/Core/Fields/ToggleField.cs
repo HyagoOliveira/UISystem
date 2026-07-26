@@ -31,7 +31,7 @@ namespace ActionCode.UISystem
             if (IsRunning())
             {
                 audioHandler = GetComponentInParent<AudioHandler>();
-                if (initialValue) SetValueWithoutNotify(initialValue);
+                SetValueWithoutNotify(initialValue);
             }
         }
 

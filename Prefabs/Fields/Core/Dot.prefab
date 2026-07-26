@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9046553900995055178}
   - component: {fileID: 2842529975380534821}
   m_Layer: 0
-  m_Name: DropdownField_Dot
+  m_Name: Dot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
