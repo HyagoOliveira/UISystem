@@ -1,6 +1,6 @@
+using ActionCode.InputSystem;
 using System;
 using UnityEngine;
-using ActionCode.InputSystem;
 
 namespace ActionCode.UISystem
 {
@@ -9,6 +9,8 @@ namespace ActionCode.UISystem
     {
         [Tooltip("If enabled, moving a Tab will warp from one side to another.")]
         public bool isWarpAllowed = true;
+
+        [Space]
         public ActionPerformedListener leftSwitchListener;
         public ActionPerformedListener rightSwitchListener;
 
@@ -20,6 +22,19 @@ namespace ActionCode.UISystem
         private void Awake() => InitializeTabs();
         private void OnEnable() => SubscribeEvents();
         private void OnDisable() => UnsubscribeEvents();
+
+        public void SwitchTab(uint index) => OnTabSwitched?.Invoke(index);
+        public void MoveLeft() => Move(-1);
+        public void MoveRight() => Move(1);
+
+        public void Move(int direction)
+        {
+            if (direction == 0) return;
+
+            var index = GetMovedIndex(direction);
+            var canMove = CurrentTab.Index != index;
+            if (canMove) SwitchTab(index);
+        }
 
         private void InitializeTabs()
         {
@@ -64,6 +79,9 @@ namespace ActionCode.UISystem
             {
                 tab.OnSwitched += HandleTabSwitched;
             }
+
+            leftSwitchListener.OnActionPerformed.AddListener(HandleLeftSwitchPerformed);
+            rightSwitchListener.OnActionPerformed.AddListener(HandleRightSwitchPerformed);
         }
 
         private void UnsubscribeEvents()
@@ -72,8 +90,13 @@ namespace ActionCode.UISystem
             {
                 tab.OnSwitched -= HandleTabSwitched;
             }
+
+            leftSwitchListener.OnActionPerformed.RemoveListener(HandleLeftSwitchPerformed);
+            rightSwitchListener.OnActionPerformed.RemoveListener(HandleRightSwitchPerformed);
         }
 
-        private void HandleTabSwitched(uint index) => OnTabSwitched?.Invoke(index);
+        private void HandleLeftSwitchPerformed() => MoveLeft();
+        private void HandleRightSwitchPerformed() => MoveRight();
+        private void HandleTabSwitched(uint index) => SwitchTab(index);
     }
 }

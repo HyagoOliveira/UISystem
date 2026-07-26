@@ -6,6 +6,10 @@ namespace ActionCode.UISystem
     public sealed class TabMenu : Menu
     {
         [Space]
+        [Tooltip("If true, the menu will be activated using the last opened Tab.")]
+        public bool useLastTab;
+
+        [Space]
         [SerializeField] private TabHeader header;
         [SerializeField] private TabContent content;
 
@@ -31,57 +35,28 @@ namespace ActionCode.UISystem
             UnsubscribeEvents();
         }
 
-        public void MoveLeft() => MoveToDirection(-1);
-        public void MoveRight() => MoveToDirection(1);
-
-        /// <summary>
-        /// Moves to the given direction.
-        /// Warps to the other side if <see cref="TabHeader.isWarpAllowed"/> is enabled.
-        /// </summary>
-        /// <param name="direction">The direction to warp. Positive to right, negative to left.</param>
-        public void MoveToDirection(int direction)
+        public override async Awaitable OpenScreenAsync(string identifier, bool undoable = false)
         {
-            if (direction == 0) return;
+            var isOpeningFirstTab = !IsOpened;
+            await base.OpenScreenAsync(identifier, undoable);
 
-            var index = Header.GetMovedIndex(direction);
-            Move(index);
+            var hasScreen = Screens.TryGetValue(identifier, out var screen);
+            if (hasScreen && screen is TabScreen tab)
+            {
+                if (useLastTab) firstScreen = screen;
+                Select(tab.Index, playAudio: !isOpeningFirstTab);
+            }
         }
 
-        public void Move(uint index)
-        {
-            var canMove = !IsOpening && Header.CurrentTab.Index != index;
-            if (!canMove) return;
-
-            Audio.PlayTabSelection();
-            _ = OpenScreenAsync(Content.Tabs[index]);
-        }
-
-        protected override void StartOpenCurrentScreen()
-        {
-            base.StartOpenCurrentScreen();
-            if (CurrentScreen is TabScreen tab) Select(tab.Index);
-        }
-
-        private void Select(uint index)
+        private void Select(uint index, bool playAudio = true)
         {
             Header.Select(index);
             Content.Select(index);
+            if (playAudio) Audio.PlayTabSelection();
         }
 
-        private void SubscribeEvents()
-        {
-            Header.OnTabSwitched += HandleTabSwitched;
-            Header.leftSwitchListener.OnActionPerformed.AddListener(MoveLeft);
-            Header.rightSwitchListener.OnActionPerformed.AddListener(MoveRight);
-        }
-
-        private void UnsubscribeEvents()
-        {
-            Header.OnTabSwitched -= HandleTabSwitched;
-            Header.leftSwitchListener.OnActionPerformed.RemoveListener(MoveLeft);
-            Header.rightSwitchListener.OnActionPerformed.RemoveListener(MoveRight);
-        }
-
-        private void HandleTabSwitched(uint index) => Move(index);
+        private void SubscribeEvents() => Header.OnTabSwitched += HandleTabSwitched;
+        private void UnsubscribeEvents() => Header.OnTabSwitched -= HandleTabSwitched;
+        private void HandleTabSwitched(uint index) => _ = OpenScreenAsync(Content.Tabs[index]);
     }
 }

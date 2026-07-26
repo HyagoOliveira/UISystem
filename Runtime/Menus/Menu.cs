@@ -201,7 +201,7 @@ namespace ActionCode.UISystem
         /// <param name="identifier">The screen identifier.</param>
         /// <param name="undoable"><inheritdoc cref="OpenScreenAsync{T}(T, bool)" path="/param[@name='undoable']"/></param>
         /// <returns><inheritdoc cref="OpenFirstScreenAsync"/></returns>
-        public async Awaitable OpenScreenAsync(string identifier, bool undoable = false)
+        public virtual async Awaitable OpenScreenAsync(string identifier, bool undoable = false)
         {
             SetOpening(true);
             if (!IsActive) Activate();
@@ -218,24 +218,20 @@ namespace ActionCode.UISystem
             // Disable the entire menu input while opening Screen
             DisableInput();
 
+            LastScreen = CurrentScreen;
             await CloseCurrentScreenAsync(undoable);
             CloseAnyOpenedScreens();
 
-            LastScreen = CurrentScreen;
             CurrentScreen = screen;
-            StartOpenCurrentScreen();
 
             try
             {
                 // CurrentScreen virtual methods can throw an exception
                 // for any component implementing the BaseScreen
-                await CurrentScreen.LoadAsync();
                 CurrentScreen.StartOpen();
+                await CurrentScreen.LoadAsync();
             }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-            }
+            catch (Exception e) { Debug.LogException(e); }
 
             await globalFades.TryPlayFadeInAnimation();
             await CurrentScreen.fades.TryPlayFadeInAnimation();
