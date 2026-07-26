@@ -73,14 +73,14 @@ namespace ActionCode.UISystem
 
         private void BindButton(LanguageButton button)
         {
-            button.OnLocaleConfirmed += HandleLanguageConfirmed;
             button.OnLocaleSelected += HandleLanguageSelected;
+            button.OnLocaleConfirmed += HandleLanguageConfirmed;
         }
 
         private void UnbindButton(LanguageButton button)
         {
-            button.OnLocaleConfirmed -= HandleLanguageConfirmed;
             button.OnLocaleSelected -= HandleLanguageSelected;
+            button.OnLocaleConfirmed -= HandleLanguageConfirmed;
         }
 
         private void HandleLanguageConfirmed(Locale locale)
