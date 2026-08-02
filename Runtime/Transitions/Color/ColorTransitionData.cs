@@ -9,35 +9,36 @@ namespace ActionCode.UISystem
     public sealed class ColorTransitionData : ScriptableObject
     {
         [Tooltip("The normal Color of an object.")]
-        public Color NormalColor;
+        public Color Normal;
         [Tooltip("The Color when an object is highlighted.")]
-        public Color HighlightedColor;
+        public Color Highlighted;
         [Tooltip("The Color when an object is selected.")]
-        public Color SelectedColor;
+        public Color Selected;
         [Tooltip("The Color when an object is pressed.")]
-        public Color PressedColor;
+        public Color Pressed;
         [Tooltip("The Color when an object is disabled.")]
-        public Color DisabledColor;
+        public Color Disabled;
+
 
         private void Reset() => SetColors(Color.white);
 
         public void SetColors(Color baseColor)
         {
-            NormalColor = baseColor;
-            HighlightedColor = baseColor;
-            SelectedColor = baseColor;
-            PressedColor = baseColor;
-            DisabledColor = baseColor;
+            Normal = baseColor;
+            Highlighted = baseColor;
+            Selected = baseColor;
+            Pressed = baseColor;
+            Disabled = baseColor;
         }
 
         public Color GetColor(SelectionState state) => state switch
         {
-            SelectionState.Normal => NormalColor,
-            SelectionState.Highlighted => HighlightedColor,
-            SelectionState.Pressed => PressedColor,
-            SelectionState.Selected => SelectedColor,
-            SelectionState.Disabled => DisabledColor,
-            _ => NormalColor
+            SelectionState.Normal => Normal,
+            SelectionState.Highlighted => Highlighted,
+            SelectionState.Pressed => Pressed,
+            SelectionState.Selected => Selected,
+            SelectionState.Disabled => Disabled,
+            _ => Normal
         };
     }
 }

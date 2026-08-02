@@ -13,7 +13,12 @@ MonoBehaviour:
   m_Name: ActionCode-Color_Background
   m_EditorClassIdentifier: ActionCode.UISystem::ActionCode.UISystem.SelectableTransitionData
   NormalColor: {r: 0, g: 0, b: 0, a: 0}
+  Normal: {r: 0, g: 0, b: 0, a: 0}
   HighlightedColor: {r: 1, g: 1, b: 0.28627452, a: 1}
+  Highlighted: {r: 1, g: 1, b: 0.28627452, a: 1}
   SelectedColor: {r: 1, g: 1, b: 0, a: 1}
+  Selected: {r: 1, g: 1, b: 0, a: 1}
   PressedColor: {r: 0.6603774, g: 0.6603774, b: 0, a: 1.04}
+  Pressed: {r: 0.6603774, g: 0.6603774, b: 0, a: 1.04}
   DisabledColor: {r: 0, g: 0, b: 0, a: 0}
+  Disabled: {r: 0, g: 0, b: 0, a: 0}

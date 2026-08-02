@@ -13,7 +13,12 @@ MonoBehaviour:
   m_Name: ActionCode-Color_Tab_Header
   m_EditorClassIdentifier: ActionCode.UISystem::ActionCode.UISystem.SelectableTransitionData
   NormalColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
+  Normal: {r: 0.58431375, g: 0.58431375, b: 0.58431375, a: 1}
   HighlightedColor: {r: 1, g: 1, b: 0.28627452, a: 1}
+  Highlighted: {r: 1, g: 1, b: 0.28627452, a: 1}
   SelectedColor: {r: 1, g: 1, b: 0, a: 1}
+  Selected: {r: 1, g: 1, b: 0, a: 1}
   PressedColor: {r: 0.6603774, g: 0.6603774, b: 0, a: 1.04}
+  Pressed: {r: 0.6603774, g: 0.6603774, b: 0, a: 1.04}
   DisabledColor: {r: 0.24528301, g: 0.24528301, b: 0.24528301, a: 1}
+  Disabled: {r: 0.24705882, g: 0.24705882, b: 0.24705882, a: 1}
