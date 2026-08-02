@@ -10,6 +10,8 @@ namespace ActionCode.UISystem
     [DisallowMultipleComponent]
     public sealed class Label : AbstractTransition
     {
+        [Tooltip("The data used to transit the UI state.")]
+        [SerializeField] private ColorTransitionData data;
         [SerializeField, Tooltip("The local Text component.")]
         private TMP_Text target;
         [SerializeField, Tooltip("[Optional] The local Localization component.")]

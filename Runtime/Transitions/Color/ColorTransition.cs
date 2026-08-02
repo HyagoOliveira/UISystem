@@ -10,6 +10,8 @@ namespace ActionCode.UISystem
     [DisallowMultipleComponent]
     public sealed class ColorTransition : AbstractTransition
     {
+        [Tooltip("The data used to transit the UI state.")]
+        [SerializeField] private ColorTransitionData data;
         [SerializeField, Tooltip("The target graphic to change color.")]
         private Graphic target;
         [SerializeField, Min(0), Tooltip("The color change fade duration.")]

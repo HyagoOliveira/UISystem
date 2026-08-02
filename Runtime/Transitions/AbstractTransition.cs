@@ -7,9 +7,6 @@ namespace ActionCode.UISystem
     /// </summary>
     public abstract class AbstractTransition : MonoBehaviour
     {
-        [Tooltip("The data used to transit the UI state.")]
-        [SerializeField] protected SelectableTransitionData data;
-
         public abstract void Transit(SelectionState state, bool instant);
     }
 }

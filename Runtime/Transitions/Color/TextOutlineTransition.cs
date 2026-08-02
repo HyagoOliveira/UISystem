@@ -9,6 +9,8 @@ namespace ActionCode.UISystem
     [DisallowMultipleComponent]
     public sealed class TextOutlineTransition : AbstractTransition
     {
+        [Tooltip("The data used to transit the UI state.")]
+        [SerializeField] private ColorTransitionData data;
         [SerializeField, Tooltip("The target graphic to change color.")]
         private TMP_Text target;
         [SerializeField, Min(0f)] private float outlineWidth = 0.2f;

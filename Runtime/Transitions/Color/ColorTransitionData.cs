@@ -5,10 +5,9 @@ namespace ActionCode.UISystem
     /// <summary>
     /// Color Data container for Selectable UI components.
     /// </summary>
-    [CreateAssetMenu(fileName = "SelectableTransitionData", menuName = "ActionCode/UI System/Selectable Transition Data", order = 110)]
-    public sealed class SelectableTransitionData : ScriptableObject
+    [CreateAssetMenu(fileName = "ColorTransitionData", menuName = "ActionCode/UI System/Color Transition Data", order = 110)]
+    public sealed class ColorTransitionData : ScriptableObject
     {
-        [Header("Colors")]
         [Tooltip("The normal Color of an object.")]
         public Color NormalColor;
         [Tooltip("The Color when an object is highlighted.")]
