@@ -23,6 +23,7 @@ namespace ActionCode.UISystem
         public bool HasData() => Data != null;
         public void SetData(T data) => Data = data;
         public void SetSlot(int slot) => Slot = slot;
+        public void DeleteData() => Data = null;
 
         public virtual void SetDataAndSlot(T data, int slot)
         {
