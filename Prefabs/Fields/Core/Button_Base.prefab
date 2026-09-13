@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4909020074734495171
+--- !u!1 &2686194000756579997
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,53 +8,53 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4460840990256456118}
-  - component: {fileID: 8498723199732423969}
-  - component: {fileID: 7302299396237676168}
-  - component: {fileID: 3691110739844238959}
+  - component: {fileID: 77850031403101450}
+  - component: {fileID: 8404075907551513463}
+  - component: {fileID: 1835421849171145536}
+  - component: {fileID: 6475599341776736992}
+  - component: {fileID: 8149206462511804949}
   m_Layer: 5
-  m_Name: Field_Base
+  m_Name: Button_Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &4460840990256456118
+--- !u!224 &77850031403101450
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4909020074734495171}
+  m_GameObject: {fileID: 2686194000756579997}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2249127134937033386}
-  - {fileID: 4287666968698642417}
+  - {fileID: 4869940711684382728}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1000, y: 80}
+  m_SizeDelta: {x: 400, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &8498723199732423969
+--- !u!222 &8404075907551513463
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4909020074734495171}
+  m_GameObject: {fileID: 2686194000756579997}
   m_CullTransparentMesh: 1
---- !u!114 &7302299396237676168
+--- !u!114 &1835421849171145536
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4909020074734495171}
+  m_GameObject: {fileID: 2686194000756579997}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
@@ -78,67 +78,80 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3691110739844238959
+--- !u!114 &6475599341776736992
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4909020074734495171}
+  m_GameObject: {fileID: 2686194000756579997}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 484b462261b3d954084bf1dc344ec097, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ActionCode.UISystem::ActionCode.UISystem.ColorTransition
   data: {fileID: 11400000, guid: 5fc5f2e40c5dd894cb98a8fbe8fe50cf, type: 2}
-  target: {fileID: 7302299396237676168}
+  target: {fileID: 1835421849171145536}
   fadeDuration: 0.1
---- !u!1 &7300567697697510463
-GameObject:
+--- !u!114 &8149206462511804949
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4287666968698642417}
-  m_Layer: 5
-  m_Name: Input
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &4287666968698642417
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7300567697697510463}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4460840990256456118}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.3, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 1, y: 0.5}
---- !u!1001 &2508121449320432254
+  m_GameObject: {fileID: 2686194000756579997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b441c16c49d156141abd438454278512, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ActionCode.UISystem::ActionCode.UISystem.ActionButton
+  m_Navigation:
+    m_Mode: 2
+    m_WrapAround: 1
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 0
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 0}
+  <Label>k__BackingField: {fileID: 7438817084632657162}
+  <Transitions>k__BackingField:
+  - {fileID: 6475599341776736992}
+  - {fileID: 7438817084632657162}
+  onClicked:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!1001 &9110117234121656540
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 4460840990256456118}
+    m_TransformParent: {fileID: 77850031403101450}
     m_Modifications:
     - target: {fileID: 4465356538836773076, guid: daa6416a6c7e40f4783c69e9d9bbf740, type: 3}
       propertyPath: m_Pivot.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4465356538836773076, guid: daa6416a6c7e40f4783c69e9d9bbf740, type: 3}
       propertyPath: m_Pivot.y
@@ -146,7 +159,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4465356538836773076, guid: daa6416a6c7e40f4783c69e9d9bbf740, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4465356538836773076, guid: daa6416a6c7e40f4783c69e9d9bbf740, type: 3}
       propertyPath: m_AnchorMax.y
@@ -216,6 +229,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4708579821200325576, guid: daa6416a6c7e40f4783c69e9d9bbf740, type: 3}
+      propertyPath: m_text
+      value: Button
+      objectReference: {fileID: 0}
     - target: {fileID: 5507653555556258864, guid: daa6416a6c7e40f4783c69e9d9bbf740, type: 3}
       propertyPath: m_Name
       value: Field_Label
@@ -225,8 +242,19 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: daa6416a6c7e40f4783c69e9d9bbf740, type: 3}
---- !u!224 &2249127134937033386 stripped
+--- !u!224 &4869940711684382728 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4465356538836773076, guid: daa6416a6c7e40f4783c69e9d9bbf740, type: 3}
-  m_PrefabInstance: {fileID: 2508121449320432254}
+  m_PrefabInstance: {fileID: 9110117234121656540}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7438817084632657162 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1825752126288995798, guid: daa6416a6c7e40f4783c69e9d9bbf740, type: 3}
+  m_PrefabInstance: {fileID: 9110117234121656540}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4a45d8d887b5bf47ba9720ee2049719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ActionCode.UISystem::ActionCode.UISystem.Label
