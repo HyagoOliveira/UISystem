@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Added
+- IsReadOnly property for Fields
+- OnReadOnlyValueChangeDenied event for Fields
 - GameVersionDisplayer component
 - GlobalScreenFade In/Out Animation components
 - Localization scripts

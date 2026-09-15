@@ -78,7 +78,7 @@ namespace ActionCode.UISystem
                 case MoveDirection.Right:
                 case MoveDirection.Left:
                     Toggle();
-                    if (audioHandler) audioHandler.PlaySubmition();
+                    TryPlaySubmition();
                     break;
             }
         }
@@ -91,5 +91,10 @@ namespace ActionCode.UISystem
             OnClicked?.Invoke();
         }
         #endregion
+
+        private void TryPlaySubmition()
+        {
+            if (audioHandler) audioHandler.PlaySubmition();
+        }
     }
 }
